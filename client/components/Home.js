@@ -1,6 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
+import socket from '../socket';
+import Chat from './Chat';
 
 /**
  * COMPONENT
@@ -47,6 +49,7 @@ export class Home extends React.Component {
     return (
       <div>
         <h3>Welcome</h3>
+        <Chat />
         <div>
           <div id="piano">
             {data.map((note) => {

@@ -1,16 +1,8 @@
 import axios from 'axios';
 import history from '../../history';
-// import socket from './socket';
+import socket from '../../socket';
 
-//example of socket action
-// serverSocket.on('connection', (socket) => {
-//   console.log(`Connection from client ${socket.id}`);
-//   setInterval(() => {
-//     const time = (new Date()).toLocaleString()
-//    //  console.log(time)
-//     socket.emit('time-change', time)
-//   }, 1000)
-//  });
+// example of socket action
 
 // export const sendMessage = message => async (dispatch, getState) => {
 //   message.name = getState().user

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Home from './components/Home';
+import Chat from './components/Chat';
 
 /**
  * COMPONENT
@@ -11,8 +12,8 @@ class Routes extends Component {
     return (
       <div>
         <Switch>
-          <Route path="/" component={Home} />
-          <Redirect to="/" />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/chat" component={Chat} />
         </Switch>
       </div>
     );
