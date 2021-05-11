@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
+import Chat from './Chat';
 
 /**
  * COMPONENT
@@ -115,6 +116,7 @@ export class Home extends React.Component {
             })}
           </div>
           <audio controls></audio>
+          <Chat />
         </div>
       </div>
     );

@@ -5,7 +5,16 @@ const server = app.listen(PORT, () =>
 );
 const io = require('socket.io')(server);
 
-require('./socket')(io);
+io.on('connection', (socket) => {
+  const { id } = socket.client;
+  console.log(`User Connected: ${id}`);
+  socket.on('chat message', ({ nickname, msg }) => {
+    io.emit('chat message', { nickname, msg });
+  });
+  socket.on('disconnect', () => {
+    console.log('BYEEEEEE');
+  });
+});
 
 const init = async () => {
   try {
