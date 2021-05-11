@@ -41,7 +41,6 @@ export class Home extends React.Component {
     }, 5000);
   }
   render() {
-    const piano = document.querySelector('#piano');
     const data = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
     console.log('AUDIO: ', document.querySelector('audio'));
 
