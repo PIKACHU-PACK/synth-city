@@ -1,18 +1,20 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+
+// do we need this component anymore?
 
 export const Navbar = () => {
-  <div>
-    <h1>SynthCity</h1>
-    <nav>
-      <div>
-        <Link to="/login">Login</Link>
-        <Link to="/signup">Sign Up</Link>
-      </div>
-    </nav>
-    <hr />
-  </div>;
+	<div>
+		<h1>SynthCity</h1>
+		<nav>
+			<div>
+				<Link to='/login'>Login</Link>
+				<Link to='/signup'>Sign Up</Link>
+			</div>
+		</nav>
+		<hr />
+	</div>;
 };
 
 /**
