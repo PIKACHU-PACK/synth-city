@@ -3,12 +3,15 @@ const app = require('./app');
 const server = app.listen(PORT, () =>
   console.log(`Feeling chatty on port ${PORT}`)
 );
-const io = require('socket.io')(server);
-
-require('./socket')(io);
+const socketio = require('socket.io');
 
 const init = async () => {
   try {
+    const io = socketio(server, {
+      pingInterval: 10000,
+      pingTimeout: 600000, //10 minutes
+    });
+    require('./socket')(io);
     return server;
   } catch (ex) {
     console.log(ex);

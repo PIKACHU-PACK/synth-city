@@ -1,6 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as Tone from "tone";
+import Chat from "./Chat";
+import { RoomTest } from "./RoomTest";
 
 /**
  * COMPONENT
@@ -52,13 +54,13 @@ export class Home extends React.Component {
     }, 5000);
   }
   render() {
-    const piano = document.querySelector("#piano");
     const data = ["C", "D", "E", "F", "G", "A", "B"];
     console.log("AUDIO: ", document.querySelector("audio"));
 
     return (
       <div>
         <h3>Welcome</h3>
+        <RoomTest />
         <div>
           <div id="piano">
             {data.map((note) => {
@@ -127,6 +129,7 @@ export class Home extends React.Component {
             })}
           </div>
           <audio controls></audio>
+          <Chat />
         </div>
       </div>
     );
