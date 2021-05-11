@@ -25,6 +25,7 @@ module.exports = (io) => {
       };
       rooms[room.id] = room;
       joinRoom(socket, room);
+      console.log(rooms);
       callback();
     });
 
