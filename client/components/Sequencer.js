@@ -5,9 +5,8 @@ import * as Tone from "tone";
 import classNames from "classnames";
 
 const AMOUNT_OF_NOTES = 16;
-const AMOUNT_OF_ROWS = 4;
-//this looks like [0, 1, 2, 3, 5, 6] and so forth until it reaches the total
-const numArray = Array.from(Array(AMOUNT_OF_NOTES).keys());
+//this looks like [0, 1, 2, 3, 4, 5, 6] and so forth until it reaches the total
+const numArray = Array.from(Array(AMOUNT_OF_NOTES - 1).keys());
 
 const CHOSEN_OCTAVE = "4";
 const synth = new Tone.PolySynth().toDestination();
@@ -19,6 +18,7 @@ class Sequencer extends React.Component {
       grid: this.generateGrid(),
       isPlaying: false,
       currentColumn: null,
+      //music: [],
     };
     this.generateGrid = this.generateGrid.bind(this);
     this.handleNoteClick = this.handleNoteClick.bind(this);
@@ -56,20 +56,22 @@ class Sequencer extends React.Component {
     );
     //Updates the grid with the new note toggled
     this.setState({ grid: updatedGrid });
+    //console.log(this.state.grid[0]);
   }
 
   async playMusic() {
-    // Variable for storing our note in a appropriate format for our synth
     let music = [];
-
+    // Variable for storing our note in a appropriate format for our synth
     this.state.grid.map((column) => {
       let columnNotes = [];
-      column.map(
-        (shouldPlay) =>
-          //If isActive, push the given note, with our chosen octave
-          shouldPlay.isActive &&
-          columnNotes.push(shouldPlay.note + CHOSEN_OCTAVE)
-      );
+      column.map((shouldPlay) => {
+        //If isActive, push the given note, with our chosen octave
+        if (shouldPlay.isActive) {
+          columnNotes.push(shouldPlay.note + CHOSEN_OCTAVE);
+        }
+      });
+      console.log("columnNotes ", columnNotes);
+
       music.push(columnNotes);
     });
 
@@ -94,6 +96,7 @@ class Sequencer extends React.Component {
     if (this.state.isPlaying) {
       // Turn of our player if music is currently playing
       this.setState({ isPlaying: false, currentColumn: null });
+      music = [];
 
       await Tone.Transport.stop();
       await Sequencer.stop();
