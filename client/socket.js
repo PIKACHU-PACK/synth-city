@@ -16,8 +16,11 @@ socket.on('disconnect', () => {
 });
 
 export function createRoom(callback) {
-  socket.emit('createRoom', callback);
-  // socket.on('createRoom', callback);
+  socket.emit('createRoom');
+  console.log('frontend');
+  socket.on('roomCreated', (roomId) => {
+    callback(roomId);
+  });
 }
 
 export function joinRoom(roomId, callback) {
