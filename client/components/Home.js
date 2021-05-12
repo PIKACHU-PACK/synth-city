@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
 import Chat from './Chat';
-import { RoomTest } from './RoomTest';
+import { Rooms } from './Rooms';
 
 /**
  * COMPONENT
@@ -60,7 +60,7 @@ export class Home extends React.Component {
     return (
       <div>
         <h3>Welcome</h3>
-        <RoomTest />
+        <Rooms />
         <div>
           <div id="piano">
             {data.map((note) => {
