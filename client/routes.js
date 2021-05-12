@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Home from './components/Home';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import Home from "./components/Home";
+import Sequencer from "./components/Sequencer";
 
 /**
  * COMPONENT
@@ -11,8 +12,9 @@ class Routes extends Component {
     return (
       <div>
         <Switch>
-          <Route path="/" component={Home} />
-          <Redirect to="/" />
+          <Route exact path="/" component={Home} />
+          <Route exact path="/sequencer" component={Sequencer} />
+          {/* <Redirect to="/" /> */}
         </Switch>
       </div>
     );
