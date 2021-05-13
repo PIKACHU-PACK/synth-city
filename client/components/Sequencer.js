@@ -1,148 +1,132 @@
-import React from "react";
-import { connect } from "react-redux";
-import { Link } from "react-router-dom";
-import * as Tone from "tone";
 import classNames from "classnames";
+import * as Tone from "tone";
+import React from "react";
 
 const AMOUNT_OF_NOTES = 16;
-//this looks like [0, 1, 2, 3, 4, 5, 6] and so forth until it reaches the total
-const numArray = Array.from(Array(AMOUNT_OF_NOTES - 1).keys());
+const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
+const BPM = 120;
+const rowGrid = makeGrid(notes);
+const synthsArr = makeSynths(6);
 
-const CHOSEN_OCTAVE = "4";
-const synth = new Tone.PolySynth().toDestination();
-
-class Sequencer extends React.Component {
+export default class Sequencer extends React.Component {
   constructor() {
     super();
     this.state = {
-      grid: this.generateGrid(),
-      isPlaying: false,
-      currentColumn: null,
-      //music: [],
+      synths: [],
+      grid: [], //[[{note, isActive}, {note, isActive}], [{note, isActive}, {note, isActive}]]
+      beat: 0,
+      playing: false,
+      started: false,
+      currentColumn: false,
     };
-    this.generateGrid = this.generateGrid.bind(this);
     this.handleNoteClick = this.handleNoteClick.bind(this);
-    this.playMusic = this.playMusic.bind(this);
+    this.configPlayButton = this.configPlayButton.bind(this);
   }
 
-  generateGrid() {
-    const grid = [];
-    for (let i = 0; i < AMOUNT_OF_NOTES; i++) {
-      let column = [
-        { note: "C", isActive: false },
-        { note: "D", isActive: false },
-        { note: "E", isActive: false },
-        { note: "F", isActive: false },
-        { note: "G", isActive: false },
-        { note: "A", isActive: false },
-        { note: "B", isActive: false },
-      ];
-      grid.push(column);
-    }
-    return grid;
+  componentDidMount() {
+    const rowGrid = makeGrid(notes);
+    const synthsArr = makeSynths(6);
+    this.setState({ grid: rowGrid, synths: synthsArr });
   }
 
-  handleNoteClick(clickedColumn, clickedNote) {
-    // Shallow copy of our grid with updated isActive
-    let updatedGrid = this.state.grid.map((column, columnIndex) =>
-      column.map((cell, cellIndex) => {
-        let cellCopy = cell;
-        // Flip isActive for the clicked note-cell in our grid
-        if (columnIndex === clickedColumn && cellIndex === clickedNote) {
-          cellCopy.isActive = !cell.isActive;
-        }
-        return cellCopy;
-      })
-    );
-    //Updates the grid with the new note toggled
-    this.setState({ grid: updatedGrid });
-    //console.log(this.state.grid[0]);
-  }
-
-  async playMusic() {
-    let music = [];
-    // Variable for storing our note in a appropriate format for our synth
-    this.state.grid.map((column) => {
-      let columnNotes = [];
-      column.map((shouldPlay) => {
-        //If isActive, push the given note, with our chosen octave
-        if (shouldPlay.isActive) {
-          columnNotes.push(shouldPlay.note + CHOSEN_OCTAVE);
+  configLoop() {
+    const repeat = (time) => {
+      this.state.grid.forEach((row, index) => {
+        let synth = this.state.synths[index];
+        let note = row[this.state.beat];
+        if (synth && note.isActive) {
+          synth.triggerAttackRelease(note.note, "8n", time);
         }
       });
-      console.log("columnNotes ", columnNotes);
+      this.setState({ beat: (this.state.beat + 1) % AMOUNT_OF_NOTES });
+    };
 
-      music.push(columnNotes);
+    Tone.Transport.bpm.value = BPM;
+    Tone.Transport.scheduleRepeat(repeat, "8n");
+  }
+
+  handleNoteClick(clickedRowIndex, clickedNoteIndex, e) {
+    let newGrid = this.state.grid.map((row, rowIndex) => {
+      row.map((note, noteIndex) => {
+        if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
+          note.isActive = !note.isActive;
+          e.target.className = classNames(
+            "note",
+            { "note-is-active": !!note.isActive },
+            { "note-not-active": !note.isActive }
+          );
+        }
+        return note;
+      });
+      return row;
     });
+    this.setState({ grid: newGrid });
+    console.log("state in handleNoteClick is ", this.state);
+  }
 
-    // Starts our Tone context
-    await Tone.start();
-
-    // Tone.Sequence()
-    //@param callback
-    //@param "events" to send with callback
-    //@param subdivision  to engage callback
-    const Sequencer = new Tone.Sequence(
-      (time, column) => {
-        // Highlight column with styling
-        this.setState({ currentColumn: column });
-        //Sends the active note to our PolySynth
-        synth.triggerAttackRelease(music[column], "8n", time);
-      },
-      numArray,
-      "8n"
-    );
-
-    if (this.state.isPlaying) {
-      // Turn of our player if music is currently playing
-      this.setState({ isPlaying: false, currentColumn: null });
-      music = [];
-
-      await Tone.Transport.stop();
-      await Sequencer.stop();
-      await Sequencer.clear();
-      await Sequencer.dispose();
-
-      return;
+  configPlayButton(e) {
+    if (!this.state.started) {
+      Tone.start();
+      Tone.getDestination().volume.rampTo(-10, 0.001);
+      this.configLoop();
+      this.setState({ started: true });
     }
-    this.setState({ isPlaying: true });
-    // Toggles playback of our musical masterpiece
-    await Sequencer.start();
-    await Tone.Transport.start();
+    //might need something that sets started to false below
+    if (this.state.playing) {
+      e.target.innerText = "Play";
+      Tone.Transport.stop();
+      this.setState({ playing: false, currentColumn: null });
+    } else {
+      e.target.innerText = "Stop";
+      Tone.Transport.start();
+      this.setState({ playing: true });
+    }
   }
 
   render() {
+    //console.log("state in render is ", this.state);
     return (
-      <div className="sequencer">
-        <div className="note-wrapper">
-          {this.state.grid.map((column, columnIndex) => (
-            <div
-              className={classNames("note-column", {
-                "note-column--active": this.state.currentColumn === columnIndex,
-              })}
-              key={columnIndex + "column"}
-            >
-              {column.map(({ note, isActive }, noteIndex) => (
-                <NoteButton
-                  note={note}
-                  isActive={isActive}
-                  onClick={() => this.handleNoteClick(columnIndex, noteIndex)}
-                  key={note + columnIndex}
-                />
-              ))}
-            </div>
-          ))}
+      <div>
+        <div id="sequencer" className="container sequencer">
+          {this.state.grid.map((row, rowIndex) => {
+            return (
+              <div
+                id="rowIndex"
+                className="sequencer-row"
+                key={rowIndex + "row"}
+              >
+                {row.map(({ note, isActive }, noteIndex) => {
+                  return (
+                    <NoteButton
+                      key={noteIndex + "note"}
+                      isActive={isActive}
+                      className="note"
+                      onClick={(event) =>
+                        this.handleNoteClick(rowIndex, noteIndex, event)
+                      }
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
         </div>
-        <button className="play-button" onClick={() => this.playMusic()}>
-          {this.state.isPlaying ? "Stop" : "Play"}
-        </button>
+        <div className="toggle-play">
+          <button
+            id="play-button"
+            className="play-button"
+            onClick={(event) => this.configPlayButton(event)}
+          >
+            Play
+          </button>
+        </div>
       </div>
     );
   }
 }
 
 const NoteButton = ({ note, isActive, ...rest }) => {
-  const classes = isActive ? "note note--active" : "note";
+  const classes = isActive ? "note note-is-active" : "note";
   return (
     <button className={classes} {...rest}>
       {note}
@@ -150,4 +134,40 @@ const NoteButton = ({ note, isActive, ...rest }) => {
   );
 };
 
-export default Sequencer;
+function makeGrid(notes) {
+  // our "notation" will consist of an array with 6 sub arrays
+  // each sub array corresponds to one row in our sequencer grid
+  // parent array to hold each rows subarray
+  const rows = [];
+
+  for (const note of notes) {
+    // declare the subarray
+    const row = [];
+    // each subarray contains multiple objects that have an assigned note
+    // and a boolean to flag whether they are "activated"
+    // each element in the subarray corresponds to one eigth note
+    for (let i = 0; i < AMOUNT_OF_NOTES; i++) {
+      row.push({
+        note: note,
+        isActive: false,
+      });
+    }
+    rows.push(row);
+  }
+  // we now have 6 rows each containing 16 eighth notes
+  return rows;
+}
+
+function makeSynths(count) {
+  // MAKE DIFFERENT SYNTHS LATER ON INSTEAD
+  const synths = [];
+  for (let i = 0; i < count; i++) {
+    let synth = new Tone.Synth({
+      oscillator: {
+        type: "square8",
+      },
+    }).toDestination();
+    synths.push(synth);
+  }
+  return synths;
+}
