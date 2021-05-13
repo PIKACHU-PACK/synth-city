@@ -31,7 +31,7 @@ export function joinRoom(roomId, callback) {
 }
 
 export function startGame(roomId) {
-  socket.emit('startGame');
+  socket.emit('startGame', roomId);
 }
 
 export default socket;

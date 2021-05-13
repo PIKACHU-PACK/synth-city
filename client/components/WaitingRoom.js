@@ -12,7 +12,7 @@ export class WaitingRoom extends React.Component {
   }
 
   onStart() {
-    startGame();
+    startGame(this.props.match.params.roomId);
   }
 
   render() {

@@ -31,6 +31,7 @@ module.exports = (io) => {
       rooms[room.id] = room;
       joinRoom(socket, room);
       console.log('backend', room);
+
       io.emit('roomCreated', room.id);
     });
 
@@ -40,9 +41,10 @@ module.exports = (io) => {
       callback();
     });
 
-    socket.on('startGame', () => {
+    socket.on('startGame', (roomId) => {
       console.log(socket.id, 'is ready');
-      const room = rooms[socket.roomId];
+      const room = rooms[roomId];
+      console.log(room);
       if (room.sockets.length >= 2 && room.sockets.length <= 4) {
         for (const client of room.sockets) {
           client.emit('initGame');
