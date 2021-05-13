@@ -122,7 +122,22 @@ form div {
 }
 
 .note-is-active {
+  /* background-color: green; */
+  border: 1px solid black;
+}
+
+.green-synth {
   background-color: green;
+  border: 1px solid black;
+}
+
+.blue-synth {
+  background-color: rgb(21, 51, 185);
+  border: 1px solid black;
+}
+
+.red-synth {
+  background-color: rgb(128, 26, 0);
   border: 1px solid black;
 }
 

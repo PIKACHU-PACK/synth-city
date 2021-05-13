@@ -1,41 +1,49 @@
 import classNames from "classnames";
 import * as Tone from "tone";
 import React from "react";
+import { NoteButton } from "./NoteButton";
+import {
+  makeGrid,
+  makeSynths,
+  basicSynth,
+  amSynth,
+  pluckySynth,
+} from "./HelperFunctions";
 
-const AMOUNT_OF_NOTES = 16;
+export const AMOUNT_OF_NOTES = 16;
 const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
 const BPM = 120;
-const rowGrid = makeGrid(notes);
-const synthsArr = makeSynths(6);
 
-export default class Sequencer extends React.Component {
+class Sequencer extends React.Component {
   constructor() {
     super();
     this.state = {
       synths: [],
-      grid: [], //[[{note, isActive}, {note, isActive}], [{note, isActive}, {note, isActive}]]
+      grid: [],
       beat: 0,
       playing: false,
       started: false,
       currentColumn: false,
+      currSynth: basicSynth,
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
+    this.amSynthButton = this.amSynthButton.bind(this);
   }
 
   componentDidMount() {
     const rowGrid = makeGrid(notes);
-    const synthsArr = makeSynths(6);
+    const synthsArr = makeSynths(basicSynth);
     this.setState({ grid: rowGrid, synths: synthsArr });
   }
 
   configLoop() {
     const repeat = (time) => {
       this.state.grid.forEach((row, index) => {
-        let synth = this.state.synths[index];
+        //let synth = this.state.synths[index];
         let note = row[this.state.beat];
-        if (synth && note.isActive) {
-          synth.triggerAttackRelease(note.note, "8n", time);
+        if (note.isActive) {
+          note.synth.triggerAttackRelease(note.note, "8n", time);
         }
       });
       this.setState({ beat: (this.state.beat + 1) % AMOUNT_OF_NOTES });
@@ -50,10 +58,18 @@ export default class Sequencer extends React.Component {
       row.map((note, noteIndex) => {
         if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
           note.isActive = !note.isActive;
+          note.synth = this.state.currSynth;
           e.target.className = classNames(
             "note",
             { "note-is-active": !!note.isActive },
-            { "note-not-active": !note.isActive }
+            { "note-not-active": !note.isActive },
+            {
+              "green-synth": note.synth === basicSynth && note.isActive,
+            },
+            {
+              "blue-synth": note.synth === pluckySynth && note.isActive,
+            },
+            { "red-synth": note.synth === amSynth && note.isActive }
           );
         }
         return note;
@@ -83,10 +99,39 @@ export default class Sequencer extends React.Component {
     }
   }
 
+  amSynthButton(type) {
+    let synthType;
+    if (type == "amSynth") {
+      synthType = amSynth;
+    } else if (type === "basicSynth") {
+      synthType = basicSynth;
+    } else if (type === "pluckySynth") {
+      synthType = pluckySynth;
+    }
+    this.setState({ currSynth: synthType });
+    //synths: makeSynths(synthType),
+  }
+
   render() {
-    //console.log("state in render is ", this.state);
     return (
       <div>
+        <div>
+          <h2>Let's Make Some Jams!</h2>
+        </div>
+        <div>
+          <div>
+            <button onClick={() => this.amSynthButton("amSynth")}>
+              AM Synth (Red)
+            </button>
+            <button onClick={() => this.amSynthButton("pluckySynth")}>
+              Plucky Synth (Blue)
+            </button>
+            <button onClick={() => this.amSynthButton("basicSynth")}>
+              Basic Synth (Green)
+            </button>
+            <p></p>
+          </div>
+        </div>
         <div id="sequencer" className="container sequencer">
           {this.state.grid.map((row, rowIndex) => {
             return (
@@ -98,8 +143,10 @@ export default class Sequencer extends React.Component {
                 {row.map(({ note, isActive }, noteIndex) => {
                   return (
                     <NoteButton
+                      note={note}
                       key={noteIndex + "note"}
                       isActive={isActive}
+                      currSynth={this.state.currSynth}
                       className="note"
                       onClick={(event) =>
                         this.handleNoteClick(rowIndex, noteIndex, event)
@@ -125,49 +172,4 @@ export default class Sequencer extends React.Component {
   }
 }
 
-const NoteButton = ({ note, isActive, ...rest }) => {
-  const classes = isActive ? "note note-is-active" : "note";
-  return (
-    <button className={classes} {...rest}>
-      {note}
-    </button>
-  );
-};
-
-function makeGrid(notes) {
-  // our "notation" will consist of an array with 6 sub arrays
-  // each sub array corresponds to one row in our sequencer grid
-  // parent array to hold each rows subarray
-  const rows = [];
-
-  for (const note of notes) {
-    // declare the subarray
-    const row = [];
-    // each subarray contains multiple objects that have an assigned note
-    // and a boolean to flag whether they are "activated"
-    // each element in the subarray corresponds to one eigth note
-    for (let i = 0; i < AMOUNT_OF_NOTES; i++) {
-      row.push({
-        note: note,
-        isActive: false,
-      });
-    }
-    rows.push(row);
-  }
-  // we now have 6 rows each containing 16 eighth notes
-  return rows;
-}
-
-function makeSynths(count) {
-  // MAKE DIFFERENT SYNTHS LATER ON INSTEAD
-  const synths = [];
-  for (let i = 0; i < count; i++) {
-    let synth = new Tone.Synth({
-      oscillator: {
-        type: "square8",
-      },
-    }).toDestination();
-    synths.push(synth);
-  }
-  return synths;
-}
+export default Sequencer;
