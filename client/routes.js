@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Home from './components/Home';
-import Sequencer from './components/Sequencer';
-import { WaitingRoom } from './components/WaitingRoom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import Home from "./components/Home";
+import { WaitingRoom } from "./components/WaitingRoom";
+import { Sequencer } from "./components/Sequencer";
 
 /**
  * COMPONENT
