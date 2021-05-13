@@ -3,30 +3,35 @@ const rooms = {};
 
 const joinRoom = (socket, room) => {
   room.sockets.push(socket);
-  socket.join(room.id, () => {
-    socket.roomId = room.id;
-    console.log(socket.id, 'Joined', room.id);
-  });
+  socket.join(room.id);
+  console.log('in joinRoom function', room);
+  // socket.join(room.id, () => {
+  //   socket.roomId = room.id;
+  //   console.log(socket.id, 'Joined', room.id);
+  // });
 };
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
-    console.log(socket.id, ' has made a persistent connection to the server!');
-    const { id } = socket.client;
-    console.log(`User Connected: ${id}`);
+    console.log(`User Connected: ${socket.id}`);
+
+    socket.on('disconnect', () => {
+      console.log(`User ${socket.id} left, BYEEEEEE`);
+    });
+
     socket.on('chat message', ({ nickname, msg }) => {
       io.emit('chat message', { nickname, msg });
     });
 
-    socket.on('createRoom', (callback) => {
+    socket.on('createRoom', () => {
       const room = {
         id: uuidv4().slice(0, 5).toUpperCase(),
         sockets: [],
       };
       rooms[room.id] = room;
       joinRoom(socket, room);
-      console.log(rooms);
-      callback();
+      console.log('backend', room);
+      io.emit('roomCreated', room.id);
     });
 
     socket.on('joinRoom', (roomId, callback) => {
@@ -47,10 +52,6 @@ module.exports = (io) => {
 
     socket.on('musicComp', (arr, room) => {
       socket.to(room).broadcast.emit('musicToState', arr);
-    });
-
-    socket.on('disconnect', () => {
-      console.log('BYEEEEEE');
     });
   });
 };

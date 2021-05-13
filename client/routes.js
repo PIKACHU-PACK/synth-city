@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Route, Switch, Redirect } from "react-router-dom";
 import Home from "./components/Home";
+import Sequencer from "./components/Sequencer";
+import { WaitingRoom } from "./components/WaitingRoom";
 import { SeqAttempt } from "./components/SequencerAttempt";
 
 /**
@@ -14,6 +16,7 @@ class Routes extends Component {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/sequencer" component={SeqAttempt} />
+          <Route path="/waiting/:roomId" component={WaitingRoom} />
           {/* <Redirect to="/" /> */}
         </Switch>
       </div>
