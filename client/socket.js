@@ -30,4 +30,8 @@ export function joinRoom(roomId, callback) {
   socket.on('ready');
 }
 
+export function startGame(roomId) {
+  socket.emit('startGame');
+}
+
 export default socket;

@@ -40,7 +40,7 @@ module.exports = (io) => {
       callback();
     });
 
-    socket.on('ready', () => {
+    socket.on('startGame', () => {
       console.log(socket.id, 'is ready');
       const room = rooms[socket.roomId];
       if (room.sockets.length >= 2 && room.sockets.length <= 4) {
