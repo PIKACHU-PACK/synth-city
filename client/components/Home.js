@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import * as Tone from "tone";
-import Chat from "./Chat";
-import { RoomTest } from "./RoomTest";
+import React from 'react';
+import { connect } from 'react-redux';
+import * as Tone from 'tone';
+import Chat from './Chat';
+import { Rooms } from './Rooms';
 
 /**
  * COMPONENT
@@ -34,7 +34,7 @@ export class Home extends React.Component {
 
     event.stopPropagation();
     console.log(note);
-    synth.triggerAttackRelease(note, "8n");
+    synth.triggerAttackRelease(note, '8n');
     setTimeout(async () => {
       const chunks = [];
       const buttonRecord = this.state.recorderToButton.stop();
@@ -42,7 +42,7 @@ export class Home extends React.Component {
       this.state.recorderToButton.ondataavailable = (evt) =>
         chunks.push(evt.data);
       recorder.onstop = (evt) => {
-        let blob = new Blob(chunks, { type: "audio/ogg; codecs=opus" });
+        let blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' });
         audio.src = URL.createObjectURL(blob);
       };
       // const recording = await this.state.recorder.stop();
@@ -54,28 +54,28 @@ export class Home extends React.Component {
     }, 5000);
   }
   render() {
-    const data = ["C", "D", "E", "F", "G", "A", "B"];
-    console.log("AUDIO: ", document.querySelector("audio"));
+    const data = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
+    console.log('AUDIO: ', document.querySelector('audio'));
 
     return (
       <div>
         <h3>Welcome</h3>
-        <RoomTest />
+        <Rooms />
         <div>
           <div id="piano">
             {data.map((note) => {
-              let hasSharp = note !== "E" && note !== "B" ? true : false;
+              let hasSharp = note !== 'E' && note !== 'B' ? true : false;
               return hasSharp ? (
                 <>
                   <div
-                    onClick={(event) => this.strikeKey(event, note + "4")}
+                    onClick={(event) => this.strikeKey(event, note + '4')}
                     key={`${note}4`}
                     className="whiteNote"
                     data-code={`${note}4`}
                   >
                     {note}4
                     <div
-                      onClick={(event) => this.strikeKey(event, note + "#4")}
+                      onClick={(event) => this.strikeKey(event, note + '#4')}
                       key={`${note}#4`}
                       className="blackNote"
                       data-code={`${note}#4`}
@@ -86,7 +86,7 @@ export class Home extends React.Component {
                 </>
               ) : (
                 <div
-                  onClick={(event) => this.strikeKey(event, note + "4")}
+                  onClick={(event) => this.strikeKey(event, note + '4')}
                   key={`${note}4`}
                   className="whiteNote"
                   data-code={`${note}4`}
@@ -96,18 +96,18 @@ export class Home extends React.Component {
               );
             })}
             {data.map((note) => {
-              let hasSharp = note !== "E" && note !== "B" ? true : false;
+              let hasSharp = note !== 'E' && note !== 'B' ? true : false;
               return hasSharp ? (
                 <>
                   <div
-                    onClick={(event) => this.strikeKey(event, note + "5")}
+                    onClick={(event) => this.strikeKey(event, note + '5')}
                     key={`${note}5`}
                     className="whiteNote"
                     data-code={`${note}5`}
                   >
                     {note}5
                     <div
-                      onClick={(event) => this.strikeKey(event, note + "#5")}
+                      onClick={(event) => this.strikeKey(event, note + '#5')}
                       key={`${note}#5`}
                       className="blackNote"
                       data-code={`${note}#5`}
@@ -118,7 +118,7 @@ export class Home extends React.Component {
                 </>
               ) : (
                 <div
-                  onClick={(event) => this.strikeKey(event, note + "5")}
+                  onClick={(event) => this.strikeKey(event, note + '5')}
                   key={`${note}5`}
                   className="whiteNote"
                   data-code={`${note}5`}
@@ -129,7 +129,7 @@ export class Home extends React.Component {
             })}
           </div>
           <audio controls></audio>
-          <Chat />
+          {/* <Chat /> */}
         </div>
       </div>
     );
