@@ -23,15 +23,22 @@ export function createRoom(callback) {
 
 export function joinRoom(roomId, callback) {
   socket.emit('joinRoom', roomId, callback);
+  //pass callback down, set state for other players
   socket.on('ready');
 }
 
 export function startGame(roomId) {
   socket.emit('startGame', roomId);
-}
-
-export function gameStarted(room, data) {
-  socket.emit('gameStarted', room);
+  socket.emit('gameStarted', roomId);
+  socket.on('yourTurn', () => {
+    console.log('its my turn');
+  });
+  socket.on('youreNext', () => {
+    console.log('im next');
+  });
+  socket.on('youreWaiting', () => {
+    console.log('im later');
+  });
 }
 
 export function newGame(room, users) {

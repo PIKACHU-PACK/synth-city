@@ -1,10 +1,35 @@
 const { v4: uuidv4 } = require('uuid');
 const rooms = {};
+let players = [];
+let currentTurn = 0;
+let timeOut;
+let turn = 0;
+const MAX_WAITING = 3000;
 
 const joinRoom = (socket, room) => {
   room.sockets.push(socket);
   socket.join(room.id);
   console.log('in joinRoom function', room);
+};
+
+const nextTurn = () => {
+  turn = currentTurn++ % players.length;
+  players[turn].emit('your turn');
+  console.log('next turn triggered ', turn);
+  triggerTimeout();
+};
+
+const triggerTimeout = () => {
+  timeOut = setTimeout(() => {
+    nextTurn();
+  }, MAX_WAITING);
+};
+
+const resetTimeOut = () => {
+  if (typeof timeOut === 'object') {
+    console.log('timeout reset');
+    clearTimeout(timeOut);
+  }
 };
 
 module.exports = (io) => {
@@ -40,18 +65,28 @@ module.exports = (io) => {
     socket.on('startGame', (roomId) => {
       console.log(socket.id, 'is ready');
       const room = rooms[roomId];
-      if (room.sockets.length >= 2 && room.sockets.length <= 4) {
-        for (const client of room.sockets) {
-          client.emit('initGame');
-        }
-      }
+      // for (const client of room.sockets) {
+      //   client.emit('initGame');
+      // }
+      let playersArr = room.sockets.map((player) => player.id);
+      console.log(playersArr);
+      players = room.sockets;
     });
 
     socket.on('gameStarted', (room, data) => {
-      io.to(room.sockets[0]).emit('yourTurn', room);
-      io.to(room.sockets[1]).emit('youreNext', data);
-      for (let i = 1; i < room.sockets.length; i++) {
-        io.to(room.sockets[1]).emit('youreWaiting');
+      io.to(players[0]).emit('yourTurn', room, data);
+      io.to(players[1]).emit('youreNext', room, data);
+      for (let i = 1; i < players.length; i++) {
+        io.to(players[i]).emit('youreWaiting', room, data);
+      }
+      nextTurn();
+    });
+
+    socket.on('passTurn', (room) => {
+      players = room.sockets;
+      if (players[turn] == socket) {
+        resetTimeOut();
+        nextTurn();
       }
     });
 

@@ -13,6 +13,10 @@ export class WaitingRoom extends React.Component {
 
   onStart() {
     startGame(this.props.match.params.roomId);
+    //add turn listener into component did mount of game room
+    //imported function to listen to turns
+    //when called it would start the io.on
+    //fire turn listener function and start implementing turns until the game ends
   }
 
   render() {
@@ -26,7 +30,7 @@ export class WaitingRoom extends React.Component {
           Start Game
         </button>
         {/* </a> */}
-        <Chat />
+        {/* <Chat /> */}
       </div>
     );
   }
