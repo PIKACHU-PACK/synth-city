@@ -44,9 +44,11 @@ class Chat extends React.Component {
   render() {
     return (
       <div className="chat-box">
-        <div className="chat-header"></div>
-        <div id="chat" className="chat">
-          <div className="bubble">{this.renderChat()}</div>
+        <div className="bubbleWrapper">
+          <div className="inlineContainer">
+            <div className="otherBubble other">{this.renderChat()}</div>
+          </div>
+          {/* <div className="bubble"></div> */}
           <span>Nickname</span>
           <div className="chat-control">
             <input
