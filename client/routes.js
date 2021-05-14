@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Home from './components/Home';
-import Sequencer from './components/Sequencer';
-import { WaitingRoom } from './components/WaitingRoom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import Home from "./components/Home";
+import { WaitingRoom } from "./components/WaitingRoom";
+import Sequencer from "./components/Sequencer";
+import PracticeRoom from "./components/PracticeRoom";
 
 /**
  * COMPONENT
@@ -16,6 +17,7 @@ class Routes extends Component {
           <Route exact path="/" component={Home} />
           <Route path="game/:roomId/sequencer" component={Sequencer} />
           <Route exact path="/sequencer" component={Sequencer} />
+          <Route exact path="/practice" component={PracticeRoom} />
           <Route path="/waiting/:roomId" component={WaitingRoom} />
         </Switch>
       </div>

@@ -14,7 +14,7 @@ export const AMOUNT_OF_NOTES = 16;
 const notes = ["C", "D", "E", "F", "G", "A", "B"];
 const BPM = 120;
 
-class Sequencer extends React.Component {
+class PracticeRoom extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -192,4 +192,4 @@ class Sequencer extends React.Component {
   }
 }
 
-export default Sequencer;
+export default PracticeRoom;

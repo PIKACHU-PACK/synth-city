@@ -51,9 +51,7 @@ form div {
   transform: translateX(5.5vmin);
 }
 
-/* SEQUENCER */
-
-.sequencer {
+/* .sequencer {
   font-family: sans-serif;
   text-align: center;
   display: flex;
@@ -98,6 +96,58 @@ form div {
   border: 2px solid #121212;
   border-radius: 4px;
   cursor: pointer;
+} */
+
+.sequencer {
+  border-radius: 5px;
+  width: fit-content;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  grid-template-columns: fit-content;
+  margin: auto;
+}
+
+.note {
+  border-radius: 5px;
+  height: 4em;
+  width: 4em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: lightgray;
+  margin: 2px;
+  outline: none;
+}
+
+.sequencer-row {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.green-synth {
+  background-color: green;
+  border: 1px solid black;
+}
+
+.blue-synth {
+  background-color: rgb(21, 51, 185);
+  border: 1px solid black;
+}
+
+.red-synth {
+  background-color: rgb(128, 26, 0);
+  border: 1px solid black;
+}
+
+.note-not-active {
+  background-color: solid grey;
+}
+
+.toggle-play {
+  display: flex;
+}
+
+.play-button {
+  margin: auto;
 }
 
 /* CHAT BOX */
