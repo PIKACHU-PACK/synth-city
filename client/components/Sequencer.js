@@ -8,11 +8,13 @@ import {
   basicSynth,
   amSynth,
   pluckySynth,
+  lastNotesSeed,
 } from "./HelperFunctions";
 
 export const AMOUNT_OF_NOTES = 16;
-const notes = ["C", "D", "E", "F", "G", "A", "B"];
-const BPM = 120;
+export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
+export const BPM = 120;
+const PREVIOUS_COLUMNS_TOTAL = 2;
 
 class Sequencer extends React.Component {
   constructor() {
@@ -23,14 +25,17 @@ class Sequencer extends React.Component {
       beat: 0,
       playing: false,
       started: false,
-      currentColumn: false,
       currSynth: basicSynth,
       octave: "4",
+      previousNotes: lastNotesSeed,
+      nextNotes: [],
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
     this.chooseSynth = this.chooseSynth.bind(this);
     this.octaveDropDown = this.octaveDropDown.bind(this);
+    this.onTurnEnd = this.onTurnEnd.bind(this);
+    this.clearGrid = this.clearGrid.bind(this);
   }
 
   componentDidMount() {
@@ -58,6 +63,9 @@ class Sequencer extends React.Component {
     let newGrid = this.state.grid.map((row, rowIndex) => {
       row.map((note, noteIndex) => {
         if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
+          if (typeof note.note === "number") {
+            return;
+          }
           note.isActive = !note.isActive;
           note.synth = this.state.currSynth;
           note.octave = this.state.octave;
@@ -84,17 +92,15 @@ class Sequencer extends React.Component {
     if (!this.state.started) {
       Tone.start();
       Tone.getDestination().volume.rampTo(-10, 0.001);
-      this.configLoop();
       this.setState({ started: true });
+      this.configLoop();
     }
     if (this.state.playing) {
       e.target.innerText = "Play";
       Tone.Transport.stop();
       this.setState({
         playing: false,
-        currentColumn: null,
         beat: 0,
-        started: false,
       });
     } else {
       e.target.innerText = "Stop";
@@ -120,7 +126,33 @@ class Sequencer extends React.Component {
     this.setState({ octave: newOctave });
   }
 
+  onTurnEnd() {
+    let count = 0;
+    const nextNotes = new Array(PREVIOUS_COLUMNS_TOTAL).fill([]);
+    let grid = this.state.grid;
+    for (let i = 1; i < grid.length; i++) {
+      let row = grid[i];
+      for (let j = row.length - PREVIOUS_COLUMNS_TOTAL; j < row.length; j++) {
+        let currNote = row[j];
+        if (currNote.isActive) {
+          nextNotes[count].push(currNote);
+        }
+        count++;
+      }
+      count = 0;
+    }
+    this.setState({ nextNotes: nextNotes });
+  }
+
+  clearGrid() {
+    //NOT WORKING YET TBD
+    // const newGrid = makeGrid(notes);
+    // this.setState({ grid: newGrid });
+    // console.log("new gri is", this.state.grid);
+  }
+
   render() {
+    console.log("state is", this.state);
     return (
       <div>
         <div>
@@ -129,16 +161,13 @@ class Sequencer extends React.Component {
         <div>
           <div>
             <select name="octave" id="octave" onChange={this.octaveDropDown}>
-              <option selected hidden>
-                Octave:
-              </option>
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
               <option value="4">4</option>
               <option value="5">5</option>
               <option value="6">6</option>
               <option value="7">7</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
             </select>
             <button onClick={() => this.chooseSynth("amSynth")}>
               AM Synth (Red)
@@ -167,7 +196,7 @@ class Sequencer extends React.Component {
                       key={noteIndex + "note"}
                       isActive={isActive}
                       currSynth={this.state.currSynth}
-                      className="note"
+                      beat={this.state.beat}
                       onClick={(event) =>
                         this.handleNoteClick(rowIndex, noteIndex, event)
                       }
@@ -185,6 +214,12 @@ class Sequencer extends React.Component {
             onClick={(event) => this.configPlayButton(event)}
           >
             Play
+          </button>
+          <button className="play-button" onClick={this.clearGrid}>
+            Clear
+          </button>
+          <button className="play-button" onClick={this.onTurnEnd}>
+            End Turn
           </button>
         </div>
       </div>
