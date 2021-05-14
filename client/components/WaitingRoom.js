@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
 import Chat from './Chat';
-import { RoomTest } from './Rooms';
-import { startGame } from '../socket';
+import { Rooms } from './Rooms';
+import { gameStarted, startGame } from '../socket';
 
 export class WaitingRoom extends React.Component {
   constructor() {
@@ -16,13 +16,16 @@ export class WaitingRoom extends React.Component {
   }
 
   render() {
+    const { roomId } = this.props.match.params;
     return (
       <div>
         <h2>HELLO, PLEASE WAIT</h2>
-        <p>Your code is: {this.props.match.params.roomId}</p>
+        <p>Your code is: {roomId}</p>
+        {/* <a href={`/game/${roomId}/sequencer`}> */}
         <button type="button" onClick={this.onStart}>
           Start Game
         </button>
+        {/* </a> */}
         <Chat />
       </div>
     );

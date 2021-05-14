@@ -14,9 +14,9 @@ class Routes extends Component {
       <div>
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route path="game/:roomId/sequencer" component={Sequencer} />
           <Route exact path="/sequencer" component={Sequencer} />
           <Route path="/waiting/:roomId" component={WaitingRoom} />
-          {/* <Redirect to="/" /> */}
         </Switch>
       </div>
     );

@@ -21,6 +21,8 @@ form div {
   display: inline-block;
 }
 
+/* PIANO */
+
 #piano {
   position: absolute;
   margin: auto;
@@ -48,6 +50,8 @@ form div {
   width: 3.5vmin;
   transform: translateX(5.5vmin);
 }
+
+/* SEQUENCER */
 
 .sequencer {
   font-family: sans-serif;
@@ -95,3 +99,5 @@ form div {
   border-radius: 4px;
   cursor: pointer;
 }
+
+/* CHAT BOX */

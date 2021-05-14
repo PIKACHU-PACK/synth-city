@@ -5,10 +5,6 @@ const joinRoom = (socket, room) => {
   room.sockets.push(socket);
   socket.join(room.id);
   console.log('in joinRoom function', room);
-  // socket.join(room.id, () => {
-  //   socket.roomId = room.id;
-  //   console.log(socket.id, 'Joined', room.id);
-  // });
 };
 
 module.exports = (io) => {
@@ -44,11 +40,18 @@ module.exports = (io) => {
     socket.on('startGame', (roomId) => {
       console.log(socket.id, 'is ready');
       const room = rooms[roomId];
-      console.log(room);
       if (room.sockets.length >= 2 && room.sockets.length <= 4) {
         for (const client of room.sockets) {
           client.emit('initGame');
         }
+      }
+    });
+
+    socket.on('gameStarted', (room, data) => {
+      io.to(room.sockets[0]).emit('yourTurn', room);
+      io.to(room.sockets[1]).emit('youreNext', data);
+      for (let i = 1; i < room.sockets.length; i++) {
+        io.to(room.sockets[1]).emit('youreWaiting');
       }
     });
 
