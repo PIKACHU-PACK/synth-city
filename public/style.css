@@ -121,11 +121,6 @@ form div {
   white-space: nowrap;
 }
 
-.note-is-active {
-  /* background-color: green; */
-  border: 1px solid black;
-}
-
 .green-synth {
   background-color: green;
   border: 1px solid black;

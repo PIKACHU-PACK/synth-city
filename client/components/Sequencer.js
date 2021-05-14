@@ -11,7 +11,7 @@ import {
 } from "./HelperFunctions";
 
 export const AMOUNT_OF_NOTES = 16;
-const notes = ["C4", "D4", "E4", "F4", "G4", "A4", "B4"];
+const notes = ["C", "D", "E", "F", "G", "A", "B"];
 const BPM = 120;
 
 class Sequencer extends React.Component {
@@ -25,10 +25,12 @@ class Sequencer extends React.Component {
       started: false,
       currentColumn: false,
       currSynth: basicSynth,
+      octave: "4",
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
-    this.amSynthButton = this.amSynthButton.bind(this);
+    this.chooseSynth = this.chooseSynth.bind(this);
+    this.octaveDropDown = this.octaveDropDown.bind(this);
   }
 
   componentDidMount() {
@@ -40,10 +42,9 @@ class Sequencer extends React.Component {
   configLoop() {
     const repeat = (time) => {
       this.state.grid.forEach((row, index) => {
-        //let synth = this.state.synths[index];
         let note = row[this.state.beat];
         if (note.isActive) {
-          note.synth.triggerAttackRelease(note.note, "8n", time);
+          note.synth.triggerAttackRelease(note.note + note.octave, "8n", time);
         }
       });
       this.setState({ beat: (this.state.beat + 1) % AMOUNT_OF_NOTES });
@@ -59,9 +60,9 @@ class Sequencer extends React.Component {
         if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
           note.isActive = !note.isActive;
           note.synth = this.state.currSynth;
+          note.octave = this.state.octave;
           e.target.className = classNames(
             "note",
-            { "note-is-active": !!note.isActive },
             { "note-not-active": !note.isActive },
             {
               "green-synth": note.synth === basicSynth && note.isActive,
@@ -77,7 +78,6 @@ class Sequencer extends React.Component {
       return row;
     });
     this.setState({ grid: newGrid });
-    console.log("state in handleNoteClick is ", this.state);
   }
 
   configPlayButton(e) {
@@ -87,11 +87,15 @@ class Sequencer extends React.Component {
       this.configLoop();
       this.setState({ started: true });
     }
-    //might need something that sets started to false below
     if (this.state.playing) {
       e.target.innerText = "Play";
       Tone.Transport.stop();
-      this.setState({ playing: false, currentColumn: null });
+      this.setState({
+        playing: false,
+        currentColumn: null,
+        beat: 0,
+        started: false,
+      });
     } else {
       e.target.innerText = "Stop";
       Tone.Transport.start();
@@ -99,7 +103,7 @@ class Sequencer extends React.Component {
     }
   }
 
-  amSynthButton(type) {
+  chooseSynth(type) {
     let synthType;
     if (type == "amSynth") {
       synthType = amSynth;
@@ -109,7 +113,11 @@ class Sequencer extends React.Component {
       synthType = pluckySynth;
     }
     this.setState({ currSynth: synthType });
-    //synths: makeSynths(synthType),
+  }
+
+  octaveDropDown(evt) {
+    const newOctave = evt.target.value;
+    this.setState({ octave: newOctave });
   }
 
   render() {
@@ -120,13 +128,25 @@ class Sequencer extends React.Component {
         </div>
         <div>
           <div>
-            <button onClick={() => this.amSynthButton("amSynth")}>
+            <select name="octave" id="octave" onChange={this.octaveDropDown}>
+              <option selected hidden>
+                Octave:
+              </option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>
+            <button onClick={() => this.chooseSynth("amSynth")}>
               AM Synth (Red)
             </button>
-            <button onClick={() => this.amSynthButton("pluckySynth")}>
+            <button onClick={() => this.chooseSynth("pluckySynth")}>
               Plucky Synth (Blue)
             </button>
-            <button onClick={() => this.amSynthButton("basicSynth")}>
+            <button onClick={() => this.chooseSynth("basicSynth")}>
               Basic Synth (Green)
             </button>
             <p></p>

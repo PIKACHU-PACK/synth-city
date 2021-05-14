@@ -2,8 +2,16 @@ import React from "react";
 import classNames from "classnames";
 import { basicSynth, amSynth, pluckySynth } from "./HelperFunctions";
 
-export const NoteButton = ({ note, isActive, synth, currSynth, ...rest }) => {
-  //const classes = isActive ? "note note-is-active" : "note";
+export const NoteButton = ({
+  note,
+  octave,
+  isActive,
+  synth,
+  currSynth,
+  ...rest
+}) => {
+  //   const noteOctave = note + octave;
+  //   console.log(octave);
   return (
     <button
       className={classNames(
