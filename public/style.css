@@ -3,6 +3,22 @@ body {
   background-color: cyan;
 }
 
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+
+#content-wrap {
+  padding-bottom: 2.5rem; /* Footer height */
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 2.5rem; /* Footer height */
+}
+
 a {
   text-decoration: none;
 }
@@ -136,6 +152,30 @@ form div {
 .red-synth {
   background-color: rgb(128, 26, 0);
   border: 1px solid black;
+}
+
+.inactive-beat {
+  border-radius: 5px;
+  height: 2em;
+  width: 4em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(95, 95, 95);
+  background-color: rgb(117, 117, 117);
+  margin: 2px;
+  outline: none;
+}
+
+.active-beat {
+  border-radius: 5px;
+  height: 2em;
+  width: 4em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(95, 95, 95);
+  margin: 2px;
+  outline: none;
+  background-color: rgb(255, 7, 181);
 }
 
 .note-not-active {

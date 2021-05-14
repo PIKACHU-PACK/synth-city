@@ -8,6 +8,7 @@ export const NoteButton = ({
   isActive,
   synth,
   currSynth,
+  beat,
   ...rest
 }) => {
   //   const noteOctave = note + octave;
@@ -15,7 +16,9 @@ export const NoteButton = ({
   return (
     <button
       className={classNames(
-        "note",
+        { "inactive-beat": typeof note === "number" },
+        { "active-beat": note === beat },
+        { "note ": typeof note !== "number" },
         { "green-synth": synth === basicSynth && isActive },
         { "blue-synth": synth === pluckySynth && isActive },
         { "red-synth": synth === amSynth && isActive }
