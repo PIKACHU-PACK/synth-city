@@ -30,15 +30,23 @@ export function joinRoom(roomId, callback) {
 export function startGame(roomId) {
   socket.emit('startGame', roomId);
   socket.emit('gameStarted', roomId);
-  socket.on('yourTurn', () => {
+}
+
+export function turnListener(callback, finishedCallback) {
+  socket.on('yourTurn', (callback) => {
     console.log('its my turn');
   });
-  socket.on('youreNext', () => {
+  socket.on('youreNext', (callback) => {
     console.log('im next');
   });
-  socket.on('youreWaiting', () => {
+  socket.on('youreWaiting', (callback) => {
     console.log('im later');
   });
+  socket.on('finished', finishedCallback);
+}
+
+export function passTurn(num, room, musicArr, musicArrStarter) {
+  socket.emit('complete', num, room, musicArr, musicArrStarter);
 }
 
 export function newGame(room, users) {

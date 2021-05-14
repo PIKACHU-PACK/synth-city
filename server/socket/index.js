@@ -14,7 +14,7 @@ const joinRoom = (socket, room) => {
 
 const nextTurn = () => {
   turn = currentTurn++ % players.length;
-  players[turn].emit('your turn');
+  players[turn].emit('yourTurn');
   console.log('next turn triggered ', turn);
   triggerTimeout();
 };
@@ -92,6 +92,28 @@ module.exports = (io) => {
 
     socket.on('musicComp', (arr, room) => {
       socket.to(room).broadcast.emit('musicToState', arr);
+    });
+
+    socket.on('complete', (num, room, musicArr, musicArrStarter) => {
+      io.in(room).emit('finishTurn', musicArr, musicArrStarter, num);
+      resetTimeOut();
+      nextTurn();
+
+      if (room.sockets.length === 2) {
+        if (num === 4) {
+          io.in(room).emit('finished');
+        }
+      }
+      if (room.sockets.length === 3) {
+        if (num === 6) {
+          io.in(room).emit('finished');
+        }
+      }
+      if (room.sockets.length === 4) {
+        if (num === 8) {
+          io.in(room).emit('finished');
+        }
+      }
     });
   });
 };

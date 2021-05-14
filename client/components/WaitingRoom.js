@@ -4,6 +4,7 @@ import * as Tone from 'tone';
 import Chat from './Chat';
 import { Rooms } from './Rooms';
 import { gameStarted, startGame } from '../socket';
+import history from '../history';
 
 export class WaitingRoom extends React.Component {
   constructor() {
@@ -12,6 +13,9 @@ export class WaitingRoom extends React.Component {
   }
 
   onStart() {
+    history.push({
+      pathname: `/game/${this.props.match.params.roomId}`,
+    });
     startGame(this.props.match.params.roomId);
     //add turn listener into component did mount of game room
     //imported function to listen to turns
@@ -25,11 +29,9 @@ export class WaitingRoom extends React.Component {
       <div>
         <h2>HELLO, PLEASE WAIT</h2>
         <p>Your code is: {roomId}</p>
-        {/* <a href={`/game/${roomId}/sequencer`}> */}
         <button type="button" onClick={this.onStart}>
           Start Game
         </button>
-        {/* </a> */}
         {/* <Chat /> */}
       </div>
     );
