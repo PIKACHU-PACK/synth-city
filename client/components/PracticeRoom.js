@@ -9,10 +9,7 @@ import {
   amSynth,
   pluckySynth,
 } from "./HelperFunctions";
-
-export const AMOUNT_OF_NOTES = 16;
-const notes = ["C", "D", "E", "F", "G", "A", "B"];
-const BPM = 120;
+import { AMOUNT_OF_NOTES, BPM, notes } from "./Sequencer";
 
 class PracticeRoom extends React.Component {
   constructor() {
