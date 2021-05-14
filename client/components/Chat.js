@@ -43,21 +43,34 @@ class Chat extends React.Component {
 
   render() {
     return (
-      <div>
-        <span>Nickname</span>
-        <input
-          name="nickname"
-          onChange={(e) => this.onTextChange(e)}
-          value={this.state.nickname}
-        />
-        <span>Message</span>
-        <input
-          name="msg"
-          onChange={(e) => this.onTextChange(e)}
-          value={this.state.msg}
-        />
-        <button onClick={this.onMessageSubmit}>Send</button>
-        <div>{this.renderChat()}</div>
+      <div className="chat-box">
+        <div className="bubbleWrapper">
+          <div className="inlineContainer">
+            <div className="otherBubble other">{this.renderChat()}</div>
+          </div>
+          {/* <div className="bubble"></div> */}
+          <span>Nickname</span>
+          <div className="chat-control">
+            <input
+              placeholder="Aa"
+              className="chat-input"
+              name="nickname"
+              onChange={(e) => this.onTextChange(e)}
+              value={this.state.nickname}
+            />
+          </div>
+          <span>Message</span>
+          <div className="chat-control">
+            <input
+              placeholder="Aa"
+              className="chat-input"
+              name="msg"
+              onChange={(e) => this.onTextChange(e)}
+              value={this.state.msg}
+            />
+          </div>
+          <button onClick={this.onMessageSubmit}>Send</button>
+        </div>
       </div>
     );
   }

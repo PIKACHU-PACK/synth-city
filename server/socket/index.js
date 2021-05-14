@@ -1,14 +1,35 @@
 const { v4: uuidv4 } = require('uuid');
 const rooms = {};
+let players = [];
+let currentTurn = 0;
+let timeOut;
+let turn = 0;
+const MAX_WAITING = 3000;
 
 const joinRoom = (socket, room) => {
   room.sockets.push(socket);
   socket.join(room.id);
   console.log('in joinRoom function', room);
-  // socket.join(room.id, () => {
-  //   socket.roomId = room.id;
-  //   console.log(socket.id, 'Joined', room.id);
-  // });
+};
+
+const nextTurn = () => {
+  turn = currentTurn++ % players.length;
+  players[turn].emit('yourTurn');
+  console.log('next turn triggered ', turn);
+  triggerTimeout();
+};
+
+const triggerTimeout = () => {
+  timeOut = setTimeout(() => {
+    nextTurn();
+  }, MAX_WAITING);
+};
+
+const resetTimeOut = () => {
+  if (typeof timeOut === 'object') {
+    console.log('timeout reset');
+    clearTimeout(timeOut);
+  }
 };
 
 module.exports = (io) => {
@@ -31,6 +52,7 @@ module.exports = (io) => {
       rooms[room.id] = room;
       joinRoom(socket, room);
       console.log('backend', room);
+
       io.emit('roomCreated', room.id);
     });
 
@@ -40,18 +62,58 @@ module.exports = (io) => {
       callback();
     });
 
-    socket.on('ready', () => {
+    socket.on('startGame', (roomId) => {
       console.log(socket.id, 'is ready');
-      const room = rooms[socket.roomId];
-      if (room.sockets.length >= 2 && room.sockets.length <= 4) {
-        for (const client of room.sockets) {
-          client.emit('initGame');
-        }
+      const room = rooms[roomId];
+      // for (const client of room.sockets) {
+      //   client.emit('initGame');
+      // }
+      let playersArr = room.sockets.map((player) => player.id);
+      console.log(playersArr);
+      players = room.sockets;
+    });
+
+    socket.on('gameStarted', (room, data) => {
+      io.to(players[0]).emit('yourTurn', room, data);
+      io.to(players[1]).emit('youreNext', room, data);
+      for (let i = 1; i < players.length; i++) {
+        io.to(players[i]).emit('youreWaiting', room, data);
+      }
+      nextTurn();
+    });
+
+    socket.on('passTurn', (room) => {
+      players = room.sockets;
+      if (players[turn] == socket) {
+        resetTimeOut();
+        nextTurn();
       }
     });
 
     socket.on('musicComp', (arr, room) => {
       socket.to(room).broadcast.emit('musicToState', arr);
+    });
+
+    socket.on('complete', (num, room, musicArr, musicArrStarter) => {
+      io.in(room).emit('finishTurn', musicArr, musicArrStarter, num);
+      resetTimeOut();
+      nextTurn();
+
+      if (room.sockets.length === 2) {
+        if (num === 4) {
+          io.in(room).emit('finished');
+        }
+      }
+      if (room.sockets.length === 3) {
+        if (num === 6) {
+          io.in(room).emit('finished');
+        }
+      }
+      if (room.sockets.length === 4) {
+        if (num === 8) {
+          io.in(room).emit('finished');
+        }
+      }
     });
   });
 };
