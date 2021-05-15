@@ -11,7 +11,7 @@ import {
   lastNotesSeed,
 } from "./HelperFunctions";
 
-export const AMOUNT_OF_NOTES = 16;
+export const AMOUNT_OF_NOTES = 18;
 export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
 export const BPM = 120;
 const PREVIOUS_COLUMNS_TOTAL = 2;
@@ -127,19 +127,14 @@ class Sequencer extends React.Component {
   }
 
   onTurnEnd() {
-    let count = 0;
-    const nextNotes = new Array(PREVIOUS_COLUMNS_TOTAL).fill([]);
+    const nextNotes = [];
     let grid = this.state.grid;
     for (let i = 1; i < grid.length; i++) {
-      let row = grid[i];
-      for (let j = row.length - PREVIOUS_COLUMNS_TOTAL; j < row.length; j++) {
-        let currNote = row[j];
-        if (currNote.isActive) {
-          nextNotes[count].push(currNote);
-        }
-        count++;
-      }
-      count = 0;
+      let currRow = grid[i];
+      let newRow = [];
+      newRow.push(currRow[16]);
+      newRow.push(currRow[17]);
+      nextNotes.push(newRow);
     }
     this.setState({ nextNotes: nextNotes });
   }

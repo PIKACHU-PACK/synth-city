@@ -34,7 +34,7 @@ export function makeSynths(synthType) {
   return synths;
 }
 
-const countArray = Array.from({ length: 16 }, (_, i) => i + 1);
+const countArray = Array.from({ length: 18 }, (_, i) => i + 1);
 let currCount = 0;
 
 export function makeGrid(notes) {
