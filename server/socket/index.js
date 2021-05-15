@@ -1,9 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const rooms = {};
-let currentTurn = 0;
 let timeOut;
-let turn = 0;
-const MAX_WAITING = 3000;
+const TURN_DURATION = 3000;
 
 const nextTurn = () => {
   turn = currentTurn++ % players.length;
@@ -39,14 +37,14 @@ module.exports = (io) => {
 
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
-      rooms[room] = [socket.id];
+      rooms[room] = { players: [socket.id], turn: 0 };
       socket.join(room);
       // console.log('WOWOWOWOWOW', socket, 'WOWOWOWOWOW');
       socket.emit('roomCreated', room);
     });
 
     socket.on('joinRoom', (room) => {
-      rooms[room].push(socket.id);
+      rooms[room].players.push(socket.id);
       socket.join(room);
       socket.emit('roomJoined');
     });
@@ -57,21 +55,18 @@ module.exports = (io) => {
 
     socket.on('getInfo', (room) => {
       const thisPlayer = socket.id;
-      const players = rooms[room];
-      console.log('NOW?', players);
+      const players = rooms[room].players;
+      // console.log('NOW?', players);
       io.to(thisPlayer).emit('info', {
         thisPlayer: thisPlayer,
         players: players,
       });
     });
 
-    socket.on('turnsOrSometing?', (room, data) => {
-      io.to(players[0]).emit('yourTurn', room, data);
-      io.to(players[1]).emit('youreNext', room, data);
-      for (let i = 1; i < players.length; i++) {
-        io.to(players[i]).emit('youreWaiting', room, data);
-      }
-      nextTurn();
+    socket.on('setTurn', (room, data) => {
+      const turn = rooms[room].turn;
+      const nextPlayer = rooms[room].players[turn];
+      io.in(room).emit('switchTurn', nextPlayer);
     });
 
     socket.on('passTurn', (room) => {

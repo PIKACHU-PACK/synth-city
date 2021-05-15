@@ -8,6 +8,7 @@ export class GamePage extends React.Component {
     this.state = {
       players: [],
       thisPlayer: '',
+      turn: '',
     };
     this.stateInfo = this.stateInfo.bind(this);
   }
