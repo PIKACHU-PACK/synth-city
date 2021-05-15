@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-// import store, { gotNewMessage } from './store'
 
 const socket = io(window.location.origin);
 
@@ -26,7 +25,6 @@ export function joinRoom(room, callback) {
   socket.on('roomJoined', () => {
     callback(room);
   });
-  //pass callback down, set state for other players
 }
 
 export function startGame(room) {
@@ -34,7 +32,6 @@ export function startGame(room) {
 }
 
 export function getInfo(room, callback) {
-  console.log('ROOM', room, typeof room);
   socket.emit('getInfo', room);
   socket.on('info', (info) => {
     callback(info);
@@ -47,17 +44,14 @@ export function startListener(callback) {
   });
 }
 
+export function endTurn(room) {
+  socket.emit('setTurn', room);
+}
+
 export function turnListener(callback, finishedCallback) {
-  socket.on('yourTurn', (callback) => {
-    console.log('its my turn');
+  socket.on('switchTurn', (nextPlayer) => {
+    callback(nextPlayer);
   });
-  socket.on('youreNext', (callback) => {
-    console.log('im next');
-  });
-  socket.on('youreWaiting', (callback) => {
-    console.log('im later');
-  });
-  socket.on('finished', finishedCallback);
 }
 
 export function passTurn(num, room, musicArr, musicArrStarter) {

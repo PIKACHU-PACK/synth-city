@@ -1,34 +1,12 @@
 const { v4: uuidv4 } = require('uuid');
 const rooms = {};
-let timeOut;
-const TURN_DURATION = 3000;
-
-const nextTurn = () => {
-  turn = currentTurn++ % players.length;
-  players[turn].emit('yourTurn');
-  console.log('next turn triggered ', turn);
-  triggerTimeout();
-};
-
-const triggerTimeout = () => {
-  timeOut = setTimeout(() => {
-    nextTurn();
-  }, MAX_WAITING);
-};
-
-const resetTimeOut = () => {
-  if (typeof timeOut === 'object') {
-    console.log('timeout reset');
-    clearTimeout(timeOut);
-  }
-};
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log(`User Connected: ${socket.id}`);
 
     socket.on('disconnect', () => {
-      console.log(`User ${socket.id} left, BYEEEEEE`);
+      console.log(`BYEEEEEE ${socket.id}`);
     });
 
     socket.on('chat message', ({ nickname, msg }) => {
@@ -39,7 +17,6 @@ module.exports = (io) => {
       const room = uuidv4().slice(0, 5).toUpperCase();
       rooms[room] = { players: [socket.id], turn: 0 };
       socket.join(room);
-      // console.log('WOWOWOWOWOW', socket, 'WOWOWOWOWOW');
       socket.emit('roomCreated', room);
     });
 
@@ -56,29 +33,19 @@ module.exports = (io) => {
     socket.on('getInfo', (room) => {
       const thisPlayer = socket.id;
       const players = rooms[room].players;
-      // console.log('NOW?', players);
+      const turn = rooms[room].turn;
       io.to(thisPlayer).emit('info', {
         thisPlayer: thisPlayer,
         players: players,
+        musician: rooms[room].players[turn],
       });
     });
 
-    socket.on('setTurn', (room, data) => {
+    socket.on('setTurn', (room) => {
+      rooms[room].turn++;
       const turn = rooms[room].turn;
       const nextPlayer = rooms[room].players[turn];
       io.in(room).emit('switchTurn', nextPlayer);
-    });
-
-    socket.on('passTurn', (room) => {
-      players = room.sockets;
-      if (players[turn] == socket) {
-        resetTimeOut();
-        nextTurn();
-      }
-    });
-
-    socket.on('musicComp', (arr, room) => {
-      socket.to(room).broadcast.emit('musicToState', arr);
     });
 
     socket.on('complete', (num, room, musicArr, musicArrStarter) => {
