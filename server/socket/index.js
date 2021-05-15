@@ -41,19 +41,28 @@ module.exports = (io) => {
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
       rooms[room] = room;
-      players.push(socket);
+      players.push(socket.id);
       socket.join(room);
+      // console.log('WOWOWOWOWOW', socket, 'WOWOWOWOWOW');
       socket.emit('roomCreated', room);
     });
 
     socket.on('joinRoom', (room) => {
-      players.push(socket);
+      players.push(socket.id);
       socket.join(room);
       socket.emit('roomJoined');
     });
 
     socket.on('startGame', (room) => {
       io.in(room).emit('gameStarted');
+    });
+
+    socket.on('getInfo', () => {
+      const thisPlayer = socket.id;
+      io.to(thisPlayer).emit('info', {
+        thisPlayer: thisPlayer,
+        players: players,
+      });
     });
 
     socket.on('turnsOrSometing?', (room, data) => {
