@@ -16,20 +16,27 @@ socket.on('disconnect', () => {
 
 export function createRoom(callback) {
   socket.emit('createRoom');
-  socket.on('roomCreated', (roomId) => {
-    callback(roomId);
+  socket.on('roomCreated', (room) => {
+    callback(room);
   });
 }
 
-export function joinRoom(roomId, callback) {
-  socket.emit('joinRoom', roomId, callback);
+export function joinRoom(room, callback) {
+  socket.emit('joinRoom', room);
+  socket.on('roomJoined', () => {
+    callback(room);
+  });
   //pass callback down, set state for other players
-  socket.on('ready');
 }
 
-export function startGame(roomId) {
-  socket.emit('startGame', roomId);
-  socket.emit('gameStarted', roomId);
+export function startGame(room) {
+  socket.emit('startGame', room);
+}
+
+export function startListener(callback) {
+  socket.on('gameStarted', () => {
+    callback();
+  });
 }
 
 export function turnListener(callback, finishedCallback) {

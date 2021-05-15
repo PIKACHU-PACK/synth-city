@@ -3,24 +3,36 @@ import { connect } from 'react-redux';
 import * as Tone from 'tone';
 import Chat from './Chat';
 import { Rooms } from './Rooms';
-import { gameStarted, startGame } from '../socket';
+import { startGame, startListener } from '../socket';
 import history from '../history';
 
 export class WaitingRoom extends React.Component {
   constructor() {
     super();
+    this.state = {
+      players: [],
+      thisPlayer: '',
+    };
     this.onStart = this.onStart.bind(this);
+    this.gameStarted = this.gameStarted.bind(this);
+  }
+
+  componentDidMount() {
+    startListener(this.gameStarted);
   }
 
   onStart() {
-    history.push({
-      pathname: `/game/${this.props.match.params.roomId}`,
-    });
     startGame(this.props.match.params.roomId);
     //add turn listener into component did mount of game room
     //imported function to listen to turns
     //when called it would start the io.on
     //fire turn listener function and start implementing turns until the game ends
+  }
+
+  gameStarted() {
+    history.push({
+      pathname: `/game/${this.props.match.params.roomId}`,
+    });
   }
 
   render() {

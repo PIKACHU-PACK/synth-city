@@ -6,12 +6,6 @@ let timeOut;
 let turn = 0;
 const MAX_WAITING = 3000;
 
-const joinRoom = (socket, room) => {
-  room.sockets.push(socket);
-  socket.join(room.id);
-  console.log('in joinRoom function', room);
-};
-
 const nextTurn = () => {
   turn = currentTurn++ % players.length;
   players[turn].emit('yourTurn');
@@ -45,35 +39,24 @@ module.exports = (io) => {
     });
 
     socket.on('createRoom', () => {
-      const room = {
-        id: uuidv4().slice(0, 5).toUpperCase(),
-        sockets: [],
-      };
-      rooms[room.id] = room;
-      joinRoom(socket, room);
-      console.log('backend', room);
-
-      io.emit('roomCreated', room.id);
+      const room = uuidv4().slice(0, 5).toUpperCase();
+      rooms[room] = room;
+      players.push(socket);
+      socket.join(room);
+      socket.emit('roomCreated', room);
     });
 
-    socket.on('joinRoom', (roomId, callback) => {
-      const room = rooms[roomId];
-      joinRoom(socket, room);
-      callback();
+    socket.on('joinRoom', (room) => {
+      players.push(socket);
+      socket.join(room);
+      socket.emit('roomJoined');
     });
 
-    socket.on('startGame', (roomId) => {
-      console.log(socket.id, 'is ready');
-      const room = rooms[roomId];
-      // for (const client of room.sockets) {
-      //   client.emit('initGame');
-      // }
-      let playersArr = room.sockets.map((player) => player.id);
-      console.log(playersArr);
-      players = room.sockets;
+    socket.on('startGame', (room) => {
+      io.in(room).emit('gameStarted');
     });
 
-    socket.on('gameStarted', (room, data) => {
+    socket.on('turnsOrSometing?', (room, data) => {
       io.to(players[0]).emit('yourTurn', room, data);
       io.to(players[1]).emit('youreNext', room, data);
       for (let i = 1; i < players.length; i++) {

@@ -1,19 +1,19 @@
-import React from "react";
-import io from "socket.io-client";
+import React from 'react';
+import io from 'socket.io-client';
 
-const socket = io.connect(window.location.origin);
+// const socket = io.connect(window.location.origin);
 
 class Chat extends React.Component {
   constructor() {
     super();
-    this.state = { msg: "", chat: [], nickname: "" };
+    this.state = { msg: '', chat: [], nickname: '' };
     this.onTextChange = this.onTextChange.bind(this);
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
     this.renderChat = this.renderChat.bind(this);
   }
 
   componentDidMount() {
-    socket.on("chat message", ({ nickname, msg }) => {
+    socket.on('chat message', ({ nickname, msg }) => {
       this.setState({
         chat: [...this.state.chat, { nickname, msg }],
       });
@@ -26,15 +26,15 @@ class Chat extends React.Component {
 
   onMessageSubmit() {
     const { nickname, msg } = this.state;
-    socket.emit("chat message", { nickname, msg });
-    this.setState({ msg: "" });
+    socket.emit('chat message', { nickname, msg });
+    this.setState({ msg: '' });
   }
 
   renderChat() {
     const { chat } = this.state;
     return chat.map(({ nickname, msg }, idx) => (
       <div key={idx}>
-        <span style={{ color: "green" }}>{nickname}: </span>
+        <span style={{ color: 'green' }}>{nickname}: </span>
 
         <span>{msg}</span>
       </div>

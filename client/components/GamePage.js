@@ -5,10 +5,16 @@ import Sequencer from './Sequencer';
 export class GamePage extends React.Component {
   constructor() {
     super();
+    this.state = {
+      players: [],
+      thisPlayer: '',
+    };
   }
+
   componentDidMount() {
     turnListener();
   }
+
   render() {
     return (
       <div>

@@ -9,15 +9,15 @@ export class Rooms extends React.Component {
       roomKey: '',
     };
     this.handleCreate = this.handleCreate.bind(this);
-    this.enterRoom = this.enterRoom.bind(this);
+    this.enterNewRoom = this.enterNewRoom.bind(this);
     this.enterExistingRoom = this.enterExistingRoom.bind(this);
     this.handleJoin = this.handleJoin.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  enterRoom(roomId) {
+  enterNewRoom(room) {
     history.push({
-      pathname: `/waiting/${roomId}`,
+      pathname: `/waiting/${room}`,
     });
   }
 
@@ -34,7 +34,7 @@ export class Rooms extends React.Component {
   }
 
   handleCreate() {
-    createRoom(this.enterRoom);
+    createRoom(this.enterNewRoom);
   }
 
   handleJoin() {
