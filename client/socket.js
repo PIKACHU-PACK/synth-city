@@ -33,8 +33,9 @@ export function startGame(room) {
   socket.emit('startGame', room);
 }
 
-export function getInfo(callback) {
-  socket.emit('getInfo');
+export function getInfo(room, callback) {
+  console.log('ROOM', room, typeof room);
+  socket.emit('getInfo', room);
   socket.on('info', (info) => {
     callback(info);
   });

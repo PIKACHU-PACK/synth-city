@@ -1,6 +1,5 @@
 const { v4: uuidv4 } = require('uuid');
 const rooms = {};
-let players = [];
 let currentTurn = 0;
 let timeOut;
 let turn = 0;
@@ -40,15 +39,14 @@ module.exports = (io) => {
 
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
-      rooms[room] = room;
-      players.push(socket.id);
+      rooms[room] = [socket.id];
       socket.join(room);
       // console.log('WOWOWOWOWOW', socket, 'WOWOWOWOWOW');
       socket.emit('roomCreated', room);
     });
 
     socket.on('joinRoom', (room) => {
-      players.push(socket.id);
+      rooms[room].push(socket.id);
       socket.join(room);
       socket.emit('roomJoined');
     });
@@ -57,8 +55,10 @@ module.exports = (io) => {
       io.in(room).emit('gameStarted');
     });
 
-    socket.on('getInfo', () => {
+    socket.on('getInfo', (room) => {
       const thisPlayer = socket.id;
+      const players = rooms[room];
+      console.log('NOW?', players);
       io.to(thisPlayer).emit('info', {
         thisPlayer: thisPlayer,
         players: players,

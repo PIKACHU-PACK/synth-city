@@ -13,7 +13,7 @@ export class GamePage extends React.Component {
   }
 
   componentDidMount() {
-    getInfo(this.stateInfo);
+    getInfo(this.props.match.params.roomId, this.stateInfo);
     turnListener();
   }
 
