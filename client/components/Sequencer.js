@@ -36,12 +36,14 @@ class Sequencer extends React.Component {
     this.octaveDropDown = this.octaveDropDown.bind(this);
     this.onTurnEnd = this.onTurnEnd.bind(this);
     this.clearGrid = this.clearGrid.bind(this);
+    this.addPreviousNotes = this.addPreviousNotes.bind(this);
   }
 
   componentDidMount() {
     const rowGrid = makeGrid(notes);
     const synthsArr = makeSynths(basicSynth);
-    this.setState({ grid: rowGrid, synths: synthsArr });
+    const newGrid = this.addPreviousNotes(rowGrid);
+    this.setState({ grid: newGrid, synths: synthsArr });
   }
 
   configLoop() {
@@ -64,6 +66,9 @@ class Sequencer extends React.Component {
       row.map((note, noteIndex) => {
         if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
           if (typeof note.note === "number") {
+            return;
+          }
+          if (noteIndex === 0 || noteIndex === 1) {
             return;
           }
           note.isActive = !note.isActive;
@@ -139,6 +144,29 @@ class Sequencer extends React.Component {
     this.setState({ nextNotes: nextNotes });
   }
 
+  addPreviousNotes(grid) {
+    let newGrid = grid.map((eachRow, rowIndex) => {
+      if (rowIndex === 0) {
+        return eachRow;
+      }
+      let newRow = eachRow.map((eachCol, colIndex) => {
+        if (colIndex === 0) {
+          eachCol = this.state.previousNotes[rowIndex - 1][0];
+          eachCol["isPrevious"] = true;
+          return eachCol;
+        } else if (colIndex === 1) {
+          eachCol = this.state.previousNotes[rowIndex - 1][1];
+          eachCol["isPrevious"] = true;
+          return eachCol;
+        } else {
+          return eachCol;
+        }
+      });
+      return newRow;
+    });
+    return newGrid;
+  }
+
   clearGrid() {
     //NOT WORKING YET TBD
     // const newGrid = makeGrid(notes);
@@ -147,7 +175,7 @@ class Sequencer extends React.Component {
   }
 
   render() {
-    console.log("state is", this.state);
+    console.log("state in render is", this.state);
     return (
       <div>
         <div>
@@ -184,14 +212,15 @@ class Sequencer extends React.Component {
                 className="sequencer-row"
                 key={rowIndex + "row"}
               >
-                {row.map(({ note, isActive }, noteIndex) => {
+                {row.map(({ note, isActive, synth, isPrevious }, noteIndex) => {
                   return (
                     <NoteButton
                       note={note}
                       key={noteIndex + "note"}
                       isActive={isActive}
-                      currSynth={this.state.currSynth}
                       beat={this.state.beat}
+                      synth={synth}
+                      isPrevious={isPrevious}
                       onClick={(event) =>
                         this.handleNoteClick(rowIndex, noteIndex, event)
                       }
