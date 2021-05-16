@@ -30,37 +30,34 @@ export function joinRoom(room, callback) {
 export function startGame(room) {
   socket.emit('startGame', room);
 }
-
+// in GamePage componentDidMount - gets data from backend, then sets state
 export function getInfo(room, callback) {
   socket.emit('getInfo', room);
   socket.on('info', (info) => {
     callback(info);
   });
 }
-
+// in WaitingRoom componentDidMount - starts game for everyone when Start Game pressed
 export function startListener(callback) {
   socket.on('gameStarted', () => {
     callback();
   });
 }
-
+// triggered when timer runs out on player's turn
 export function endTurn(room) {
   socket.emit('setTurn', room);
 }
-
+// switches turns after backend hears that current player's turn ended
 export function turnListener(callback, finishedCallback) {
   socket.on('switchTurn', (nextPlayer) => {
     callback(nextPlayer);
   });
 }
-
-export function passTurn(num, room, musicArr, musicArrStarter) {
-  socket.emit('complete', num, room, musicArr, musicArrStarter);
-}
-
-export function newGame(room, users) {
-  socket.emit('users', room, users);
-  socket.emit('newgame', room);
+// listens for backend that all rounds finished, then redirects to SongReveal
+export function gameEndListener(callback) {
+  socket.on('gameOver', () => {
+    callback();
+  });
 }
 
 export default socket;

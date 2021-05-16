@@ -1,7 +1,8 @@
 import React from 'react';
-import { getInfo, turnListener, endTurn } from '../socket';
+import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
 import Sequencer from './Sequencer';
 import { Timer } from 'react-countdown-clock-timer';
+import history from '../history';
 
 export class GamePage extends React.Component {
   constructor() {
@@ -14,11 +15,13 @@ export class GamePage extends React.Component {
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
     this.changeMusician = this.changeMusician.bind(this);
+    this.revealSong = this.revealSong.bind(this);
   }
 
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
     turnListener(this.changeMusician);
+    gameEndListener(this.revealSong);
   }
 
   stateInfo(info) {
@@ -36,6 +39,12 @@ export class GamePage extends React.Component {
 
   finishTurn(room) {
     endTurn(room);
+  }
+
+  revealSong() {
+    history.push({
+      pathname: `/song/${this.props.match.params.roomId}`,
+    });
   }
 
   render() {

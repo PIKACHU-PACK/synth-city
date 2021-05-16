@@ -6,7 +6,7 @@ import { Rooms } from './Rooms';
 import { startGame, startListener } from '../socket';
 import history from '../history';
 
-export class WaitingRoom extends React.Component {
+class WaitingRoom extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -49,3 +49,5 @@ export class WaitingRoom extends React.Component {
     );
   }
 }
+
+export default WaitingRoom;

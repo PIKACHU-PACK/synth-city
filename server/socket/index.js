@@ -1,5 +1,14 @@
 const { v4: uuidv4 } = require('uuid');
+
 const rooms = {};
+// rooms = {
+//          ROOM_ID: {
+//                   id: ROOM_ID,
+//                   players: [ SOCKET_ID, SOCKET_ID... ],
+//                   turn: TURN_NUMBER,
+//                   rounds: NUMBER_OF_ROUNDS
+//                  }
+//          }
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
@@ -7,10 +16,6 @@ module.exports = (io) => {
 
     socket.on('disconnect', () => {
       console.log(`BYEEEEEE ${socket.id}`);
-    });
-
-    socket.on('chat message', ({ nickname, msg }) => {
-      io.emit('chat message', { nickname, msg });
     });
 
     socket.on('createRoom', () => {
@@ -33,6 +38,7 @@ module.exports = (io) => {
     socket.on('getInfo', (room) => {
       const thisPlayer = socket.id;
       const players = rooms[room].players;
+      rooms[room].rounds = players.length === 3 ? 6 : 4; // determines number of rounds for game based on number of players
       const turn = rooms[room].turn;
       io.to(thisPlayer).emit('info', {
         thisPlayer: thisPlayer,
@@ -43,30 +49,14 @@ module.exports = (io) => {
 
     socket.on('setTurn', (room) => {
       rooms[room].turn++;
-      const turn = rooms[room].turn;
-      const nextPlayer = rooms[room].players[turn];
-      io.in(room).emit('switchTurn', nextPlayer);
-    });
-
-    socket.on('complete', (num, room, musicArr, musicArrStarter) => {
-      io.in(room).emit('finishTurn', musicArr, musicArrStarter, num);
-      resetTimeOut();
-      nextTurn();
-
-      if (room.sockets.length === 2) {
-        if (num === 4) {
-          io.in(room).emit('finished');
-        }
-      }
-      if (room.sockets.length === 3) {
-        if (num === 6) {
-          io.in(room).emit('finished');
-        }
-      }
-      if (room.sockets.length === 4) {
-        if (num === 8) {
-          io.in(room).emit('finished');
-        }
+      if (rooms[room].turn === rooms[room].rounds) {
+        // checks to see if the game should end or turns should keep switching
+        io.in(room).emit('gameOver');
+      } else {
+        const players = rooms[room].players;
+        const turn = rooms[room].turn % players.length; // makes it so that turns will loop if players are meant to have two turns each
+        const nextPlayer = players[turn];
+        io.in(room).emit('switchTurn', nextPlayer);
       }
     });
   });
