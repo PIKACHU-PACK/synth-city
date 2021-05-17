@@ -1,5 +1,4 @@
 import io from 'socket.io-client';
-// import store, { gotNewMessage } from './store'
 
 const socket = io(window.location.origin);
 
@@ -16,42 +15,49 @@ socket.on('disconnect', () => {
 
 export function createRoom(callback) {
   socket.emit('createRoom');
-  socket.on('roomCreated', (roomId) => {
-    callback(roomId);
+  socket.on('roomCreated', (room) => {
+    callback(room);
   });
 }
 
-export function joinRoom(roomId, callback) {
-  socket.emit('joinRoom', roomId, callback);
-  //pass callback down, set state for other players
-  socket.on('ready');
+export function joinRoom(room, callback) {
+  socket.emit('joinRoom', room);
+  socket.on('roomJoined', () => {
+    callback(room);
+  });
 }
 
-export function startGame(roomId) {
-  socket.emit('startGame', roomId);
-  socket.emit('gameStarted', roomId);
+export function startGame(room) {
+  socket.emit('startGame', room);
 }
-
+// in GamePage componentDidMount - gets data from backend, then sets state
+export function getInfo(room, callback) {
+  socket.emit('getInfo', room);
+  socket.on('info', (info) => {
+    callback(info);
+  });
+}
+// in WaitingRoom componentDidMount - starts game for everyone when Start Game pressed
+export function startListener(callback) {
+  socket.on('gameStarted', () => {
+    callback();
+  });
+}
+// triggered when timer runs out on player's turn
+export function endTurn(room) {
+  socket.emit('setTurn', room);
+}
+// switches turns after backend hears that current player's turn ended
 export function turnListener(callback, finishedCallback) {
-  socket.on('yourTurn', (callback) => {
-    console.log('its my turn');
+  socket.on('switchTurn', (nextPlayer) => {
+    callback(nextPlayer);
   });
-  socket.on('youreNext', (callback) => {
-    console.log('im next');
-  });
-  socket.on('youreWaiting', (callback) => {
-    console.log('im later');
-  });
-  socket.on('finished', finishedCallback);
 }
-
-export function passTurn(num, room, musicArr, musicArrStarter) {
-  socket.emit('complete', num, room, musicArr, musicArrStarter);
-}
-
-export function newGame(room, users) {
-  socket.emit('users', room, users);
-  socket.emit('newgame', room);
+// listens for backend that all rounds finished, then redirects to SongReveal
+export function gameEndListener(callback) {
+  socket.on('gameOver', () => {
+    callback();
+  });
 }
 
 export default socket;

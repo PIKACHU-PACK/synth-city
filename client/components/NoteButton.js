@@ -19,7 +19,6 @@ export const NoteButton = ({
         { "inactive-beat": typeof note === "number" },
         { "active-beat": note === beat },
         { "note ": typeof note !== "number" },
-
         {
           "previous-note": typeof note !== "number" && isPrevious && !isActive,
         },
@@ -29,7 +28,7 @@ export const NoteButton = ({
       )}
       {...rest}
     >
-      {note}
+      {note + `${octave}`}
     </button>
   );
 };

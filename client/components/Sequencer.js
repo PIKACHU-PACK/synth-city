@@ -212,21 +212,27 @@ class Sequencer extends React.Component {
                 className="sequencer-row"
                 key={rowIndex + "row"}
               >
-                {row.map(({ note, isActive, synth, isPrevious }, noteIndex) => {
-                  return (
-                    <NoteButton
-                      note={note}
-                      key={noteIndex + "note"}
-                      isActive={isActive}
-                      beat={this.state.beat}
-                      synth={synth}
-                      isPrevious={isPrevious}
-                      onClick={(event) =>
-                        this.handleNoteClick(rowIndex, noteIndex, event)
-                      }
-                    />
-                  );
-                })}
+                {row.map(
+                  (
+                    { note, isActive, synth, isPrevious, octave },
+                    noteIndex
+                  ) => {
+                    return (
+                      <NoteButton
+                        note={note}
+                        key={noteIndex + "note"}
+                        isActive={isActive}
+                        beat={this.state.beat}
+                        synth={synth}
+                        octave={octave}
+                        isPrevious={isPrevious}
+                        onClick={(event) =>
+                          this.handleNoteClick(rowIndex, noteIndex, event)
+                        }
+                      />
+                    );
+                  }
+                )}
               </div>
             );
           })}
