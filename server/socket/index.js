@@ -1,118 +1,62 @@
 const { v4: uuidv4 } = require('uuid');
+
 const rooms = {};
-let players = [];
-let currentTurn = 0;
-let timeOut;
-let turn = 0;
-const MAX_WAITING = 3000;
-
-const joinRoom = (socket, room) => {
-  room.sockets.push(socket);
-  socket.join(room.id);
-  console.log('in joinRoom function', room);
-};
-
-const nextTurn = () => {
-  turn = currentTurn++ % players.length;
-  players[turn].emit('yourTurn');
-  console.log('next turn triggered ', turn);
-  triggerTimeout();
-};
-
-const triggerTimeout = () => {
-  timeOut = setTimeout(() => {
-    nextTurn();
-  }, MAX_WAITING);
-};
-
-const resetTimeOut = () => {
-  if (typeof timeOut === 'object') {
-    console.log('timeout reset');
-    clearTimeout(timeOut);
-  }
-};
+// rooms = {
+//          ROOM_ID: {
+//                   id: ROOM_ID,
+//                   players: [ SOCKET_ID, SOCKET_ID... ],
+//                   turn: TURN_NUMBER,
+//                   rounds: NUMBER_OF_ROUNDS
+//                  }
+//          }
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log(`User Connected: ${socket.id}`);
 
     socket.on('disconnect', () => {
-      console.log(`User ${socket.id} left, BYEEEEEE`);
-    });
-
-    socket.on('chat message', ({ nickname, msg }) => {
-      io.emit('chat message', { nickname, msg });
+      console.log(`BYEEEEEE ${socket.id}`);
     });
 
     socket.on('createRoom', () => {
-      const room = {
-        id: uuidv4().slice(0, 5).toUpperCase(),
-        sockets: [],
-      };
-      rooms[room.id] = room;
-      joinRoom(socket, room);
-      console.log('backend', room);
-
-      io.emit('roomCreated', room.id);
+      const room = uuidv4().slice(0, 5).toUpperCase();
+      rooms[room] = { players: [socket.id], turn: 0 };
+      socket.join(room);
+      socket.emit('roomCreated', room);
     });
 
-    socket.on('joinRoom', (roomId, callback) => {
-      const room = rooms[roomId];
-      joinRoom(socket, room);
-      callback();
+    socket.on('joinRoom', (room) => {
+      rooms[room].players.push(socket.id);
+      socket.join(room);
+      socket.emit('roomJoined');
     });
 
-    socket.on('startGame', (roomId) => {
-      console.log(socket.id, 'is ready');
-      const room = rooms[roomId];
-      // for (const client of room.sockets) {
-      //   client.emit('initGame');
-      // }
-      let playersArr = room.sockets.map((player) => player.id);
-      console.log(playersArr);
-      players = room.sockets;
+    socket.on('startGame', (room) => {
+      io.in(room).emit('gameStarted');
     });
 
-    socket.on('gameStarted', (room, data) => {
-      io.to(players[0]).emit('yourTurn', room, data);
-      io.to(players[1]).emit('youreNext', room, data);
-      for (let i = 1; i < players.length; i++) {
-        io.to(players[i]).emit('youreWaiting', room, data);
-      }
-      nextTurn();
+    socket.on('getInfo', (room) => {
+      const thisPlayer = socket.id;
+      const players = rooms[room].players;
+      rooms[room].rounds = players.length === 3 ? 6 : 4; // determines number of rounds for game based on number of players
+      const turn = rooms[room].turn;
+      io.to(thisPlayer).emit('info', {
+        thisPlayer: thisPlayer,
+        players: players,
+        musician: rooms[room].players[turn],
+      });
     });
 
-    socket.on('passTurn', (room) => {
-      players = room.sockets;
-      if (players[turn] == socket) {
-        resetTimeOut();
-        nextTurn();
-      }
-    });
-
-    socket.on('musicComp', (arr, room) => {
-      socket.to(room).broadcast.emit('musicToState', arr);
-    });
-
-    socket.on('complete', (num, room, musicArr, musicArrStarter) => {
-      io.in(room).emit('finishTurn', musicArr, musicArrStarter, num);
-      resetTimeOut();
-      nextTurn();
-
-      if (room.sockets.length === 2) {
-        if (num === 4) {
-          io.in(room).emit('finished');
-        }
-      }
-      if (room.sockets.length === 3) {
-        if (num === 6) {
-          io.in(room).emit('finished');
-        }
-      }
-      if (room.sockets.length === 4) {
-        if (num === 8) {
-          io.in(room).emit('finished');
-        }
+    socket.on('setTurn', (room) => {
+      rooms[room].turn++;
+      if (rooms[room].turn === rooms[room].rounds) {
+        // checks to see if the game should end or turns should keep switching
+        io.in(room).emit('gameOver');
+      } else {
+        const players = rooms[room].players;
+        const turn = rooms[room].turn % players.length; // makes it so that turns will loop if players are meant to have two turns each
+        const nextPlayer = players[turn];
+        io.in(room).emit('switchTurn', nextPlayer);
       }
     });
   });

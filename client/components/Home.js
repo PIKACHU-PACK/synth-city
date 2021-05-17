@@ -12,21 +12,18 @@ export class Home extends React.Component {
     this.state = {
       roomKey: '',
     };
-
     this.handleCreate = this.handleCreate.bind(this);
-    this.enterRoom = this.enterRoom.bind(this);
+    this.enterNewRoom = this.enterNewRoom.bind(this);
     this.enterExistingRoom = this.enterExistingRoom.bind(this);
     this.handleJoin = this.handleJoin.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.openRoomInput = this.openRoomInput.bind(this);
   }
 
-  enterRoom(roomId) {
+  enterNewRoom(room) {
     history.push({
-      pathname: `/waiting/${roomId}`,
+      pathname: `/waiting/${room}`,
     });
   }
-
   enterExistingRoom() {
     history.push({
       pathname: `/waiting/${this.state.roomKey}`,
@@ -40,7 +37,7 @@ export class Home extends React.Component {
   }
 
   handleCreate() {
-    createRoom(this.enterRoom);
+    createRoom(this.enterNewRoom);
   }
 
   async openRoomInput() {
@@ -70,7 +67,7 @@ export class Home extends React.Component {
           <div className="column">
             <div onClick={this.openRoomInput} className="option-card">
               <h3>Join existing game</h3>
-              {/* <input
+              <input
                 name="roomKey"
                 value={this.state.roomKey}
                 onChange={this.handleChange}
@@ -82,7 +79,7 @@ export class Home extends React.Component {
                 onClick={this.handleJoin}
               >
                 Join Game
-              </button> */}
+              </button>
             </div>
           </div>
           <div className="column">

@@ -9,15 +9,15 @@
 //       roomKey: '',
 //     };
 //     this.handleCreate = this.handleCreate.bind(this);
-//     this.enterRoom = this.enterRoom.bind(this);
+//     this.enterNewRoom = this.enterNewRoom.bind(this);
 //     this.enterExistingRoom = this.enterExistingRoom.bind(this);
 //     this.handleJoin = this.handleJoin.bind(this);
 //     this.handleChange = this.handleChange.bind(this);
 //   }
 
-//   enterRoom(roomId) {
+//   enterNewRoom(room) {
 //     history.push({
-//       pathname: `/waiting/${roomId}`,
+//       pathname: `/waiting/${room}`,
 //     });
 //   }
 
@@ -33,9 +33,9 @@
 //     });
 //   }
 
-//   handleCreate() {
-//     createRoom(this.enterRoom);
-//   }
+// handleCreate() {
+//   createRoom(this.enterNewRoom);
+// }
 
 //   handleJoin() {
 //     joinRoom(this.state.roomKey, this.enterExistingRoom);
