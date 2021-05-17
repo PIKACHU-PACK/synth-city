@@ -12,7 +12,6 @@ export class GamePage extends React.Component {
   render() {
     return (
       <div>
-        <h2>Playing</h2>
         <Sequencer />
       </div>
     );

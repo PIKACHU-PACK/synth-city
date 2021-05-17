@@ -1,24 +1,98 @@
-import React from "react";
-import { connect } from "react-redux";
-import Chat from "./Chat";
-import { Rooms } from "./Rooms";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { createRoom, joinRoom } from '../socket';
+import history from '../history';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export class Home extends React.Component {
   constructor() {
     super();
+    this.state = {
+      roomKey: '',
+    };
+
+    this.handleCreate = this.handleCreate.bind(this);
+    this.enterRoom = this.enterRoom.bind(this);
+    this.enterExistingRoom = this.enterExistingRoom.bind(this);
+    this.handleJoin = this.handleJoin.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.openRoomInput = this.openRoomInput.bind(this);
+  }
+
+  enterRoom(roomId) {
+    history.push({
+      pathname: `/waiting/${roomId}`,
+    });
+  }
+
+  enterExistingRoom() {
+    history.push({
+      pathname: `/waiting/${this.state.roomKey}`,
+    });
+  }
+
+  handleChange(evt) {
+    this.setState({
+      [evt.target.name]: evt.target.value,
+    });
+  }
+
+  handleCreate() {
+    createRoom(this.enterRoom);
+  }
+
+  async openRoomInput() {
+    const mySwal = withReactContent(Swal);
+    await mySwal.fire({
+      text: 'Join a Room',
+      input: 'text',
+      inputValue: this.state.roomKey,
+      inputPlaceholder: 'Aa',
+    });
+  }
+  handleJoin() {
+    joinRoom(this.state.roomKey, this.enterExistingRoom);
   }
   render() {
     return (
-      <div>
-        <h3>Welcome</h3>
-        <Rooms />
-        <Link to={"/practice"}>
-          <h3>Click me for practice room</h3>
-        </Link>
-        <Link to={"/sequencer"}>
-          <h3>Click me for current sequencer (remove when needed)</h3>
-        </Link>
+      <div className="home-page">
+        <div className="banner">
+          <h2 className="home-title">SynthCity</h2>
+        </div>
+        <div className="options-container">
+          <div className="column">
+            <div onClick={this.handleCreate} className="option-card">
+              <h3>Create New Game</h3>
+            </div>
+          </div>
+          <div className="column">
+            <div onClick={this.openRoomInput} className="option-card">
+              <h3>Join existing game</h3>
+              {/* <input
+                name="roomKey"
+                value={this.state.roomKey}
+                onChange={this.handleChange}
+              />
+              <button
+                type="button"
+                id="joinRoom"
+                className="main-cta"
+                onClick={this.handleJoin}
+              >
+                Join Game
+              </button> */}
+            </div>
+          </div>
+          <div className="column">
+            <Link to={'/practice'}>
+              <div className="option-card">
+                <h3>Try it out</h3>
+              </div>
+            </Link>
+          </div>
+        </div>
       </div>
     );
   }
