@@ -1,7 +1,7 @@
-import classNames from 'classnames';
-import * as Tone from 'tone';
-import React from 'react';
-import { NoteButton } from './NoteButton';
+import classNames from "classnames";
+import * as Tone from "tone";
+import React from "react";
+import { NoteButton } from "./NoteButton";
 import {
   makeGrid,
   makeSynths,
@@ -9,10 +9,10 @@ import {
   amSynth,
   pluckySynth,
   lastNotesSeed,
-} from './HelperFunctions';
+} from "./HelperFunctions";
 
-export const AMOUNT_OF_NOTES = 16;
-export const notes = ['COUNT', 'C', 'D', 'E', 'F', 'G', 'A', 'B'];
+export const AMOUNT_OF_NOTES = 18;
+export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
 export const BPM = 120;
 const PREVIOUS_COLUMNS_TOTAL = 2;
 
@@ -26,7 +26,7 @@ class Sequencer extends React.Component {
       playing: false,
       started: false,
       currSynth: basicSynth,
-      octave: '4',
+      octave: "4",
       previousNotes: lastNotesSeed,
       nextNotes: [],
     };
@@ -36,12 +36,14 @@ class Sequencer extends React.Component {
     this.octaveDropDown = this.octaveDropDown.bind(this);
     this.onTurnEnd = this.onTurnEnd.bind(this);
     this.clearGrid = this.clearGrid.bind(this);
+    this.addPreviousNotes = this.addPreviousNotes.bind(this);
   }
 
   componentDidMount() {
     const rowGrid = makeGrid(notes);
     const synthsArr = makeSynths(basicSynth);
-    this.setState({ grid: rowGrid, synths: synthsArr });
+    const newGrid = this.addPreviousNotes(rowGrid);
+    this.setState({ grid: newGrid, synths: synthsArr });
   }
 
   configLoop() {
@@ -49,36 +51,39 @@ class Sequencer extends React.Component {
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
-          note.synth.triggerAttackRelease(note.note + note.octave, '8n', time);
+          note.synth.triggerAttackRelease(note.note + note.octave, "8n", time);
         }
       });
       this.setState({ beat: (this.state.beat + 1) % AMOUNT_OF_NOTES });
     };
 
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, '8n');
+    Tone.Transport.scheduleRepeat(repeat, "8n");
   }
 
   handleNoteClick(clickedRowIndex, clickedNoteIndex, e) {
     let newGrid = this.state.grid.map((row, rowIndex) => {
       row.map((note, noteIndex) => {
         if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
-          if (typeof note.note === 'number') {
+          if (typeof note.note === "number") {
+            return;
+          }
+          if (noteIndex === 0 || noteIndex === 1) {
             return;
           }
           note.isActive = !note.isActive;
           note.synth = this.state.currSynth;
           note.octave = this.state.octave;
           e.target.className = classNames(
-            'note',
-            { 'note-not-active': !note.isActive },
+            "note",
+            { "note-not-active": !note.isActive },
             {
-              'green-synth': note.synth === basicSynth && note.isActive,
+              "green-synth": note.synth === basicSynth && note.isActive,
             },
             {
-              'blue-synth': note.synth === pluckySynth && note.isActive,
+              "blue-synth": note.synth === pluckySynth && note.isActive,
             },
-            { 'red-synth': note.synth === amSynth && note.isActive }
+            { "red-synth": note.synth === amSynth && note.isActive }
           );
         }
         return note;
@@ -96,14 +101,14 @@ class Sequencer extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = 'Play';
+      e.target.innerText = "Play";
       Tone.Transport.stop();
       this.setState({
         playing: false,
         beat: 0,
       });
     } else {
-      e.target.innerText = 'Stop';
+      e.target.innerText = "Stop";
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -111,11 +116,11 @@ class Sequencer extends React.Component {
 
   chooseSynth(type) {
     let synthType;
-    if (type == 'amSynth') {
+    if (type == "amSynth") {
       synthType = amSynth;
-    } else if (type === 'basicSynth') {
+    } else if (type === "basicSynth") {
       synthType = basicSynth;
-    } else if (type === 'pluckySynth') {
+    } else if (type === "pluckySynth") {
       synthType = pluckySynth;
     }
     this.setState({ currSynth: synthType });
@@ -127,21 +132,39 @@ class Sequencer extends React.Component {
   }
 
   onTurnEnd() {
-    let count = 0;
-    const nextNotes = new Array(PREVIOUS_COLUMNS_TOTAL).fill([]);
+    const nextNotes = [];
     let grid = this.state.grid;
     for (let i = 1; i < grid.length; i++) {
-      let row = grid[i];
-      for (let j = row.length - PREVIOUS_COLUMNS_TOTAL; j < row.length; j++) {
-        let currNote = row[j];
-        if (currNote.isActive) {
-          nextNotes[count].push(currNote);
-        }
-        count++;
-      }
-      count = 0;
+      let currRow = grid[i];
+      let newRow = [];
+      newRow.push(currRow[16]);
+      newRow.push(currRow[17]);
+      nextNotes.push(newRow);
     }
     this.setState({ nextNotes: nextNotes });
+  }
+
+  addPreviousNotes(grid) {
+    let newGrid = grid.map((eachRow, rowIndex) => {
+      if (rowIndex === 0) {
+        return eachRow;
+      }
+      let newRow = eachRow.map((eachCol, colIndex) => {
+        if (colIndex === 0) {
+          eachCol = this.state.previousNotes[rowIndex - 1][0];
+          eachCol["isPrevious"] = true;
+          return eachCol;
+        } else if (colIndex === 1) {
+          eachCol = this.state.previousNotes[rowIndex - 1][1];
+          eachCol["isPrevious"] = true;
+          return eachCol;
+        } else {
+          return eachCol;
+        }
+      });
+      return newRow;
+    });
+    return newGrid;
   }
 
   clearGrid() {
@@ -152,7 +175,7 @@ class Sequencer extends React.Component {
   }
 
   render() {
-    console.log('state is', this.state);
+    console.log("state in render is", this.state);
     return (
       <div>
         <div>
@@ -176,19 +199,19 @@ class Sequencer extends React.Component {
             </select>
             <button
               className="main-cta"
-              onClick={() => this.chooseSynth('amSynth')}
+              onClick={() => this.chooseSynth("amSynth")}
             >
               AM Synth (Red)
             </button>
             <button
               className="main-cta"
-              onClick={() => this.chooseSynth('pluckySynth')}
+              onClick={() => this.chooseSynth("pluckySynth")}
             >
               Plucky Synth (Blue)
             </button>
             <button
               className="main-cta"
-              onClick={() => this.chooseSynth('basicSynth')}
+              onClick={() => this.chooseSynth("basicSynth")}
             >
               Basic Synth (Green)
             </button>
@@ -201,22 +224,29 @@ class Sequencer extends React.Component {
               <div
                 id="rowIndex"
                 className="sequencer-row"
-                key={rowIndex + 'row'}
+                key={rowIndex + "row"}
               >
-                {row.map(({ note, isActive }, noteIndex) => {
-                  return (
-                    <NoteButton
-                      note={note}
-                      key={noteIndex + 'note'}
-                      isActive={isActive}
-                      currSynth={this.state.currSynth}
-                      beat={this.state.beat}
-                      onClick={(event) =>
-                        this.handleNoteClick(rowIndex, noteIndex, event)
-                      }
-                    />
-                  );
-                })}
+                {row.map(
+                  (
+                    { note, isActive, synth, isPrevious, octave },
+                    noteIndex
+                  ) => {
+                    return (
+                      <NoteButton
+                        note={note}
+                        key={noteIndex + "note"}
+                        isActive={isActive}
+                        beat={this.state.beat}
+                        synth={synth}
+                        octave={octave}
+                        isPrevious={isPrevious}
+                        onClick={(event) =>
+                          this.handleNoteClick(rowIndex, noteIndex, event)
+                        }
+                      />
+                    );
+                  }
+                )}
               </div>
             );
           })}

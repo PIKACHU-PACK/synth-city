@@ -7,7 +7,7 @@ export const NoteButton = ({
   octave,
   isActive,
   synth,
-  currSynth,
+  isPrevious,
   beat,
   ...rest
 }) => {
@@ -19,13 +19,16 @@ export const NoteButton = ({
         { "inactive-beat": typeof note === "number" },
         { "active-beat": note === beat },
         { "note ": typeof note !== "number" },
+        {
+          "previous-note": typeof note !== "number" && isPrevious && !isActive,
+        },
         { "green-synth": synth === basicSynth && isActive },
         { "blue-synth": synth === pluckySynth && isActive },
         { "red-synth": synth === amSynth && isActive }
       )}
       {...rest}
     >
-      {note}
+      {note + `${octave}`}
     </button>
   );
 };

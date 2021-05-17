@@ -168,6 +168,11 @@ form div {
   border-color: lightgray;
   margin: 2px;
   outline: none;
+  /* background-color: rgb(202, 202, 202); */
+}
+
+.previous-note {
+  background-color: rgb(187, 187, 187);
 }
 
 .sequencer-row {
