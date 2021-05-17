@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { createRoom, joinRoom } from '../socket';
+import Footer from './Footer';
 import history from '../history';
 import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 
 export class Home extends React.Component {
   constructor() {
@@ -17,6 +17,7 @@ export class Home extends React.Component {
     this.enterExistingRoom = this.enterExistingRoom.bind(this);
     this.handleJoin = this.handleJoin.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.displayInstructions = this.displayInstructions.bind(this);
   }
 
   enterNewRoom(room) {
@@ -40,68 +41,85 @@ export class Home extends React.Component {
     createRoom(this.enterNewRoom);
   }
 
-  async openRoomInput() {
-    const mySwal = withReactContent(Swal);
-    await mySwal.fire({
-      text: 'Join a Room',
-      input: 'text',
-      inputValue: this.state.roomKey,
-      inputPlaceholder: 'Aa',
+  // async openRoomInput() {
+  //   const mySwal = withReactContent(Swal);
+  //   await mySwal.fire({
+  //     text: 'Join a Room',
+  //     input: 'text',
+  //     onChange: this.handleChange,
+  //     inputPlaceholder: 'Aa',
+  //   });
+  // }
+
+  displayInstructions() {
+    Swal.fire({
+      title: 'HOW TO PLAY:',
+      html:
+        'Each player will have two 25-second turns to compose a section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>' +
+        "To compose your section, click on the Sequencer's buttons. Use the menu at the top to change Octaves and Synths.<br></br>" +
+        "At the end of the game, you'll be able to hear and download your grammy-nominated masterpiece!",
+      showCloseButton: true,
     });
   }
+
   handleJoin() {
     joinRoom(this.state.roomKey, this.enterExistingRoom);
   }
   render() {
     return (
-      <div className="home-page">
-        <div className="banner">
-          <h2 className="home-title">SynthCity</h2>
-        </div>
-        <div className="options-container">
-          <div className="column">
-            <div onClick={this.handleCreate} className="option-card">
-              <h3>Create New Game</h3>
-            </div>
+      <div>
+        <div className="home-page">
+          <div className="banner">
+            <h2 className="home-title">SynthCity</h2>
           </div>
-          <div className="column">
-            <div onClick={this.openRoomInput} className="option-card">
-              <h3>Join existing game</h3>
-              <input
-                name="roomKey"
-                value={this.state.roomKey}
-                onChange={this.handleChange}
-              />
-              <button
-                type="button"
-                id="joinRoom"
-                className="main-cta"
-                onClick={this.handleJoin}
-              >
-                Join Game
-              </button>
-            </div>
-          </div>
-          <div className="column">
-            <Link to={'/practice'}>
-              <div className="option-card">
-                <h3>Try it out</h3>
+          <div className="options-container">
+            <div className="column">
+              <div onClick={this.handleCreate} className="option-card">
+                <h3>Create New Game</h3>
               </div>
-            </Link>
+            </div>
+            <div className="column">
+              <div className="join-card">
+                <h3>Join existing game</h3>
+                <input
+                  name="roomKey"
+                  value={this.state.roomKey}
+                  onChange={this.handleChange}
+                />
+                <button
+                  type="button"
+                  id="joinRoom"
+                  className="join-cta"
+                  onClick={this.handleJoin}
+                >
+                  Go!
+                </button>
+              </div>
+            </div>
+            <div className="column">
+              <Link to={'/practice'}>
+                <div className="option-card">
+                  <h3>Try it out</h3>
+                </div>
+              </Link>
+            </div>
           </div>
+          <div className="instructions-container">
+            <button
+              type="button"
+              className="instructions-button"
+              onClick={this.displayInstructions}
+            >
+              <img src="./InstructionsIcon.png" className="instructions-img" />
+            </button>
+          </div>
+        </div>
+        <div>
+          <Footer />
         </div>
       </div>
     );
   }
 }
 
-/**
- * CONTAINER
- */
-const mapState = (state) => {
-  return {
-    // username: state.auth.username
-  };
-};
-
-export default connect(mapState)(Home);
+export default Home;
