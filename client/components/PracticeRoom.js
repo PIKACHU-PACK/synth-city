@@ -1,15 +1,15 @@
-import classNames from "classnames";
-import * as Tone from "tone";
-import React from "react";
-import { NoteButton } from "./NoteButton";
+import classNames from 'classnames';
+import * as Tone from 'tone';
+import React from 'react';
+import { NoteButton } from './NoteButton';
 import {
   makeGrid,
   makeSynths,
   basicSynth,
   amSynth,
   pluckySynth,
-} from "./HelperFunctions";
-import { AMOUNT_OF_NOTES, BPM, notes } from "./Sequencer";
+} from './HelperFunctions';
+import { AMOUNT_OF_NOTES, BPM, notes } from './Sequencer';
 
 class PracticeRoom extends React.Component {
   constructor() {
@@ -22,7 +22,7 @@ class PracticeRoom extends React.Component {
       started: false,
       currentColumn: false,
       currSynth: basicSynth,
-      octave: "4",
+      octave: '4',
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
@@ -41,14 +41,14 @@ class PracticeRoom extends React.Component {
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
-          note.synth.triggerAttackRelease(note.note + note.octave, "8n", time);
+          note.synth.triggerAttackRelease(note.note + note.octave, '8n', time);
         }
       });
       this.setState({ beat: (this.state.beat + 1) % AMOUNT_OF_NOTES });
     };
 
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, "8n");
+    Tone.Transport.scheduleRepeat(repeat, '8n');
   }
 
   handleNoteClick(clickedRowIndex, clickedNoteIndex, e) {
@@ -59,15 +59,15 @@ class PracticeRoom extends React.Component {
           note.synth = this.state.currSynth;
           note.octave = this.state.octave;
           e.target.className = classNames(
-            "note",
-            { "note-not-active": !note.isActive },
+            'note',
+            { 'note-not-active': !note.isActive },
             {
-              "green-synth": note.synth === basicSynth && note.isActive,
+              'green-synth': note.synth === basicSynth && note.isActive,
             },
             {
-              "blue-synth": note.synth === pluckySynth && note.isActive,
+              'blue-synth': note.synth === pluckySynth && note.isActive,
             },
-            { "red-synth": note.synth === amSynth && note.isActive }
+            { 'red-synth': note.synth === amSynth && note.isActive }
           );
         }
         return note;
@@ -85,7 +85,7 @@ class PracticeRoom extends React.Component {
       this.setState({ started: true });
     }
     if (this.state.playing) {
-      e.target.innerText = "Play";
+      e.target.innerText = 'Play';
       Tone.Transport.stop();
       this.setState({
         playing: false,
@@ -94,7 +94,7 @@ class PracticeRoom extends React.Component {
         started: false,
       });
     } else {
-      e.target.innerText = "Stop";
+      e.target.innerText = 'Stop';
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -102,11 +102,11 @@ class PracticeRoom extends React.Component {
 
   chooseSynth(type) {
     let synthType;
-    if (type == "amSynth") {
+    if (type == 'amSynth') {
       synthType = amSynth;
-    } else if (type === "basicSynth") {
+    } else if (type === 'basicSynth') {
       synthType = basicSynth;
-    } else if (type === "pluckySynth") {
+    } else if (type === 'pluckySynth') {
       synthType = pluckySynth;
     }
     this.setState({ currSynth: synthType });
@@ -124,8 +124,13 @@ class PracticeRoom extends React.Component {
           <h2>Let's Make Some Jams!</h2>
         </div>
         <div>
-          <div>
-            <select name="octave" id="octave" onChange={this.octaveDropDown}>
+          <div className="player-options">
+            <select
+              className="custom-select"
+              name="octave"
+              id="octave"
+              onChange={this.octaveDropDown}
+            >
               <option selected hidden>
                 Octave:
               </option>
@@ -137,13 +142,22 @@ class PracticeRoom extends React.Component {
               <option value="6">6</option>
               <option value="7">7</option>
             </select>
-            <button onClick={() => this.chooseSynth("amSynth")}>
+            <button
+              className="main-cta"
+              onClick={() => this.chooseSynth('amSynth')}
+            >
               AM Synth (Red)
             </button>
-            <button onClick={() => this.chooseSynth("pluckySynth")}>
+            <button
+              className="main-cta"
+              onClick={() => this.chooseSynth('pluckySynth')}
+            >
               Plucky Synth (Blue)
             </button>
-            <button onClick={() => this.chooseSynth("basicSynth")}>
+            <button
+              className="main-cta"
+              onClick={() => this.chooseSynth('basicSynth')}
+            >
               Basic Synth (Green)
             </button>
             <p></p>
@@ -155,13 +169,13 @@ class PracticeRoom extends React.Component {
               <div
                 id="rowIndex"
                 className="sequencer-row"
-                key={rowIndex + "row"}
+                key={rowIndex + 'row'}
               >
                 {row.map(({ note, isActive }, noteIndex) => {
                   return (
                     <NoteButton
                       note={note}
-                      key={noteIndex + "note"}
+                      key={noteIndex + 'note'}
                       isActive={isActive}
                       currSynth={this.state.currSynth}
                       className="note"
@@ -176,13 +190,15 @@ class PracticeRoom extends React.Component {
           })}
         </div>
         <div className="toggle-play">
-          <button
-            id="play-button"
-            className="play-button"
-            onClick={(event) => this.configPlayButton(event)}
-          >
-            Play
-          </button>
+          <div className="play-container">
+            <button
+              id="play-button"
+              className="play-button"
+              onClick={(event) => this.configPlayButton(event)}
+            >
+              Play
+            </button>
+          </div>
         </div>
       </div>
     );

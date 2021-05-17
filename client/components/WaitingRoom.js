@@ -38,13 +38,17 @@ class WaitingRoom extends React.Component {
   render() {
     const { roomId } = this.props.match.params;
     return (
-      <div>
-        <h2>HELLO, PLEASE WAIT</h2>
-        <p>Your code is: {roomId}</p>
-        <button type="button" onClick={this.onStart}>
-          Start Game
-        </button>
-        {/* <Chat /> */}
+      <div className="waiting-room">
+        <div className="waiting-view">
+          <div className="banner">
+            <h2 className="waiting-title">Loading...</h2>
+          </div>
+          <h2>Your code is: {roomId}</h2>
+          <button type="button" className="main-cta" onClick={this.onStart}>
+            Start Game
+          </button>
+          {/* <Chat /> */}
+        </div>
       </div>
     );
   }
