@@ -1,16 +1,17 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { createRoom, joinRoom } from '../socket';
-import history from '../history';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { createRoom, joinRoom } from "../socket";
+import history from "../history";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import Instructions from "../components/Instructions";
 
 export class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      roomKey: '',
+      roomKey: "",
     };
     this.handleCreate = this.handleCreate.bind(this);
     this.enterNewRoom = this.enterNewRoom.bind(this);
@@ -43,15 +44,20 @@ export class Home extends React.Component {
   async openRoomInput() {
     const mySwal = withReactContent(Swal);
     await mySwal.fire({
-      text: 'Join a Room',
-      input: 'text',
+      text: "Join a Room",
+      input: "text",
       inputValue: this.state.roomKey,
-      inputPlaceholder: 'Aa',
+      inputPlaceholder: "Aa",
     });
   }
   handleJoin() {
     joinRoom(this.state.roomKey, this.enterExistingRoom);
   }
+
+  displayInstructions() {
+    Swal(<Instructions />);
+  }
+
   render() {
     return (
       <div className="home-page">
@@ -83,11 +89,14 @@ export class Home extends React.Component {
             </div>
           </div>
           <div className="column">
-            <Link to={'/practice'}>
+            <Link to={"/practice"}>
               <div className="option-card">
                 <h3>Try it out</h3>
               </div>
             </Link>
+          </div>
+          <div>
+            {/* <button className="instructions-button" type="button" onClick={this.displayInstructions} > Instructions </button> */}{" "}
           </div>
         </div>
       </div>
