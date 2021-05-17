@@ -3,7 +3,9 @@ import React from 'react';
 export const PassButton = () => {
   return (
     <div>
-      <button>Finish Turn</button>{' '}
+      <button type="button" className="main-cta">
+        Finish Turn
+      </button>{' '}
     </div>
   );
 };

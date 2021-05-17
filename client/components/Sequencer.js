@@ -183,7 +183,12 @@ class Sequencer extends React.Component {
         </div>
         <div>
           <div>
-            <select name="octave" id="octave" onChange={this.octaveDropDown}>
+            <select
+              name="octave"
+              className="custom-select"
+              id="octave"
+              onChange={this.octaveDropDown}
+            >
               <option value="4">4</option>
               <option value="5">5</option>
               <option value="6">6</option>
@@ -192,13 +197,22 @@ class Sequencer extends React.Component {
               <option value="2">2</option>
               <option value="3">3</option>
             </select>
-            <button onClick={() => this.chooseSynth("amSynth")}>
+            <button
+              className="main-cta"
+              onClick={() => this.chooseSynth("amSynth")}
+            >
               AM Synth (Red)
             </button>
-            <button onClick={() => this.chooseSynth("pluckySynth")}>
+            <button
+              className="main-cta"
+              onClick={() => this.chooseSynth("pluckySynth")}
+            >
               Plucky Synth (Blue)
             </button>
-            <button onClick={() => this.chooseSynth("basicSynth")}>
+            <button
+              className="main-cta"
+              onClick={() => this.chooseSynth("basicSynth")}
+            >
               Basic Synth (Green)
             </button>
             <p></p>
@@ -238,19 +252,21 @@ class Sequencer extends React.Component {
           })}
         </div>
         <div className="toggle-play">
-          <button
-            id="play-button"
-            className="play-button"
-            onClick={(event) => this.configPlayButton(event)}
-          >
-            Play
-          </button>
-          <button className="play-button" onClick={this.clearGrid}>
-            Clear
-          </button>
-          <button className="play-button" onClick={this.onTurnEnd}>
-            End Turn
-          </button>
+          <div className="play-container">
+            <button
+              id="play-button"
+              className="play-button"
+              onClick={(event) => this.configPlayButton(event)}
+            >
+              Play
+            </button>
+            <button className="play-button" onClick={this.clearGrid}>
+              Clear
+            </button>
+            <button className="play-button" onClick={this.onTurnEnd}>
+              End Turn
+            </button>
+          </div>
         </div>
       </div>
     );
