@@ -18,6 +18,10 @@ module.exports = (io) => {
       console.log(`BYEEEEEE ${socket.id}`);
     });
 
+    socket.on('chatMessage', (message, room) => {
+      io.in(room).emit('message', message);
+    });
+
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
       rooms[room] = { players: [socket.id], turn: 0 };

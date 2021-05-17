@@ -40,14 +40,18 @@ class WaitingRoom extends React.Component {
     return (
       <div className="waiting-room">
         <div className="waiting-view">
-          <div className="banner">
-            <h2 className="waiting-title">Loading...</h2>
+          <div className="waiting-info">
+            <div className="banner">
+              <h2 className="waiting-title">Loading...</h2>
+            </div>
+            <h2>Your code is: {roomId}</h2>
+            <button type="button" className="main-cta" onClick={this.onStart}>
+              Start Game
+            </button>
           </div>
-          <h2>Your code is: {roomId}</h2>
-          <button type="button" className="main-cta" onClick={this.onStart}>
-            Start Game
-          </button>
-          {/* <Chat /> */}
+          <div className="chat-container">
+            <Chat />
+          </div>
         </div>
       </div>
     );

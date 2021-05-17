@@ -1,23 +1,14 @@
 import React from 'react';
 import io from 'socket.io-client';
-
-// const socket = io.connect(window.location.origin);
+import { chatMessage } from '../socket';
 
 class Chat extends React.Component {
   constructor() {
     super();
-    this.state = { msg: '', chat: [], nickname: '' };
+    this.state = { msg: '', chat: [] };
     this.onTextChange = this.onTextChange.bind(this);
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
     this.renderChat = this.renderChat.bind(this);
-  }
-
-  componentDidMount() {
-    socket.on('chat message', ({ nickname, msg }) => {
-      this.setState({
-        chat: [...this.state.chat, { nickname, msg }],
-      });
-    });
   }
 
   onTextChange(e) {
@@ -25,16 +16,17 @@ class Chat extends React.Component {
   }
 
   onMessageSubmit() {
-    const { nickname, msg } = this.state;
-    socket.emit('chat message', { nickname, msg });
+    const { msg } = this.state;
+    const room = this.props.match.params.roomId;
+    chatMessage(msg, room);
     this.setState({ msg: '' });
   }
 
   renderChat() {
     const { chat } = this.state;
-    return chat.map(({ nickname, msg }, idx) => (
+    return chat.map(({ msg }, idx) => (
       <div key={idx}>
-        <span style={{ color: 'green' }}>{nickname}: </span>
+        <span></span>
 
         <span>{msg}</span>
       </div>
@@ -43,34 +35,28 @@ class Chat extends React.Component {
 
   render() {
     return (
-      <div className="chat-box">
-        <div className="bubbleWrapper">
-          <div className="inlineContainer">
-            <div className="otherBubble other">{this.renderChat()}</div>
-          </div>
-          {/* <div className="bubble"></div> */}
-          <span>Nickname</span>
-          <div className="chat-control">
-            <input
-              placeholder="Aa"
-              className="chat-input"
-              name="nickname"
-              onChange={(e) => this.onTextChange(e)}
-              value={this.state.nickname}
-            />
-          </div>
-          <span>Message</span>
-          <div className="chat-control">
-            <input
-              placeholder="Aa"
-              className="chat-input"
-              name="msg"
-              onChange={(e) => this.onTextChange(e)}
-              value={this.state.msg}
-            />
-          </div>
-          <button onClick={this.onMessageSubmit}>Send</button>
+      <div className="chat-window">
+        <div className="chat-header">
+          <div className="chat-button"></div>
+          <div className="chat-button"></div>
+          <div className="chat-button"></div>
         </div>
+
+        <div className="chat-messages">
+          <div id="messages"></div>
+          <i id="typing"></i>
+        </div>
+        <form className="input-container" id="message-form">
+          <input
+            id="message"
+            className="message-input"
+            placeholder="Type something uwu"
+          />
+          <button
+            className="message-submit"
+            onSubmit={this.onMessageSubmit}
+          ></button>
+        </form>
       </div>
     );
   }

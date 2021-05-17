@@ -20,6 +20,15 @@ export function createRoom(callback) {
   });
 }
 
+export function chatMessage(message, room) {
+  socket.emit('chatMessage', message, room);
+  socket.on('chat message', (msg) => {
+    this.setState({
+      chat: [...this.state.chat, { msg }],
+    });
+  });
+}
+
 export function joinRoom(room, callback) {
   socket.emit('joinRoom', room);
   socket.on('roomJoined', () => {
