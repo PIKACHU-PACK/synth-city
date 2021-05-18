@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import * as Tone from "tone";
 import React from "react";
+import { Timer } from "react-countdown-clock-timer";
+import { endTurn } from "../socket";
 import { NoteButton } from "./NoteButton";
 import {
   makeGrid,
@@ -14,11 +16,11 @@ import {
 export const AMOUNT_OF_NOTES = 18;
 export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
 export const BPM = 120;
-const PREVIOUS_COLUMNS_TOTAL = 2;
+const turnLength = 6;
 
 class Sequencer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       synths: [],
       grid: [],
@@ -28,7 +30,8 @@ class Sequencer extends React.Component {
       currSynth: basicSynth,
       octave: "4",
       previousNotes: lastNotesSeed,
-      nextNotes: [],
+      //nextNotes: [],
+      // finalSong: [],
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
@@ -37,13 +40,30 @@ class Sequencer extends React.Component {
     this.onTurnEnd = this.onTurnEnd.bind(this);
     this.clearGrid = this.clearGrid.bind(this);
     this.addPreviousNotes = this.addPreviousNotes.bind(this);
+    this.finishTurn = this.finishTurn.bind(this);
   }
 
   componentDidMount() {
     const rowGrid = makeGrid(notes);
     const synthsArr = makeSynths(basicSynth);
-    const newGrid = this.addPreviousNotes(rowGrid);
-    this.setState({ grid: newGrid, synths: synthsArr });
+    console.log("is first is", this.props.isFirst);
+    if (this.props.isFirst) {
+      console.log("inside if!");
+      this.setState({
+        grid: rowGrid,
+        synths: synthsArr,
+        // previousNotes: this.props.lastNotes,
+      });
+    }
+    // else {
+    //   const newGrid = this.addPreviousNotes(rowGrid);
+    //   this.setState({
+    //     grid: newGrid,
+    //     synths: synthsArr,
+    //     previousNotes: this.props.lastNotes,
+    //     finalSong: this.props.finalSong,
+    //   });
+    // }
   }
 
   configLoop() {
@@ -68,7 +88,7 @@ class Sequencer extends React.Component {
           if (typeof note.note === "number") {
             return;
           }
-          if (noteIndex === 0 || noteIndex === 1) {
+          if ((noteIndex === 0 || noteIndex === 1) && !this.props.isFirst) {
             return;
           }
           note.isActive = !note.isActive;
@@ -133,15 +153,24 @@ class Sequencer extends React.Component {
 
   onTurnEnd() {
     const nextNotes = [];
+    //const savePlayerGrid = [];
     let grid = this.state.grid;
-    for (let i = 1; i < grid.length; i++) {
+    for (let i = 0; i < grid.length; i++) {
       let currRow = grid[i];
+      //SAVE LAST 2 NOTES
+      if (i === 0) {
+        continue;
+      }
       let newRow = [];
       newRow.push(currRow[16]);
       newRow.push(currRow[17]);
       nextNotes.push(newRow);
+      //IF PLAYER IS FIRST SAVE AS IS
     }
-    this.setState({ nextNotes: nextNotes });
+    return nextNotes;
+    //this.setState({ nextNotes: nextNotes });
+    // let passData = this.props.passData;
+    // passData(this.state.finalSong, nextNotes);
   }
 
   addPreviousNotes(grid) {
@@ -174,10 +203,20 @@ class Sequencer extends React.Component {
     // console.log("new gri is", this.state.grid);
   }
 
+  finishTurn(room) {
+    //let sendNotes = this.onTurnEnd();
+    endTurn(room);
+  }
+
   render() {
-    console.log("state in render is", this.state);
+    //console.log("state in render is", this.state);
     return (
       <div>
+        <Timer
+          durationInSeconds={turnLength}
+          onFinish={() => this.finishTurn(this.props.room)}
+          formatted={true}
+        />
         <div>
           <h2>Let's Make Some Jams!</h2>
         </div>
@@ -262,9 +301,6 @@ class Sequencer extends React.Component {
             </button>
             <button className="play-button" onClick={this.clearGrid}>
               Clear
-            </button>
-            <button className="play-button" onClick={this.onTurnEnd}>
-              End Turn
             </button>
           </div>
         </div>

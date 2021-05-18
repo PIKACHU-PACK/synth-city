@@ -28,7 +28,7 @@ export const NoteButton = ({
       )}
       {...rest}
     >
-      {note + `${octave}`}
+      {note + `${octave ? octave : ""}`}
     </button>
   );
 };
