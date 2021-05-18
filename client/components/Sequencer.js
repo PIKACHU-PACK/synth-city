@@ -187,7 +187,7 @@ class Sequencer extends React.Component {
     return (
       <div>
         <Timer
-          durationInSeconds={3}
+          durationInSeconds={24}
           onFinish={() => {
             const lastNotes = this.onTurnEnd();
             const sendNotes = stringify(lastNotes);
