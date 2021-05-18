@@ -1,26 +1,28 @@
-import React from 'react';
-import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
-import Sequencer from './Sequencer';
-import { Timer } from 'react-countdown-clock-timer';
-import history from '../history';
+import React from "react";
+import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
+import Sequencer from "./Sequencer";
+import history from "../history";
+import { parse } from "flatted";
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: '',
-      musician: '',
+      thisPlayer: "",
+      musician: "",
+      previousNotes: [],
+      isFirst: true,
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
-    this.changeMusician = this.changeMusician.bind(this);
+    this.sendTurn = this.sendTurn.bind(this);
     this.revealSong = this.revealSong.bind(this);
   }
 
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
-    turnListener(this.changeMusician);
+    turnListener(this.sendTurn);
     gameEndListener(this.revealSong);
   }
 
@@ -33,12 +35,17 @@ export class GamePage extends React.Component {
     });
   }
 
-  changeMusician(nextPlayer) {
-    this.setState({ musician: nextPlayer });
+  sendTurn(nextPlayer, notesStr) {
+    const notes = parse(notesStr);
+    this.setState({
+      musician: nextPlayer,
+      previousNotes: notes,
+      isFirst: false,
+    });
   }
 
-  finishTurn(room) {
-    endTurn(room);
+  finishTurn(notesString, gridString) {
+    endTurn(this.props.match.params.roomId, notesString, gridString);
   }
 
   revealSong() {
@@ -48,7 +55,6 @@ export class GamePage extends React.Component {
   }
 
   render() {
-    const room = this.props.match.params.roomId;
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician;
 
@@ -57,11 +63,12 @@ export class GamePage extends React.Component {
         {thisPlayer === musician ? (
           <>
             <h2>PLAYING</h2>
-            <Timer
-              durationInSeconds={4}
-              onFinish={() => this.finishTurn(room)}
+
+            <Sequencer
+              finishTurn={this.finishTurn}
+              previousNotes={this.state.previousNotes}
+              isFirst={this.state.isFirst}
             />
-            <Sequencer />
           </>
         ) : (
           <>
