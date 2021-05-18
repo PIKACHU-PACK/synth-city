@@ -1,26 +1,30 @@
-import React from 'react';
-import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
-import Sequencer from './Sequencer';
-import { Timer } from 'react-countdown-clock-timer';
-import history from '../history';
+import React from "react";
+import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
+import Sequencer from "./Sequencer";
+import history from "../history";
+import { parse } from "flatted";
+import { lastNotesSeed } from "./HelperFunctions";
+
+// let previousNotes = lastNotesSeed;
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: '',
-      musician: '',
+      thisPlayer: "",
+      musician: "",
+      previousNotes: lastNotesSeed,
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
-    this.changeMusician = this.changeMusician.bind(this);
+    this.sendTurn = this.sendTurn.bind(this);
     this.revealSong = this.revealSong.bind(this);
   }
 
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
-    turnListener(this.changeMusician);
+    turnListener(this.sendTurn);
     gameEndListener(this.revealSong);
   }
 
@@ -33,12 +37,14 @@ export class GamePage extends React.Component {
     });
   }
 
-  changeMusician(nextPlayer) {
-    this.setState({ musician: nextPlayer });
+  sendTurn(nextPlayer, notesStr) {
+    const notes = parse(notesStr);
+    console.log("setting turn, parsed notes is", notes);
+    this.setState({ musician: nextPlayer, previousNotes: notes });
   }
 
-  finishTurn(room) {
-    endTurn(room);
+  finishTurn(notesString) {
+    endTurn(this.props.match.params.roomId, notesString);
   }
 
   revealSong() {
@@ -57,11 +63,11 @@ export class GamePage extends React.Component {
         {thisPlayer === musician ? (
           <>
             <h2>PLAYING</h2>
-            <Timer
-              durationInSeconds={4}
-              onFinish={() => this.finishTurn(room)}
+
+            <Sequencer
+              finishTurn={this.finishTurn}
+              previousNotes={this.state.previousNotes}
             />
-            <Sequencer />
           </>
         ) : (
           <>

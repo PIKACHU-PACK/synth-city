@@ -8,17 +8,17 @@ import {
   basicSynth,
   amSynth,
   pluckySynth,
-  lastNotesSeed,
 } from "./HelperFunctions";
+import { stringify } from "flatted";
+import { Timer } from "react-countdown-clock-timer";
 
 export const AMOUNT_OF_NOTES = 18;
 export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
 export const BPM = 120;
-const PREVIOUS_COLUMNS_TOTAL = 2;
 
 class Sequencer extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       synths: [],
       grid: [],
@@ -27,8 +27,7 @@ class Sequencer extends React.Component {
       started: false,
       currSynth: basicSynth,
       octave: "4",
-      previousNotes: lastNotesSeed,
-      nextNotes: [],
+      previousNotes: this.props.previousNotes,
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
@@ -141,7 +140,7 @@ class Sequencer extends React.Component {
       newRow.push(currRow[17]);
       nextNotes.push(newRow);
     }
-    this.setState({ nextNotes: nextNotes });
+    return nextNotes;
   }
 
   addPreviousNotes(grid) {
@@ -175,9 +174,17 @@ class Sequencer extends React.Component {
   }
 
   render() {
-    console.log("state in render is", this.state);
+    console.log("previous notes in state is", this.state.previousNotes);
     return (
       <div>
+        <Timer
+          durationInSeconds={4}
+          onFinish={() => {
+            const lastNotes = this.onTurnEnd();
+            const sendNotes = stringify(lastNotes);
+            this.props.finishTurn(sendNotes);
+          }}
+        />
         <div>
           <h2>Let's Make Some Jams!</h2>
         </div>
