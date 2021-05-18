@@ -1,76 +1,85 @@
 import React from 'react';
 import io from 'socket.io-client';
+import { chatMessage } from '../socket';
 
-// const socket = io.connect(window.location.origin);
-
-class Chat extends React.Component {
+export class Chat extends React.Component {
   constructor() {
     super();
-    this.state = { msg: '', chat: [], nickname: '' };
-    this.onTextChange = this.onTextChange.bind(this);
+    this.state = {
+      msg: '',
+      chat: [],
+    };
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
-    this.renderChat = this.renderChat.bind(this);
+    this.msgChange = this.msgChange.bind(this);
+    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
-  componentDidMount() {
-    socket.on('chat message', ({ nickname, msg }) => {
+  componentDidUpdate(props, nextProps) {
+    if (props.chat.length !== nextProps.chat.length) {
       this.setState({
-        chat: [...this.state.chat, { nickname, msg }],
+        chat: [...this.props.chat],
       });
-    });
+      this.scrollToBottom();
+    }
   }
 
-  onTextChange(e) {
+  scrollToBottom() {
+    const scrollHeight = this.messageList.scrollHeight;
+    const height = this.messageList.clientHeight;
+    const maxScrollTop = scrollHeight - height;
+    this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+  }
+
+  msgChange(e) {
     this.setState({ [e.target.name]: e.target.value });
   }
 
-  onMessageSubmit() {
-    const { nickname, msg } = this.state;
-    socket.emit('chat message', { nickname, msg });
-    this.setState({ msg: '' });
-  }
-
-  renderChat() {
-    const { chat } = this.state;
-    return chat.map(({ nickname, msg }, idx) => (
-      <div key={idx}>
-        <span style={{ color: 'green' }}>{nickname}: </span>
-
-        <span>{msg}</span>
-      </div>
-    ));
+  onMessageSubmit(e) {
+    e.preventDefault();
+    const { msg } = this.state;
+    const room = this.props.roomId;
+    chatMessage(msg, room); //emits message to server
+    this.setState({ chat: [...this.state.chat, msg], msg: '' });
   }
 
   render() {
+    const { chat } = this.props;
     return (
-      <div className="chat-box">
-        <div className="bubbleWrapper">
-          <div className="inlineContainer">
-            <div className="otherBubble other">{this.renderChat()}</div>
-          </div>
-          {/* <div className="bubble"></div> */}
-          <span>Nickname</span>
-          <div className="chat-control">
-            <input
-              placeholder="Aa"
-              className="chat-input"
-              name="nickname"
-              onChange={(e) => this.onTextChange(e)}
-              value={this.state.nickname}
-            />
-          </div>
-          <span>Message</span>
-          <div className="chat-control">
-            <input
-              placeholder="Aa"
-              className="chat-input"
-              name="msg"
-              onChange={(e) => this.onTextChange(e)}
-              value={this.state.msg}
-            />
-          </div>
-          <button onClick={this.onMessageSubmit}>Send</button>
+      <div className="chat-window">
+        <div className="chat-header">
+          <div className="chat-button"></div>
+          <div className="chat-button"></div>
+          <div className="chat-button"></div>
         </div>
+        <div
+          className="chat-messages"
+          ref={(div) => {
+            this.messageList = div;
+          }}
+        >
+          <div id="messages">
+            {chat.map((m, i) => (
+              <p key={i}>{m}</p>
+            ))}
+          </div>
+          <i id="typing"></i>
+        </div>
+        <form
+          className="input-container"
+          id="message-form"
+          onSubmit={this.onMessageSubmit}
+        >
+          <input
+            id="message"
+            className="message-input"
+            placeholder="Type something uwu"
+            name="msg"
+            value={this.state.msg}
+            onChange={this.msgChange}
+            autoFocus
+          />
+          <button className="message-submit" type="submit"></button>
+        </form>
       </div>
     );
   }
