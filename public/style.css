@@ -203,6 +203,20 @@ form div {
   margin-left: 80px;
 }
 
+.home-button {
+  background-color: transparent;
+  padding: 10px;
+  font-size: 0;
+  border: none;
+  padding: 10px;
+}
+
+.home-arrow-img {
+  width: 75px;
+  height: 62px;
+  float: left;
+}
+
 /* SEQUENCER */
 
 .sequencer {
@@ -432,4 +446,19 @@ form div {
   position: absolute;
   top: calc(50% - 0.5rem);
   left: calc(50% - 0.5rem);
+}
+
+/* GAME PLAY */
+
+.game-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 50px;
+  color: #e12967;
+  text-shadow: 6px 6px #320879;
+  padding: 10px;
+}
+
+.game-chat {
+  display: flex;
+  justify-content: center;
 }
