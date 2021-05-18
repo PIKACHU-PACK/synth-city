@@ -19,7 +19,7 @@ module.exports = (io) => {
     });
 
     socket.on('chatMessage', (message, room) => {
-      io.in(room).emit('message', message);
+      io.in(room).emit('Chat Message', message);
     });
 
     socket.on('createRoom', () => {

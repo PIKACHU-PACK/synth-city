@@ -20,12 +20,10 @@ export function createRoom(callback) {
   });
 }
 
-export function chatMessage(message, room) {
-  socket.emit('chatMessage', message, room);
-  socket.on('chat message', (msg) => {
-    this.setState({
-      chat: [...this.state.chat, { msg }],
-    });
+export function chatMessage({ message, room }) {
+  socket.emit('chatMessage', { message, room });
+  socket.on('Chat Message', ({ message, room }) => {
+    message, room;
   });
 }
 
