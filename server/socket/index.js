@@ -7,6 +7,7 @@ const rooms = {};
 //                   players: [ SOCKET_ID, SOCKET_ID... ],
 //                   turn: TURN_NUMBER,
 //                   rounds: NUMBER_OF_ROUNDS
+//                   song: []
 //                  }
 //          }
 
@@ -18,9 +19,13 @@ module.exports = (io) => {
       console.log(`BYEEEEEE ${socket.id}`);
     });
 
+    socket.on('chatMessage', (message, room) => {
+      io.in(room).emit('chat Message', message);
+    });
+
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
-      rooms[room] = { players: [socket.id], turn: 0 };
+      rooms[room] = { players: [socket.id], turn: 0, song: [] };
       socket.join(room);
       socket.emit('roomCreated', room);
     });
@@ -47,7 +52,8 @@ module.exports = (io) => {
       });
     });
 
-    socket.on('setTurn', (room, notesStr) => {
+    socket.on('setTurn', (room, notesString, gridStr) => {
+      rooms[room].song.push(gridStr);
       rooms[room].turn++;
       if (rooms[room].turn === rooms[room].rounds) {
         // checks to see if the game should end or turns should keep switching
@@ -56,8 +62,13 @@ module.exports = (io) => {
         const players = rooms[room].players;
         const turn = rooms[room].turn % players.length; // makes it so that turns will loop if players are meant to have two turns each
         const nextPlayer = players[turn];
-        io.in(room).emit('switchTurn', nextPlayer, notesStr);
+        io.in(room).emit('switchTurn', nextPlayer, notesString);
       }
+    });
+
+    socket.on('getFinalSong', (room) => {
+      let song = rooms[room].song;
+      io.in(room).emit('sendFinalSong', song);
     });
   });
 };

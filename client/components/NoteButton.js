@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import { basicSynth, amSynth, pluckySynth } from "./HelperFunctions";
 
 export const NoteButton = ({
   note,
@@ -11,8 +10,6 @@ export const NoteButton = ({
   beat,
   ...rest
 }) => {
-  //   const noteOctave = note + octave;
-  //   console.log(octave);
   return (
     <button
       className={classNames(
@@ -22,13 +19,13 @@ export const NoteButton = ({
         {
           "previous-note": typeof note !== "number" && isPrevious && !isActive,
         },
-        { "green-synth": synth === basicSynth && isActive },
-        { "blue-synth": synth === pluckySynth && isActive },
-        { "red-synth": synth === amSynth && isActive }
+        { "green-synth": synth === "basicSynth" && isActive },
+        { "blue-synth": synth === "pluckySynth" && isActive },
+        { "red-synth": synth === "amSynth" && isActive }
       )}
       {...rest}
     >
-      {note + `${octave}`}
+      {note + `${octave ? octave : ""}`}
     </button>
   );
 };

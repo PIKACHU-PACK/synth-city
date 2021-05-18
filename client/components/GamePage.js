@@ -1,15 +1,24 @@
+<<<<<<< HEAD
 import React from 'react';
 import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
 import Sequencer from './Sequencer';
 import { Timer } from 'react-countdown-clock-timer';
 import { parse } from 'flatted';
 import history from '../history';
+=======
+import React from "react";
+import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
+import Sequencer from "./Sequencer";
+import history from "../history";
+import { parse } from "flatted";
+>>>>>>> 37abd7c1ed90e09db5586ac4ff811d29ddbde98b
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
+<<<<<<< HEAD
       thisPlayer: '',
       musician: '',
       notes: [],
@@ -17,12 +26,26 @@ export class GamePage extends React.Component {
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
     this.setTurn = this.setTurn.bind(this);
+=======
+      thisPlayer: "",
+      musician: "",
+      previousNotes: [],
+      isFirst: true,
+    };
+    this.stateInfo = this.stateInfo.bind(this);
+    this.finishTurn = this.finishTurn.bind(this);
+    this.sendTurn = this.sendTurn.bind(this);
+>>>>>>> 37abd7c1ed90e09db5586ac4ff811d29ddbde98b
     this.revealSong = this.revealSong.bind(this);
   }
 
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
+<<<<<<< HEAD
     turnListener(this.setTurn);
+=======
+    turnListener(this.sendTurn);
+>>>>>>> 37abd7c1ed90e09db5586ac4ff811d29ddbde98b
     gameEndListener(this.revealSong);
   }
 
@@ -35,6 +58,7 @@ export class GamePage extends React.Component {
     });
   }
 
+<<<<<<< HEAD
   setTurn(nextPlayer, notesStr) {
     const notes = parse(notesStr);
     this.setState({ musician: nextPlayer, notes: notes });
@@ -42,6 +66,19 @@ export class GamePage extends React.Component {
 
   finishTurn(notesStr) {
     endTurn(this.props.match.params.roomId, notesStr);
+=======
+  sendTurn(nextPlayer, notesStr) {
+    const notes = parse(notesStr);
+    this.setState({
+      musician: nextPlayer,
+      previousNotes: notes,
+      isFirst: false,
+    });
+  }
+
+  finishTurn(notesString, gridString) {
+    endTurn(this.props.match.params.roomId, notesString, gridString);
+>>>>>>> 37abd7c1ed90e09db5586ac4ff811d29ddbde98b
   }
 
   revealSong() {
@@ -51,7 +88,6 @@ export class GamePage extends React.Component {
   }
 
   render() {
-    const room = this.props.match.params.roomId;
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician;
     console.log('GamePageState:', this.state);
@@ -61,11 +97,20 @@ export class GamePage extends React.Component {
         {thisPlayer === musician ? (
           <>
             <h2>PLAYING</h2>
+<<<<<<< HEAD
             {/* <Timer
               durationInSeconds={4}
               onFinish={() => this.finishTurn(room)}
             /> */}
             <Sequencer finishTurn={this.finishTurn} />
+=======
+
+            <Sequencer
+              finishTurn={this.finishTurn}
+              previousNotes={this.state.previousNotes}
+              isFirst={this.state.isFirst}
+            />
+>>>>>>> 37abd7c1ed90e09db5586ac4ff811d29ddbde98b
           </>
         ) : (
           <>

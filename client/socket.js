@@ -20,6 +20,10 @@ export function createRoom(callback) {
   });
 }
 
+export function chatMessage(message, room) {
+  socket.emit('chatMessage', message, room);
+}
+
 export function joinRoom(room, callback) {
   socket.emit('joinRoom', room);
   socket.on('roomJoined', () => {
@@ -44,19 +48,28 @@ export function startListener(callback) {
   });
 }
 // triggered when timer runs out on player's turn
-export function endTurn(room, notesStr) {
-  socket.emit('setTurn', room, notesStr);
+export function endTurn(room, notesStr, gridStr) {
+  //console.log("notesStr in endTurn", notesStr);
+  socket.emit('setTurn', room, notesStr, gridStr);
 }
 // switches turns after backend hears that current player's turn ended
 export function turnListener(callback) {
-  socket.on('switchTurn', (nextPlayer, notesStr) => {
-    callback(nextPlayer, notesStr);
+  socket.on('switchTurn', (nextPlayer, notesString) => {
+    //console.log("notesStr in switchTrn is", notesString);
+    callback(nextPlayer, notesString);
   });
 }
 // listens for backend that all rounds finished, then redirects to SongReveal
 export function gameEndListener(callback) {
   socket.on('gameOver', () => {
     callback();
+  });
+}
+
+export function getSong(room, callback) {
+  socket.emit('getFinalSong', room);
+  socket.on('sendFinalSong', (songString) => {
+    callback(songString);
   });
 }
 
