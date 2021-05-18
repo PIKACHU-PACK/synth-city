@@ -10,6 +10,7 @@ import {
   pluckySynth,
 } from './HelperFunctions';
 import { AMOUNT_OF_NOTES, BPM, notes } from './Sequencer';
+import history from '../history';
 
 class PracticeRoom extends React.Component {
   constructor() {
@@ -28,6 +29,7 @@ class PracticeRoom extends React.Component {
     this.configPlayButton = this.configPlayButton.bind(this);
     this.chooseSynth = this.chooseSynth.bind(this);
     this.octaveDropDown = this.octaveDropDown.bind(this);
+    this.goHome = this.goHome.bind(this);
   }
 
   componentDidMount() {
@@ -117,11 +119,22 @@ class PracticeRoom extends React.Component {
     this.setState({ octave: newOctave });
   }
 
+  goHome() {
+    history.push({
+      pathname: '/',
+    });
+  }
+
   render() {
     return (
       <div>
         <div>
           <h2>Let's Make Some Jams!</h2>
+        </div>
+        <div className="home-button-container">
+          <button type="button" className="home-button" onClick={this.goHome}>
+            <img src={'/homebutton.png'} className="home-arrow-img" />
+          </button>
         </div>
         <div>
           <div className="player-options">
