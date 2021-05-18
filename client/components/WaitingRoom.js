@@ -2,9 +2,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Tone from 'tone';
 import Chat from './Chat';
-import { Rooms } from './Rooms';
 import { startGame, startListener } from '../socket';
 import history from '../history';
+import socket from '../socket';
 
 class WaitingRoom extends React.Component {
   constructor() {
@@ -12,6 +12,7 @@ class WaitingRoom extends React.Component {
     this.state = {
       players: [],
       thisPlayer: '',
+      chat: [],
     };
     this.onStart = this.onStart.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
@@ -19,14 +20,15 @@ class WaitingRoom extends React.Component {
 
   componentDidMount() {
     startListener(this.gameStarted);
+    socket.on('chat Message', (msg) => {
+      this.setState({
+        chat: [...this.state.chat, msg],
+      });
+    });
   }
 
   onStart() {
     startGame(this.props.match.params.roomId);
-    //add turn listener into component did mount of game room
-    //imported function to listen to turns
-    //when called it would start the io.on
-    //fire turn listener function and start implementing turns until the game ends
   }
 
   gameStarted() {
@@ -50,7 +52,7 @@ class WaitingRoom extends React.Component {
             </button>
           </div>
           <div className="chat-container">
-            <Chat />
+            <Chat roomId={roomId} chat={this.state.chat} />
           </div>
         </div>
       </div>

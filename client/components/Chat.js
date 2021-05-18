@@ -9,25 +9,41 @@ export class Chat extends React.Component {
       msg: '',
       chat: [],
     };
-    this.onTextChange = this.onTextChange.bind(this);
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
+    this.msgChange = this.msgChange.bind(this);
+    this.scrollToBottom = this.scrollToBottom.bind(this);
   }
 
-  onTextChange(e) {
+  componentDidUpdate(props, nextProps) {
+    if (props.chat.length !== nextProps.chat.length) {
+      this.setState({
+        chat: [...this.props.chat],
+      });
+      this.scrollToBottom();
+    }
+  }
+
+  scrollToBottom() {
+    const scrollHeight = this.messageList.scrollHeight;
+    const height = this.messageList.clientHeight;
+    const maxScrollTop = scrollHeight - height;
+    this.messageList.scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+  }
+
+  msgChange(e) {
     this.setState({ [e.target.name]: e.target.value });
-    console.log(this.state);
   }
 
-  onMessageSubmit() {
+  onMessageSubmit(e) {
+    e.preventDefault();
     const { msg } = this.state;
-    const room = this.props.match.params.roomId;
-    console.log(this.state);
-    this.setState({ chat: [...this.state.chat, msg] });
-    chatMessage(msg);
+    const room = this.props.roomId;
+    chatMessage(msg, room); //emits message to server
+    this.setState({ chat: [...this.state.chat, msg], msg: '' });
   }
 
   render() {
-    const { chat } = this.state;
+    const { chat } = this.props;
     return (
       <div className="chat-window">
         <div className="chat-header">
@@ -35,34 +51,34 @@ export class Chat extends React.Component {
           <div className="chat-button"></div>
           <div className="chat-button"></div>
         </div>
-
-        <div className="chat-messages">
+        <div
+          className="chat-messages"
+          ref={(div) => {
+            this.messageList = div;
+          }}
+        >
           <div id="messages">
-            {chat.map((msg, idx) => (
-              <div key={idx}>
-                <ul>
-                  <li key={idx} className="message-item">
-                    {msg.body}
-                  </li>
-                </ul>
-              </div>
+            {chat.map((m, i) => (
+              <p key={i}>{m}</p>
             ))}
           </div>
           <i id="typing"></i>
         </div>
-        <form className="input-container" id="message-form">
-          <textarea
+        <form
+          className="input-container"
+          id="message-form"
+          onSubmit={this.onMessageSubmit}
+        >
+          <input
             id="message"
-            name="msg"
-            value={this.state.msg}
             className="message-input"
             placeholder="Type something uwu"
-            onChange={this.onTextChange}
+            name="msg"
+            value={this.state.msg}
+            onChange={this.msgChange}
+            autoFocus
           />
-          <button
-            className="message-submit"
-            onClick={this.onMessageSubmit}
-          ></button>
+          <button className="message-submit" type="submit"></button>
         </form>
       </div>
     );
