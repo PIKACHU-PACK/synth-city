@@ -47,8 +47,7 @@ module.exports = (io) => {
       });
     });
 
-    socket.on('setTurn', (room, notes) => {
-      console.log('in set turn');
+    socket.on('setTurn', (room, notesStr) => {
       rooms[room].turn++;
       if (rooms[room].turn === rooms[room].rounds) {
         // checks to see if the game should end or turns should keep switching
@@ -57,7 +56,7 @@ module.exports = (io) => {
         const players = rooms[room].players;
         const turn = rooms[room].turn % players.length; // makes it so that turns will loop if players are meant to have two turns each
         const nextPlayer = players[turn];
-        io.in(room).emit('switchTurn', nextPlayer, notes);
+        io.in(room).emit('switchTurn', nextPlayer, notesStr);
       }
     });
   });

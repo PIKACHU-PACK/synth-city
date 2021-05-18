@@ -2,6 +2,7 @@ import classNames from 'classnames';
 import * as Tone from 'tone';
 import React from 'react';
 import { Timer } from 'react-countdown-clock-timer';
+import { stringify } from 'flatted';
 import { NoteButton } from './NoteButton';
 import {
   makeGrid,
@@ -183,10 +184,10 @@ class Sequencer extends React.Component {
           <h2>Let's Make Some Jams!</h2>
         </div>
         <Timer
-          durationInSeconds={4}
+          durationInSeconds={10}
           formatted={true}
           onFinish={() =>
-            this.props.finishTurn(JSON.stringify(this.state.previousNotes))
+            this.props.finishTurn(stringify(this.state.previousNotes))
           }
         />
         <div>

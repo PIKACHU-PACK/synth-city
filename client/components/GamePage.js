@@ -2,6 +2,7 @@ import React from 'react';
 import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
 import Sequencer from './Sequencer';
 import { Timer } from 'react-countdown-clock-timer';
+import { parse } from 'flatted';
 import history from '../history';
 
 export class GamePage extends React.Component {
@@ -15,13 +16,13 @@ export class GamePage extends React.Component {
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
-    this.changeMusician = this.changeMusician.bind(this);
+    this.setTurn = this.setTurn.bind(this);
     this.revealSong = this.revealSong.bind(this);
   }
 
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
-    turnListener(this.changeMusician);
+    turnListener(this.setTurn);
     gameEndListener(this.revealSong);
   }
 
@@ -34,12 +35,13 @@ export class GamePage extends React.Component {
     });
   }
 
-  changeMusician(nextPlayer, notes) {
+  setTurn(nextPlayer, notesStr) {
+    const notes = parse(notesStr);
     this.setState({ musician: nextPlayer, notes: notes });
   }
 
-  finishTurn(notes) {
-    endTurn(this.props.match.params.roomId, notes);
+  finishTurn(notesStr) {
+    endTurn(this.props.match.params.roomId, notesStr);
   }
 
   revealSong() {
@@ -52,6 +54,7 @@ export class GamePage extends React.Component {
     const room = this.props.match.params.roomId;
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician;
+    console.log('GamePageState:', this.state);
 
     return (
       <>

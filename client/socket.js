@@ -44,13 +44,13 @@ export function startListener(callback) {
   });
 }
 // triggered when timer runs out on player's turn
-export function endTurn(room, notes) {
-  socket.emit('setTurn', room, notes);
+export function endTurn(room, notesStr) {
+  socket.emit('setTurn', room, notesStr);
 }
 // switches turns after backend hears that current player's turn ended
-export function turnListener(callback, finishedCallback) {
-  socket.on('switchTurn', (nextPlayer, notes) => {
-    callback(nextPlayer, notes);
+export function turnListener(callback) {
+  socket.on('switchTurn', (nextPlayer, notesStr) => {
+    callback(nextPlayer, notesStr);
   });
 }
 // listens for backend that all rounds finished, then redirects to SongReveal
