@@ -3,9 +3,6 @@ import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
 import Sequencer from "./Sequencer";
 import history from "../history";
 import { parse } from "flatted";
-import { lastNotesSeed } from "./HelperFunctions";
-
-// let previousNotes = lastNotesSeed;
 
 export class GamePage extends React.Component {
   constructor() {
@@ -14,7 +11,8 @@ export class GamePage extends React.Component {
       players: [],
       thisPlayer: "",
       musician: "",
-      previousNotes: lastNotesSeed,
+      previousNotes: [],
+      isFirst: true,
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
@@ -39,12 +37,15 @@ export class GamePage extends React.Component {
 
   sendTurn(nextPlayer, notesStr) {
     const notes = parse(notesStr);
-    console.log("setting turn, parsed notes is", notes);
-    this.setState({ musician: nextPlayer, previousNotes: notes });
+    this.setState({
+      musician: nextPlayer,
+      previousNotes: notes,
+      isFirst: false,
+    });
   }
 
-  finishTurn(notesString) {
-    endTurn(this.props.match.params.roomId, notesString);
+  finishTurn(notesString, gridString) {
+    endTurn(this.props.match.params.roomId, notesString, gridString);
   }
 
   revealSong() {
@@ -54,7 +55,6 @@ export class GamePage extends React.Component {
   }
 
   render() {
-    const room = this.props.match.params.roomId;
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician;
 
@@ -67,6 +67,7 @@ export class GamePage extends React.Component {
             <Sequencer
               finishTurn={this.finishTurn}
               previousNotes={this.state.previousNotes}
+              isFirst={this.state.isFirst}
             />
           </>
         ) : (

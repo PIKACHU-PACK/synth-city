@@ -44,9 +44,9 @@ export function startListener(callback) {
   });
 }
 // triggered when timer runs out on player's turn
-export function endTurn(room, notesStr) {
+export function endTurn(room, notesStr, gridStr) {
   //console.log("notesStr in endTurn", notesStr);
-  socket.emit("setTurn", room, notesStr);
+  socket.emit("setTurn", room, notesStr, gridStr);
 }
 // switches turns after backend hears that current player's turn ended
 export function turnListener(callback) {
@@ -59,6 +59,13 @@ export function turnListener(callback) {
 export function gameEndListener(callback) {
   socket.on("gameOver", () => {
     callback();
+  });
+}
+
+export function getSong(room, callback) {
+  socket.emit("getFinalSong", room);
+  socket.on("sendFinalSong", (songString) => {
+    callback(songString);
   });
 }
 

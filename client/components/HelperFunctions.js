@@ -9,7 +9,7 @@ export const basicSynth = new Tone.Synth({
   },
 }).toDestination();
 
-export function makeSynths(synthType) {
+export function makeSynths() {
   // MAKE DIFFERENT SYNTHS LATER ON INSTEAD
   const synths = [];
   synths.push(amSynth, pluckySynth, basicSynth);
@@ -20,11 +20,15 @@ const countArray = Array.from({ length: 18 }, (_, i) => i + 1);
 let currHeaderCount = 0;
 let prevCount = 0;
 
-export function makeGrid(notes) {
+export function makeGrid(notes, isFirst) {
+  let CORRECT_TOTAL = AMOUNT_OF_NOTES;
+  if (isFirst) {
+    CORRECT_TOTAL = CORRECT_TOTAL - 2;
+  }
   const rows = [];
   for (const note of notes) {
     const col = [];
-    for (let i = 0; i < AMOUNT_OF_NOTES; i++) {
+    for (let i = 0; i < CORRECT_TOTAL; i++) {
       if (note === "COUNT") {
         col.push({
           note: countArray[currHeaderCount],
@@ -52,13 +56,13 @@ export const lastNotesSeed = [
     {
       note: "C",
       isActive: true,
-      synth: pluckySynth,
+      synth: "pluckySynth",
       octave: "4",
     },
     {
       note: "C",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
   ],
@@ -66,13 +70,13 @@ export const lastNotesSeed = [
     {
       note: "D",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
     {
       note: "D",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
   ],
@@ -80,13 +84,13 @@ export const lastNotesSeed = [
     {
       note: "E",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
     {
       note: "E",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
   ],
@@ -94,13 +98,13 @@ export const lastNotesSeed = [
     {
       note: "F",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
     {
       note: "F",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
   ],
@@ -108,13 +112,13 @@ export const lastNotesSeed = [
     {
       note: "G",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
     {
       note: "G",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
   ],
@@ -122,13 +126,13 @@ export const lastNotesSeed = [
     {
       note: "A",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
     {
       note: "A",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
   ],
@@ -136,50 +140,14 @@ export const lastNotesSeed = [
     {
       note: "B",
       isActive: false,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
     {
       note: "B",
       isActive: true,
-      synth: basicSynth,
+      synth: "basicSynth",
       octave: "4",
     },
   ],
 ];
-
-//THIS VERSION OF MAKEGRID DOES NOT WORK OK,
-// export function makeGrid(notes, previousNotes) {
-//   const rows = [];
-//   for (let i = 0; i < notes.length; i++) {
-//     const currentNote = notes[i];
-//     const col = [];
-//     const basicNote = {
-//       note: currentNote,
-//       isActive: false,
-//       synth: basicSynth,
-//       octave: "4",
-//     };
-//     for (let j = 0; j < AMOUNT_OF_NOTES; j++) {
-//       if (currentNote === "COUNT") {
-//         col.push({
-//           note: countArray[currHeaderCount],
-//           isActive: false,
-//         });
-//         currHeaderCount++;
-//       } else {
-//         // if (j >= 2) {
-//         col.push(basicNote);
-//       }
-//       //   else if (j === 0) {
-//       //     console.log("im in j===0");
-//       //     col.push(previousNotes[i - 1][j]);
-//       //   } else if (j === 1) {
-//       //     console.log("im in j===1");
-//       //     col.push(previousNotes[i - 1][j]);
-//       //   }
-//     }
-//     rows.push(col);
-//   }
-//   return rows;
-// }

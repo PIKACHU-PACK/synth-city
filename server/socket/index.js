@@ -7,6 +7,7 @@ const rooms = {};
 //                   players: [ SOCKET_ID, SOCKET_ID... ],
 //                   turn: TURN_NUMBER,
 //                   rounds: NUMBER_OF_ROUNDS
+//                   song: []
 //                  }
 //          }
 
@@ -20,7 +21,7 @@ module.exports = (io) => {
 
     socket.on("createRoom", () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
-      rooms[room] = { players: [socket.id], turn: 0 };
+      rooms[room] = { players: [socket.id], turn: 0, song: [] };
       socket.join(room);
       socket.emit("roomCreated", room);
     });
@@ -47,7 +48,8 @@ module.exports = (io) => {
       });
     });
 
-    socket.on("setTurn", (room, notesString) => {
+    socket.on("setTurn", (room, notesString, gridStr) => {
+      rooms[room].song.push(gridStr);
       rooms[room].turn++;
       if (rooms[room].turn === rooms[room].rounds) {
         // checks to see if the game should end or turns should keep switching
@@ -58,6 +60,11 @@ module.exports = (io) => {
         const nextPlayer = players[turn];
         io.in(room).emit("switchTurn", nextPlayer, notesString);
       }
+    });
+
+    socket.on("getFinalSong", (room) => {
+      let song = rooms[room].song;
+      io.in(room).emit("sendFinalSong", song);
     });
   });
 };

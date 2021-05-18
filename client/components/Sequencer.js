@@ -2,13 +2,7 @@ import classNames from "classnames";
 import * as Tone from "tone";
 import React from "react";
 import { NoteButton } from "./NoteButton";
-import {
-  makeGrid,
-  makeSynths,
-  basicSynth,
-  amSynth,
-  pluckySynth,
-} from "./HelperFunctions";
+import { makeGrid, makeSynths } from "./HelperFunctions";
 import { stringify } from "flatted";
 import { Timer } from "react-countdown-clock-timer";
 
@@ -25,9 +19,8 @@ class Sequencer extends React.Component {
       beat: 0,
       playing: false,
       started: false,
-      currSynth: basicSynth,
+      currSynth: "basicSynth",
       octave: "4",
-      previousNotes: this.props.previousNotes,
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
@@ -36,21 +29,35 @@ class Sequencer extends React.Component {
     this.onTurnEnd = this.onTurnEnd.bind(this);
     this.clearGrid = this.clearGrid.bind(this);
     this.addPreviousNotes = this.addPreviousNotes.bind(this);
+    this.configLoop = this.configLoop.bind(this);
   }
 
   componentDidMount() {
-    const rowGrid = makeGrid(notes);
-    const synthsArr = makeSynths(basicSynth);
-    const newGrid = this.addPreviousNotes(rowGrid);
-    this.setState({ grid: newGrid, synths: synthsArr });
+    let rowGrid = makeGrid(notes, this.props.isFirst);
+    const synthsArr = makeSynths();
+    if (!this.props.isFirst) {
+      const newGrid = this.addPreviousNotes(rowGrid);
+      this.setState({ grid: newGrid, synths: synthsArr });
+    } else {
+      this.setState({ grid: rowGrid, synths: synthsArr });
+    }
   }
 
   configLoop() {
+    //0: am, 1: plucky, 2: basic (order in state)
     const repeat = (time) => {
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
-          note.synth.triggerAttackRelease(note.note + note.octave, "8n", time);
+          let synth;
+          if (note.synth === "amSynth") {
+            synth = this.state.synths[0];
+          } else if (note.synth === "pluckySynth") {
+            synth = this.state.synths[1];
+          } else if (note.synth === "basicSynth") {
+            synth = this.state.synths[2];
+          }
+          synth.triggerAttackRelease(note.note + note.octave, "8n", time);
         }
       });
       this.setState({ beat: (this.state.beat + 1) % AMOUNT_OF_NOTES });
@@ -77,12 +84,12 @@ class Sequencer extends React.Component {
             "note",
             { "note-not-active": !note.isActive },
             {
-              "green-synth": note.synth === basicSynth && note.isActive,
+              "green-synth": note.synth === "basicSynth" && note.isActive,
             },
             {
-              "blue-synth": note.synth === pluckySynth && note.isActive,
+              "blue-synth": note.synth === "pluckySynth" && note.isActive,
             },
-            { "red-synth": note.synth === amSynth && note.isActive }
+            { "red-synth": note.synth === "amSynth" && note.isActive }
           );
         }
         return note;
@@ -114,15 +121,7 @@ class Sequencer extends React.Component {
   }
 
   chooseSynth(type) {
-    let synthType;
-    if (type == "amSynth") {
-      synthType = amSynth;
-    } else if (type === "basicSynth") {
-      synthType = basicSynth;
-    } else if (type === "pluckySynth") {
-      synthType = pluckySynth;
-    }
-    this.setState({ currSynth: synthType });
+    this.setState({ currSynth: type });
   }
 
   octaveDropDown(evt) {
@@ -131,39 +130,50 @@ class Sequencer extends React.Component {
   }
 
   onTurnEnd() {
+    let penultimate = 16;
+    let ultimate = 17;
+    if (this.props.isFirst) {
+      penultimate = 14;
+      ultimate = 15;
+    }
     const nextNotes = [];
-    let grid = this.state.grid;
+    let grid = this.state.grid.slice();
     for (let i = 1; i < grid.length; i++) {
       let currRow = grid[i];
       let newRow = [];
-      newRow.push(currRow[16]);
-      newRow.push(currRow[17]);
+      newRow.push(currRow[penultimate]);
+      newRow.push(currRow[ultimate]);
       nextNotes.push(newRow);
     }
+    Tone.Transport.stop();
     return nextNotes;
   }
 
   addPreviousNotes(grid) {
-    let newGrid = grid.map((eachRow, rowIndex) => {
-      if (rowIndex === 0) {
-        return eachRow;
-      }
-      let newRow = eachRow.map((eachCol, colIndex) => {
-        if (colIndex === 0) {
-          eachCol = this.state.previousNotes[rowIndex - 1][0];
-          eachCol["isPrevious"] = true;
-          return eachCol;
-        } else if (colIndex === 1) {
-          eachCol = this.state.previousNotes[rowIndex - 1][1];
-          eachCol["isPrevious"] = true;
-          return eachCol;
-        } else {
-          return eachCol;
+    if (this.props.previousNotes[0][0] !== null) {
+      let newGrid = grid.map((eachRow, rowIndex) => {
+        if (rowIndex === 0) {
+          return eachRow;
         }
+        let newRow = eachRow.map((eachCol, colIndex) => {
+          if (colIndex === 0) {
+            eachCol = this.props.previousNotes[rowIndex - 1][0];
+            eachCol["isPrevious"] = true;
+            return eachCol;
+          } else if (colIndex === 1) {
+            eachCol = this.props.previousNotes[rowIndex - 1][1];
+            eachCol["isPrevious"] = true;
+            return eachCol;
+          } else {
+            return eachCol;
+          }
+        });
+        return newRow;
       });
-      return newRow;
-    });
-    return newGrid;
+      return newGrid;
+    } else {
+      return grid;
+    }
   }
 
   clearGrid() {
@@ -174,15 +184,15 @@ class Sequencer extends React.Component {
   }
 
   render() {
-    console.log("previous notes in state is", this.state.previousNotes);
     return (
       <div>
         <Timer
-          durationInSeconds={4}
+          durationInSeconds={3}
           onFinish={() => {
             const lastNotes = this.onTurnEnd();
             const sendNotes = stringify(lastNotes);
-            this.props.finishTurn(sendNotes);
+            const sendGrid = stringify(this.state.grid);
+            this.props.finishTurn(sendNotes, sendGrid);
           }}
         />
         <div>
