@@ -2,7 +2,7 @@ import classNames from "classnames";
 import * as Tone from "tone";
 import React from "react";
 import { NoteButton } from "./NoteButton";
-import { makeGrid, makeSynths } from "./HelperFunctions";
+import { makeGrid, makeSynths, checkWhichSynth } from "./HelperFunctions";
 import { stringify } from "flatted";
 import { Timer } from "react-countdown-clock-timer";
 
@@ -41,6 +41,8 @@ class Sequencer extends React.Component {
     } else {
       this.setState({ grid: rowGrid, synths: synthsArr });
     }
+    Tone.start();
+    Tone.getDestination().volume.rampTo(-10, 0.001);
   }
 
   configLoop() {
@@ -49,14 +51,8 @@ class Sequencer extends React.Component {
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
-          let synth;
-          if (note.synth === "amSynth") {
-            synth = this.state.synths[0];
-          } else if (note.synth === "pluckySynth") {
-            synth = this.state.synths[1];
-          } else if (note.synth === "basicSynth") {
-            synth = this.state.synths[2];
-          }
+          const synthIndex = checkWhichSynth(note.synth);
+          let synth = this.state.synths[synthIndex];
           synth.triggerAttackRelease(note.note + note.octave, "8n", time);
         }
       });
@@ -74,12 +70,16 @@ class Sequencer extends React.Component {
           if (typeof note.note === "number") {
             return;
           }
-          if (noteIndex === 0 || noteIndex === 1) {
+          if ((noteIndex === 0 || noteIndex === 1) && !this.props.isFirst) {
             return;
           }
           note.isActive = !note.isActive;
           note.synth = this.state.currSynth;
           note.octave = this.state.octave;
+          const synthIndex = checkWhichSynth(note.synth);
+          let synth = this.state.synths[synthIndex];
+          synth.triggerAttackRelease(note.note + note.octave, "8n");
+
           e.target.className = classNames(
             "note",
             { "note-not-active": !note.isActive },
@@ -101,8 +101,8 @@ class Sequencer extends React.Component {
 
   configPlayButton(e) {
     if (!this.state.started) {
-      Tone.start();
-      Tone.getDestination().volume.rampTo(-10, 0.001);
+      // Tone.start();
+      // Tone.getDestination().volume.rampTo(-10, 0.001);
       this.setState({ started: true });
       this.configLoop();
     }
@@ -279,9 +279,6 @@ class Sequencer extends React.Component {
             </button>
             <button className="play-button" onClick={this.clearGrid}>
               Clear
-            </button>
-            <button className="play-button" onClick={this.onTurnEnd}>
-              End Turn
             </button>
           </div>
         </div>

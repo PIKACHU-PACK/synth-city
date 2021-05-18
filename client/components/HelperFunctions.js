@@ -17,10 +17,9 @@ export function makeSynths() {
 }
 
 const countArray = Array.from({ length: 18 }, (_, i) => i + 1);
-let currHeaderCount = 0;
-let prevCount = 0;
 
 export function makeGrid(notes, isFirst) {
+  let currHeaderCount = 0;
   let CORRECT_TOTAL = AMOUNT_OF_NOTES;
   if (isFirst) {
     CORRECT_TOTAL = CORRECT_TOTAL - 2;
@@ -51,103 +50,14 @@ export function makeGrid(notes, isFirst) {
   return rows;
 }
 
-export const lastNotesSeed = [
-  [
-    {
-      note: "C",
-      isActive: true,
-      synth: "pluckySynth",
-      octave: "4",
-    },
-    {
-      note: "C",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "D",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "D",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "E",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "E",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "F",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "F",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "G",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "G",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "A",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "A",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "B",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "B",
-      isActive: true,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-];
+export function checkWhichSynth(stringName, synthsArray) {
+  let synthIndex;
+  if (stringName === "amSynth") {
+    synthIndex = 0;
+  } else if (stringName === "pluckySynth") {
+    synthIndex = 1;
+  } else if (stringName === "basicSynth") {
+    synthIndex = 2;
+  }
+  return synthIndex;
+}
