@@ -11,6 +11,7 @@ export class GamePage extends React.Component {
       players: [],
       thisPlayer: '',
       musician: '',
+      notes: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
@@ -33,12 +34,12 @@ export class GamePage extends React.Component {
     });
   }
 
-  changeMusician(nextPlayer) {
-    this.setState({ musician: nextPlayer });
+  changeMusician(nextPlayer, notes) {
+    this.setState({ musician: nextPlayer, notes: notes });
   }
 
-  finishTurn(room) {
-    endTurn(room);
+  finishTurn(notes) {
+    endTurn(this.props.match.params.roomId, notes);
   }
 
   revealSong() {
@@ -57,11 +58,11 @@ export class GamePage extends React.Component {
         {thisPlayer === musician ? (
           <>
             <h2>PLAYING</h2>
-            <Timer
+            {/* <Timer
               durationInSeconds={4}
               onFinish={() => this.finishTurn(room)}
-            />
-            <Sequencer />
+            /> */}
+            <Sequencer finishTurn={this.finishTurn} />
           </>
         ) : (
           <>
