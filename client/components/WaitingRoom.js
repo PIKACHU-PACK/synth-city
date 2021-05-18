@@ -5,6 +5,7 @@ import Chat from './Chat';
 import { startGame, startListener } from '../socket';
 import history from '../history';
 import socket from '../socket';
+import { Link } from 'react-router-dom';
 
 class WaitingRoom extends React.Component {
   constructor() {
@@ -41,6 +42,14 @@ class WaitingRoom extends React.Component {
     const { roomId } = this.props.match.params;
     return (
       <div className="waiting-room">
+        <div>
+          <div className="home-button">
+            <Link to="/">
+              {/* <img src="./homebutton.png" className="home-arrow-img" /> */}
+              Home
+            </Link>
+          </div>
+        </div>
         <div className="waiting-view">
           <div className="waiting-info">
             <div className="banner">
