@@ -41,16 +41,6 @@ export class Home extends React.Component {
     createRoom(this.enterNewRoom);
   }
 
-  // async openRoomInput() {
-  //   const mySwal = withReactContent(Swal);
-  //   await mySwal.fire({
-  //     text: 'Join a Room',
-  //     input: 'text',
-  //     onChange: this.handleChange,
-  //     inputPlaceholder: 'Aa',
-  //   });
-  // }
-
   displayInstructions() {
     Swal.fire({
       title: 'HOW TO PLAY:',

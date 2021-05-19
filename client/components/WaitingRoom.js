@@ -16,6 +16,7 @@ class WaitingRoom extends React.Component {
     };
     this.onStart = this.onStart.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
+    this.goHome = this.goHome.bind(this);
   }
 
   componentDidMount() {
@@ -37,11 +38,22 @@ class WaitingRoom extends React.Component {
     });
   }
 
+  goHome() {
+    history.push({
+      pathname: '/',
+    });
+  }
+
   render() {
     const { roomId } = this.props.match.params;
     return (
       <div className="waiting-room">
         <div className="waiting-view">
+          <div className="home-button-container">
+            <button type="button" className="home-button" onClick={this.goHome}>
+              <img src={'/homebutton.png'} className="home-arrow-img" />
+            </button>
+          </div>
           <div className="waiting-info">
             <div className="banner">
               <h2 className="waiting-title">Loading...</h2>
