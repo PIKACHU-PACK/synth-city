@@ -57,7 +57,7 @@ export class Home extends React.Component {
   }
   render() {
     return (
-      <div>
+      <div className="home-view">
         <div className="home-page">
           <div className="banner">
             <h2 className="home-title">SynthCity</h2>

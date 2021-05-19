@@ -1,8 +1,8 @@
-import React from "react";
-import * as Tone from "tone";
-import { checkWhichSynth, makeSynths } from "./HelperFunctions";
-import history from "../history";
-import { BPM } from "./Sequencer";
+import React from 'react';
+import * as Tone from 'tone';
+import { checkWhichSynth, makeSynths } from './HelperFunctions';
+import history from '../history';
+import { BPM } from './Sequencer';
 
 class SongReveal extends React.Component {
   constructor() {
@@ -57,7 +57,7 @@ class SongReveal extends React.Component {
         if (note.isActive) {
           const synthIndex = checkWhichSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          synth.triggerAttackRelease(note.note + note.octave, "8n", time);
+          synth.triggerAttackRelease(note.note + note.octave, '8n', time);
         }
       });
       this.setState({
@@ -67,7 +67,7 @@ class SongReveal extends React.Component {
       });
     };
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, "8n");
+    Tone.Transport.scheduleRepeat(repeat, '8n');
   }
 
   configPlayButton(e) {
@@ -78,14 +78,14 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = "Play";
+      e.target.innerText = 'Play';
       Tone.Transport.stop();
       this.setState({
         playing: false,
         beat: 0,
       });
     } else {
-      e.target.innerText = "Stop";
+      e.target.innerText = 'Stop';
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -93,7 +93,7 @@ class SongReveal extends React.Component {
 
   goHome() {
     history.push({
-      pathname: "/",
+      pathname: '/',
     });
   }
 
@@ -106,7 +106,7 @@ class SongReveal extends React.Component {
   render() {
     return (
       <div>
-        <h2>This is where the song will be revealed to the players</h2>
+        <h2 className="home-title">Your Masterpiece</h2>
         <button
           id="play-button"
           className="main-cta"
@@ -117,13 +117,6 @@ class SongReveal extends React.Component {
         <button type="button" className="main-cta" onClick={this.goHome}>
           Go Home
         </button>
-        {/* <button
-          type="button"
-          className="main-cta"
-          onClick={this.goToWaitingRoom}
-        >
-          Play Again
-        </button> */}
       </div>
     );
   }

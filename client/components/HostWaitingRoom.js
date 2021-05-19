@@ -5,6 +5,7 @@ import Chat from './Chat';
 import { startGame, startListener } from '../socket';
 import history from '../history';
 import socket from '../socket';
+import Swal from 'sweetalert2';
 
 class HostWaitingRoom extends React.Component {
   constructor() {
@@ -17,6 +18,7 @@ class HostWaitingRoom extends React.Component {
     this.onStart = this.onStart.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
     this.goHome = this.goHome.bind(this);
+    this.displayInstructions = this.displayInstructions.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +46,17 @@ class HostWaitingRoom extends React.Component {
     });
   }
 
+  displayInstructions() {
+    Swal.fire({
+      title: 'HOW TO PLAY:',
+      html:
+        'Each player will have two 25-second turns to compose a section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>' +
+        "To compose your section, click on the Sequencer's buttons. Use the menu at the top to change Octaves and Synths.<br></br>" +
+        "At the end of the game, you'll be able to hear and download your grammy-nominated masterpiece!",
+      showCloseButton: true,
+    });
+  }
+
   render() {
     const { roomId } = this.props.match.params;
     return (
@@ -65,6 +78,18 @@ class HostWaitingRoom extends React.Component {
           </div>
           <div className="chat-container">
             <Chat roomId={roomId} chat={this.state.chat} />
+          </div>
+          <div className="waiting-instructions-container">
+            <button
+              type="button"
+              className="waiting-instructions-button"
+              onClick={this.displayInstructions}
+            >
+              <img
+                src={'/InstructionsIcon.png'}
+                className="waiting-instructions-img"
+              />
+            </button>
           </div>
         </div>
       </div>

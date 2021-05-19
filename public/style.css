@@ -4,6 +4,8 @@
 
 body {
   background-image: linear-gradient(#32eaf4, #df21c3);
+  overflow: hidden;
+  height: 100vh;
 }
 
 a {
@@ -33,26 +35,11 @@ form div {
   box-shadow: 3px 3px #df21c3;
 }
 
-#synth-options-container {
-  display: flex;
-
-  justify-content: center;
-}
-
-#page-container {
-  position: relative;
-  min-height: 100vh;
-}
-
-#content-wrap {
-  padding-bottom: 2.5rem;
-}
-
 /* FOOTER */
 
 #footer {
   position: relative;
-  max-height: 20x;
+  height: 7vh;
 }
 
 .footer-container {
@@ -65,7 +52,6 @@ form div {
 .footer-column {
   flex: 1;
   margin: 5px;
-  height: 40px;
   justify-content: center;
 }
 
@@ -95,7 +81,7 @@ form div {
     ),
     linear-gradient(to bottom, rgb(192, 192, 192) 1px, transparent 1px);
   background-color: transparent;
-  height: 100vh;
+  height: 89vh;
 }
 
 .banner {
@@ -106,7 +92,6 @@ form div {
   justify-content: center;
   align-items: center;
   margin-bottom: 32px;
-  /* background-image: url('./banner-illustration.jpeg'); */
 }
 
 .options-container {
@@ -191,7 +176,7 @@ form div {
 .instructions-img {
   width: 80px;
   height: 80px;
-  float: right;
+  float: left;
 }
 
 /* WAITING ROOM */
@@ -216,7 +201,7 @@ form div {
 }
 
 .waiting-view {
-  height: 900px;
+  height: 100vh;
   display: flex;
 }
 
@@ -232,15 +217,43 @@ form div {
   font-size: 0;
   border: none;
   padding: 10px;
+  margin-left: 30px;
+  margin-top: 60px;
 }
 
 .home-arrow-img {
-  width: 75px;
-  height: 62px;
+  width: 65px;
+  height: 52px;
+  float: left;
+}
+
+.waiting-instructions-container {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.waiting-instructions-button {
+  background-color: transparent;
+  padding: 10px;
+  font-size: 0;
+  border: none;
+  position: fixed;
+  left: 3%;
+  bottom: 10%;
+}
+
+.waiting-instructions-img {
+  width: 80px;
+  height: 80px;
   float: left;
 }
 
 /* SEQUENCER */
+
+.sequencer-view {
+  overflow: scroll;
+  height: 100vh;
+}
 
 .sequencer {
   border-radius: 5px;
@@ -385,6 +398,11 @@ form div {
   box-shadow: 3px 3px #21c3df;
 }
 
+#synth-options-container {
+  display: flex;
+  justify-content: center;
+}
+
 /* CHAT */
 
 .chat-container {
@@ -513,5 +531,33 @@ form div {
 
 .game-chat {
   display: flex;
+  justify-content: center;
+}
+
+/* PRACTICE ROOM */
+
+.practice-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 30px;
+  color: #e12967;
+  text-shadow: 2px 2px #320879;
+}
+
+.practice-home-button {
+  background-color: transparent;
+  padding: 10px;
+  font-size: 0;
+  border: none;
+}
+
+.practice-home-arrow-img {
+  width: 65px;
+  height: 52px;
+  float: left;
+}
+
+.practice-synth-options-container {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
 }
