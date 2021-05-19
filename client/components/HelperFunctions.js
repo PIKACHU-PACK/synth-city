@@ -39,7 +39,7 @@ export function makeGrid(notes, isFirst) {
         col.push({
           note: note,
           isActive: false,
-          synth: basicSynth,
+          synth: "basicSynth",
           octave: "4",
           isPrevious: false,
         });
@@ -50,7 +50,7 @@ export function makeGrid(notes, isFirst) {
   return rows;
 }
 
-export function checkWhichSynth(stringName, synthsArray) {
+export function checkWhichSynth(stringName) {
   let synthIndex;
   if (stringName === "amSynth") {
     synthIndex = 0;
@@ -60,6 +60,19 @@ export function checkWhichSynth(stringName, synthsArray) {
     synthIndex = 2;
   }
   return synthIndex;
+}
+
+export function songCleanUp(grid, isFirst) {
+  const newGrid = grid.slice();
+  newGrid.shift();
+  newGrid.map((eachRow) => {
+    if (!isFirst) {
+      eachRow.shift();
+      eachRow.shift();
+    }
+    return eachRow;
+  });
+  return newGrid;
 }
 
 export const lastNotesSeed = [

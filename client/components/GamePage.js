@@ -1,23 +1,24 @@
-import React from 'react';
-import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
-import Sequencer from './Sequencer';
-import history from '../history';
-import { parse } from 'flatted';
-import Chat from './Chat';
-import socket from '../socket';
-import { Timer } from 'react-countdown-clock-timer';
+import React from "react";
+import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
+import Sequencer, { turnLength } from "./Sequencer";
+import history from "../history";
+import { parse } from "flatted";
+import Chat from "./Chat";
+import socket from "../socket";
+import { Timer } from "react-countdown-clock-timer";
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: '',
-      musician: '',
+      thisPlayer: "",
+      musician: "",
       previousNotes: [],
       isFirst: true,
       chosenBeat: [],
       chat: [],
+      finalSong: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
@@ -28,7 +29,7 @@ export class GamePage extends React.Component {
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
     turnListener(this.sendTurn);
-    socket.on('chat Message', (msg) => {
+    socket.on("chat Message", (msg) => {
       this.setState({
         chat: [...this.state.chat, msg],
       });
@@ -45,12 +46,16 @@ export class GamePage extends React.Component {
     });
   }
 
-  sendTurn(nextPlayer, notesStr) {
+  sendTurn(nextPlayer, notesStr, gridStr) {
     const notes = parse(notesStr);
+    const segment = parse(gridStr);
+    const songSoFar = this.state.finalSong.slice();
+    songSoFar.push(segment);
     this.setState({
       musician: nextPlayer,
       previousNotes: notes,
       isFirst: false,
+      finalSong: songSoFar,
     });
   }
 
@@ -59,8 +64,9 @@ export class GamePage extends React.Component {
   }
 
   revealSong() {
-    history.push({
+    this.props.history.push({
       pathname: `/song/${this.props.match.params.roomId}`,
+      finalSong: this.state.finalSong,
     });
   }
 
@@ -82,7 +88,7 @@ export class GamePage extends React.Component {
           <>
             <div>
               <h2 className="game-title">WAITING</h2>
-              <Timer durationInSeconds={24} />
+              <Timer durationInSeconds={turnLength} />
               <div className="game-chat">
                 <Chat roomId={roomId} chat={this.state.chat} />
               </div>
