@@ -1,16 +1,16 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { createRoom, joinRoom } from '../socket';
-import Footer from './Footer';
-import history from '../history';
-import Swal from 'sweetalert2';
+import React from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { createRoom, joinRoom } from "../socket";
+import Footer from "./Footer";
+import history from "../history";
+import Swal from "sweetalert2";
 
 export class Home extends React.Component {
   constructor() {
     super();
     this.state = {
-      roomKey: '',
+      roomKey: "",
     };
     this.handleCreate = this.handleCreate.bind(this);
     this.enterNewRoom = this.enterNewRoom.bind(this);
@@ -22,7 +22,7 @@ export class Home extends React.Component {
 
   enterNewRoom(room) {
     history.push({
-      pathname: `/waiting/${room}/host`,
+      pathname: `/waiting/${room}`,
     });
   }
   enterExistingRoom() {
@@ -43,9 +43,9 @@ export class Home extends React.Component {
 
   displayInstructions() {
     Swal.fire({
-      title: 'HOW TO PLAY:',
+      title: "HOW TO PLAY:",
       html:
-        'Each player will have two 25-second turns to compose a section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>' +
+        "Each player will have two 25-second turns to compose a section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>" +
         "To compose your section, click on the Sequencer's buttons. Use the menu at the top to change Octaves and Synths.<br></br>" +
         "At the end of the game, you'll be able to hear and download your grammy-nominated masterpiece!",
       showCloseButton: true,
@@ -87,7 +87,7 @@ export class Home extends React.Component {
               </div>
             </div>
             <div className="column">
-              <Link to={'/practice'}>
+              <Link to={"/practice"}>
                 <div className="option-card">
                   <h3>Try it out</h3>
                 </div>
