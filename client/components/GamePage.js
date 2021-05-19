@@ -87,7 +87,7 @@ export class GamePage extends React.Component {
         ) : (
           <>
             <div>
-              <h2 className="game-title">WAITING</h2>
+              <h2 className="game-title">WAITING FOR YOUR TURN</h2>
               <Timer durationInSeconds={turnLength} />
               <div className="game-chat">
                 <Chat roomId={roomId} chat={this.state.chat} />
