@@ -11,7 +11,7 @@ import {
   checkWhichSynth,
 } from "./HelperFunctions";
 import { AMOUNT_OF_NOTES, BPM, notes } from "./Sequencer";
-import history from '../history';
+import history from "../history";
 
 class PracticeRoom extends React.Component {
   constructor() {
@@ -138,9 +138,11 @@ class PracticeRoom extends React.Component {
 
   goHome() {
     history.push({
-      pathname: '/',
+      pathname: "/",
     });
   }
+
+  //DELETE THIS
 
   render() {
     return (
@@ -150,7 +152,7 @@ class PracticeRoom extends React.Component {
         </div>
         <div className="home-button-container">
           <button type="button" className="home-button" onClick={this.goHome}>
-            <img src={'/homebutton.png'} className="home-arrow-img" />
+            <img src={"/homebutton.png"} className="home-arrow-img" />
           </button>
         </div>
         <div>
