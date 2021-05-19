@@ -177,10 +177,13 @@ class Sequencer extends React.Component {
   }
 
   clearGrid() {
-    //NOT WORKING YET TBD
-    // const newGrid = makeGrid(notes);
-    // this.setState({ grid: newGrid });
-    // console.log("new gri is", this.state.grid);
+    let rowGrid = makeGrid(notes, this.props.isFirst);
+    if (!this.props.isFirst) {
+      const newGrid = this.addPreviousNotes(rowGrid);
+      this.setState({ grid: newGrid });
+    } else {
+      this.setState({ grid: rowGrid });
+    }
   }
 
   render() {

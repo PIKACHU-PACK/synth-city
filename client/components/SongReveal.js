@@ -18,7 +18,7 @@ class SongReveal extends React.Component {
   }
 
   componentDidMount() {
-    getSong(this.props.match.params.roomId, this.setFinalSong);
+    //getSong(this.props.match.params.roomId, this.setFinalSong);
   }
 
   setFinalSong(finalSongArr) {
