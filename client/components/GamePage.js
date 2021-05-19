@@ -16,6 +16,7 @@ export class GamePage extends React.Component {
       musician: '',
       previousNotes: [],
       isFirst: true,
+      chosenBeat: [],
       chat: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
@@ -71,8 +72,6 @@ export class GamePage extends React.Component {
       <>
         {thisPlayer === musician ? (
           <>
-            <h2 className="game-title">PLAYING</h2>
-
             <Sequencer
               finishTurn={this.finishTurn}
               previousNotes={this.state.previousNotes}

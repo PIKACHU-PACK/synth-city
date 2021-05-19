@@ -1,7 +1,8 @@
-import React from 'react';
-import { getSong } from '../socket';
-import { parse } from 'flatted';
-import * as Tone from 'tone';
+import React from "react";
+import { getSong } from "../socket";
+import { parse } from "flatted";
+import * as Tone from "tone";
+import lastNotesSeed from "./HelperFunctions";
 import history from '../history';
 
 class SongReveal extends React.Component {
@@ -12,6 +13,7 @@ class SongReveal extends React.Component {
       beat: 0,
       playing: false,
       finalSong: [],
+      recorder: new Tone.Recorder(),
     };
     this.configPlayButton = this.configPlayButton.bind(this);
     this.configLoop = this.configLoop.bind(this);
@@ -21,7 +23,10 @@ class SongReveal extends React.Component {
   }
 
   componentDidMount() {
-    getSong(this.props.match.params.roomId, this.setFinalSong);
+    //getSong(this.props.match.params.roomId, this.setFinalSong);
+    // setTimeout(function () {
+    //   this.state.recorder.start;
+    // }, 5000);
   }
 
   setFinalSong(finalSongArr) {
