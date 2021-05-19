@@ -25,12 +25,14 @@ module.exports = (io) => {
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
       rooms[room] = { players: [socket.id], turn: 0 };
+
       socket.join(room);
       socket.emit('roomCreated', room);
     });
 
     socket.on('joinRoom', (room) => {
       rooms[room].players.push(socket.id);
+      console.log('joined', rooms[room]);
       socket.join(room);
       socket.emit('roomJoined');
     });

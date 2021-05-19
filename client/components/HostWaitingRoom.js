@@ -6,7 +6,7 @@ import { startGame, startListener } from '../socket';
 import history from '../history';
 import socket from '../socket';
 
-class WaitingRoom extends React.Component {
+class HostWaitingRoom extends React.Component {
   constructor() {
     super();
     this.state = {
@@ -14,7 +14,7 @@ class WaitingRoom extends React.Component {
       thisPlayer: '',
       chat: [],
     };
-    // this.onStart = this.onStart.bind(this);
+    this.onStart = this.onStart.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
     this.goHome = this.goHome.bind(this);
   }
@@ -28,9 +28,9 @@ class WaitingRoom extends React.Component {
     });
   }
 
-  // onStart() {
-  //   startGame(this.props.match.params.roomId);
-  // }
+  onStart() {
+    startGame(this.props.match.params.roomId);
+  }
 
   gameStarted() {
     history.push({
@@ -59,9 +59,9 @@ class WaitingRoom extends React.Component {
               <h2 className="waiting-title">Loading...</h2>
             </div>
             <h2>Your code is: {roomId}</h2>
-            {/* <button type="button" className="main-cta" onClick={this.onStart}>
+            <button type="button" className="main-cta" onClick={this.onStart}>
               Start Game
-            </button> */}
+            </button>
           </div>
           <div className="chat-container">
             <Chat roomId={roomId} chat={this.state.chat} />
@@ -72,4 +72,4 @@ class WaitingRoom extends React.Component {
   }
 }
 
-export default WaitingRoom;
+export default HostWaitingRoom;

@@ -1,5 +1,5 @@
 * {
-  font-family: "Ropa Sans", sans-serif;
+  font-family: 'Ropa Sans', sans-serif;
 }
 
 body {
@@ -80,7 +80,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -209,7 +209,7 @@ form div {
 }
 
 .waiting-title {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 70px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -474,7 +474,6 @@ form div {
   flex: auto;
   padding: 1.5rem;
   background: transparent;
-  font-family: "Inconsolata", monospace;
   font-weight: 700;
   font-size: 1rem;
 }
@@ -490,7 +489,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: "";
+  content: '';
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
