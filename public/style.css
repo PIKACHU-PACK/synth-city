@@ -116,7 +116,7 @@ form div {
   width: 200px;
   height: 100px;
   border-radius: 4px;
-  box-shadow: 3px 3px #df21c3;
+  box-shadow: 7px 7px #df21c3;
   justify-content: center;
   align-items: center;
   background-color: #320879;
@@ -131,7 +131,7 @@ form div {
   width: 200px;
   height: 100px;
   border-radius: 4px;
-  box-shadow: 3px 3px #df21c3;
+  box-shadow: 7px 7px #df21c3;
   justify-content: space-between;
   align-items: center;
   background-color: #320879;
