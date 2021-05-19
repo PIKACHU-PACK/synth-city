@@ -7,6 +7,7 @@ import Sequencer from './components/Sequencer';
 import PracticeRoom from './components/PracticeRoom';
 import GamePage from './components/GamePage';
 import SongReveal from './components/SongReveal';
+import HostWaitingRoom from './components/HostWaitingRoom';
 
 /**
  * COMPONENT
@@ -20,7 +21,12 @@ class Routes extends Component {
           <Route exact path="/sequencer" component={Sequencer} />
           <Route exact path="/practice" component={PracticeRoom} />
           <Route exact path="/game/:roomId" component={GamePage} />
-          <Route path="/waiting/:roomId" component={WaitingRoom} />
+          <Route exact path="/waiting/:roomId" component={WaitingRoom} />
+          <Route
+            exact
+            path="/waiting/:roomId/host"
+            component={HostWaitingRoom}
+          />
           <Route path="/song/:roomId" component={SongReveal} />
         </Switch>
       </div>
@@ -28,20 +34,4 @@ class Routes extends Component {
   }
 }
 
-/**
- * CONTAINER
- */
-// const mapState = (state) => {};
-
-// const mapDispatch = dispatch => {
-//   return {
-//     loadInitialData() {
-//       dispatch(me())
-//     }
-//   }
-// }
-
-// The `withRouter` wrapper makes sure that updates are not blocked
-// when the url changes
-// export default withRouter(connect(mapState, mapDispatch)(Routes));
 export default Routes;

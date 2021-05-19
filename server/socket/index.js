@@ -1,4 +1,4 @@
-const { v4: uuidv4 } = require("uuid");
+const { v4: uuidv4 } = require('uuid');
 
 const rooms = {};
 // rooms = {
@@ -12,10 +12,10 @@ const rooms = {};
 //          }
 
 module.exports = (io) => {
-  io.on("connection", (socket) => {
+  io.on('connection', (socket) => {
     console.log(`User Connected: ${socket.id}`);
 
-    socket.on("disconnect", () => {
+    socket.on('disconnect', () => {
       console.log(`BYEEEEEE ${socket.id}`);
     });
 
@@ -26,49 +26,51 @@ module.exports = (io) => {
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
       rooms[room] = { players: [socket.id], turn: 0, song: [] };
+      console.log('created', rooms[room]);
       socket.join(room);
-      socket.emit("roomCreated", room);
+      socket.emit('roomCreated', room);
     });
 
-    socket.on("joinRoom", (room) => {
+    socket.on('joinRoom', (room) => {
       rooms[room].players.push(socket.id);
+      console.log('joined', rooms[room]);
       socket.join(room);
-      socket.emit("roomJoined");
+      socket.emit('roomJoined');
     });
 
-    socket.on("startGame", (room) => {
-      io.in(room).emit("gameStarted");
+    socket.on('startGame', (room) => {
+      io.in(room).emit('gameStarted');
     });
 
-    socket.on("getInfo", (room) => {
+    socket.on('getInfo', (room) => {
       const thisPlayer = socket.id;
       const players = rooms[room].players;
       rooms[room].rounds = players.length === 3 ? 6 : 4; // determines number of rounds for game based on number of players
       const turn = rooms[room].turn;
-      io.to(thisPlayer).emit("info", {
+      io.to(thisPlayer).emit('info', {
         thisPlayer: thisPlayer,
         players: players,
         musician: rooms[room].players[turn],
       });
     });
 
-    socket.on("setTurn", (room, notesString, gridStr) => {
+    socket.on('setTurn', (room, notesString, gridStr) => {
       rooms[room].song.push(gridStr);
       rooms[room].turn++;
       if (rooms[room].turn === rooms[room].rounds) {
         // checks to see if the game should end or turns should keep switching
-        io.in(room).emit("gameOver");
+        io.in(room).emit('gameOver');
       } else {
         const players = rooms[room].players;
         const turn = rooms[room].turn % players.length; // makes it so that turns will loop if players are meant to have two turns each
         const nextPlayer = players[turn];
-        io.in(room).emit("switchTurn", nextPlayer, notesString);
+        io.in(room).emit('switchTurn', nextPlayer, notesString);
       }
     });
 
-    socket.on("getFinalSong", (room) => {
+    socket.on('getFinalSong', (room) => {
       let song = rooms[room].song;
-      io.in(room).emit("sendFinalSong", song);
+      io.in(room).emit('sendFinalSong', song);
     });
   });
 };
