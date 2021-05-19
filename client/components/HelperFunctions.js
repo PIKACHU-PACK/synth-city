@@ -61,3 +61,104 @@ export function checkWhichSynth(stringName, synthsArray) {
   }
   return synthIndex;
 }
+
+export const lastNotesSeed = [
+  [
+    {
+      note: "C",
+      isActive: true,
+      synth: "pluckySynth",
+      octave: "4",
+    },
+    {
+      note: "C",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+  ],
+  [
+    {
+      note: "D",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+    {
+      note: "D",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+  ],
+  [
+    {
+      note: "E",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+    {
+      note: "E",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+  ],
+  [
+    {
+      note: "F",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+    {
+      note: "F",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+  ],
+  [
+    {
+      note: "G",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+    {
+      note: "G",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+  ],
+  [
+    {
+      note: "A",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+    {
+      note: "A",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+  ],
+  [
+    {
+      note: "B",
+      isActive: false,
+      synth: "basicSynth",
+      octave: "4",
+    },
+    {
+      note: "B",
+      isActive: true,
+      synth: "basicSynth",
+      octave: "4",
+    },
+  ],
+];

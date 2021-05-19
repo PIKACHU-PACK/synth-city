@@ -1,5 +1,5 @@
 * {
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: "Ropa Sans", sans-serif;
 }
 
 body {
@@ -30,6 +30,13 @@ form div {
   width: 140px;
   height: 50px;
   border-radius: 5px;
+  box-shadow: 3px 3px #df21c3;
+}
+
+#synth-options-container {
+  display: flex;
+
+  justify-content: center;
 }
 
 #page-container {
@@ -64,7 +71,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -109,7 +116,7 @@ form div {
   width: 200px;
   height: 100px;
   border-radius: 4px;
-  box-shadow: 2px 2px 5px #df21c3;
+  box-shadow: 3px 3px #df21c3;
   justify-content: center;
   align-items: center;
   background-color: #320879;
@@ -124,7 +131,7 @@ form div {
   width: 200px;
   height: 100px;
   border-radius: 4px;
-  box-shadow: 2px 2px 5px #df21c3;
+  box-shadow: 3px 3px #df21c3;
   justify-content: space-between;
   align-items: center;
   background-color: #320879;
@@ -185,7 +192,7 @@ form div {
 }
 
 .waiting-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 70px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -234,19 +241,48 @@ form div {
   white-space: nowrap;
 }
 
-.green-synth {
-  background-color: green;
+.fuchsia-synth {
+  background-color: rgb(186, 37, 255);
   border: 1px solid black;
 }
 
 .blue-synth {
-  background-color: rgb(21, 51, 185);
+  background-color: rgb(46, 241, 241);
   border: 1px solid black;
 }
 
-.red-synth {
-  background-color: rgb(128, 26, 0);
+.orange-synth {
+  background-color: rgb(255, 176, 30);
   border: 1px solid black;
+}
+
+#fuchsia-synth-button {
+  background-color: rgb(195, 66, 255);
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 3px 3px #df21c3;
+}
+
+#blue-synth-button {
+  background-color: rgb(30, 233, 206);
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 3px 3px #df21c3;
+}
+
+#orange-synth-button {
+  background-color: rgb(255, 176, 30);
+  color: rgb(0, 0, 0);
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 3px 3px #df21c3;
+}
+
+#title-head {
+  display: flex;
+  text-align: center;
 }
 
 .player-options {
@@ -312,8 +348,10 @@ form div {
   margin-left: 5px;
   margin-top: 20px;
   border: none;
-  width: 90px;
+  width: 120px;
+  height: 50px;
   border-radius: 5px;
+  box-shadow: 3px 3px #21c3df;
 }
 
 /* CHAT */
@@ -405,7 +443,7 @@ form div {
   flex: auto;
   padding: 1.5rem;
   background: transparent;
-  font-family: 'Inconsolata', monospace;
+  font-family: "Inconsolata", monospace;
   font-weight: 700;
   font-size: 1rem;
 }
@@ -421,7 +459,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
