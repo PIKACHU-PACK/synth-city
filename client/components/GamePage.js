@@ -1,18 +1,19 @@
-import React from "react";
-import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
-import Sequencer from "./Sequencer";
-import history from "../history";
-import { parse } from "flatted";
+import React from 'react';
+import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
+import Sequencer from './Sequencer';
+import history from '../history';
+import { parse } from 'flatted';
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: "",
-      musician: "",
+      thisPlayer: '',
+      musician: '',
       previousNotes: [],
       isFirst: true,
+      finalSong: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
@@ -35,12 +36,14 @@ export class GamePage extends React.Component {
     });
   }
 
-  sendTurn(nextPlayer, notesStr) {
+  sendTurn(nextPlayer, notesStr, gridStr) {
     const notes = parse(notesStr);
+    const segment = parse(gridStr);
     this.setState({
       musician: nextPlayer,
       previousNotes: notes,
       isFirst: false,
+      finalSong: [...this.state.finalSong, ...segment],
     });
   }
 
@@ -49,8 +52,9 @@ export class GamePage extends React.Component {
   }
 
   revealSong() {
-    history.push({
+    this.props.history.push({
       pathname: `/song/${this.props.match.params.roomId}`,
+      finalSong: this.state.finalSong,
     });
   }
 
