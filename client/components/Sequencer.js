@@ -7,7 +7,7 @@ import { stringify } from "flatted";
 import { Timer } from "react-countdown-clock-timer";
 
 export const AMOUNT_OF_NOTES = 18;
-export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
+export const notes = ['COUNT', 'C', 'D', 'E', 'F', 'G', 'A', 'B'];
 export const BPM = 120;
 
 class Sequencer extends React.Component {
@@ -73,14 +73,14 @@ class Sequencer extends React.Component {
     };
 
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, "8n");
+    Tone.Transport.scheduleRepeat(repeat, '8n');
   }
 
   handleNoteClick(clickedRowIndex, clickedNoteIndex, e) {
     let newGrid = this.state.grid.map((row, rowIndex) => {
       row.map((note, noteIndex) => {
         if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
-          if (typeof note.note === "number") {
+          if (typeof note.note === 'number') {
             return;
           }
           if ((noteIndex === 0 || noteIndex === 1) && !this.props.isFirst) {
@@ -96,14 +96,15 @@ class Sequencer extends React.Component {
           }
 
           e.target.className = classNames(
-            "note",
-            { "note-not-active": !note.isActive },
+            'note',
+            { 'note-not-active': !note.isActive },
             {
               "fuchsia-synth": note.synth === "basicSynth" && note.isActive,
             },
             {
-              "blue-synth": note.synth === "pluckySynth" && note.isActive,
+              'blue-synth': note.synth === 'pluckySynth' && note.isActive,
             },
+
             { "orange-synth": note.synth === "amSynth" && note.isActive }
           );
         }
@@ -122,14 +123,14 @@ class Sequencer extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = "Play";
+      e.target.innerText = 'Play';
       Tone.Transport.stop();
       this.setState({
         playing: false,
         beat: 0,
       });
     } else {
-      e.target.innerText = "Stop";
+      e.target.innerText = 'Stop';
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -175,11 +176,11 @@ class Sequencer extends React.Component {
         let newRow = eachRow.map((eachCol, colIndex) => {
           if (colIndex === 0) {
             eachCol = this.props.previousNotes[rowIndex - 1][0];
-            eachCol["isPrevious"] = true;
+            eachCol['isPrevious'] = true;
             return eachCol;
           } else if (colIndex === 1) {
             eachCol = this.props.previousNotes[rowIndex - 1][1];
-            eachCol["isPrevious"] = true;
+            eachCol['isPrevious'] = true;
             return eachCol;
           } else {
             return eachCol;
@@ -215,6 +216,7 @@ class Sequencer extends React.Component {
             this.props.finishTurn(sendNotes, sendGrid);
           }}
         />
+
         <div id="synth-options-container">
           <h2 id="title-header">Let's Make Some Jams!</h2>
         </div>
@@ -268,7 +270,7 @@ class Sequencer extends React.Component {
               <div
                 id="rowIndex"
                 className="sequencer-row"
-                key={rowIndex + "row"}
+                key={rowIndex + 'row'}
               >
                 {row.map(
                   (
@@ -278,7 +280,7 @@ class Sequencer extends React.Component {
                     return (
                       <NoteButton
                         note={note}
-                        key={noteIndex + "note"}
+                        key={noteIndex + 'note'}
                         isActive={isActive}
                         beat={this.state.beat}
                         synth={synth}

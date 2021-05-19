@@ -1,19 +1,23 @@
-import React from "react";
-import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
-import Sequencer from "./Sequencer";
-import history from "../history";
-import { parse } from "flatted";
+import React from 'react';
+import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
+import Sequencer from './Sequencer';
+import history from '../history';
+import { parse } from 'flatted';
+import Chat from './Chat';
+import socket from '../socket';
+import { Timer } from 'react-countdown-clock-timer';
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: "",
-      musician: "",
+      thisPlayer: '',
+      musician: '',
       previousNotes: [],
       isFirst: true,
       chosenBeat: [],
+      chat: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
@@ -24,6 +28,11 @@ export class GamePage extends React.Component {
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
     turnListener(this.sendTurn);
+    socket.on('chat Message', (msg) => {
+      this.setState({
+        chat: [...this.state.chat, msg],
+      });
+    });
     gameEndListener(this.revealSong);
   }
 
@@ -58,7 +67,7 @@ export class GamePage extends React.Component {
   render() {
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician;
-
+    const roomId = this.props.match.params.roomId;
     return (
       <>
         {thisPlayer === musician ? (
@@ -71,7 +80,13 @@ export class GamePage extends React.Component {
           </>
         ) : (
           <>
-            <h2>WAITING</h2>
+            <div>
+              <h2 className="game-title">WAITING</h2>
+              <Timer durationInSeconds={24} />
+              <div className="game-chat">
+                <Chat roomId={roomId} chat={this.state.chat} />
+              </div>
+            </div>
           </>
         )}
       </>

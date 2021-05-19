@@ -11,7 +11,7 @@ import {
   checkWhichSynth,
 } from "./HelperFunctions";
 import { AMOUNT_OF_NOTES, BPM, notes } from "./Sequencer";
-import { TickSignal } from "tone/build/esm/core/clock/TickSignal";
+import history from '../history';
 
 class PracticeRoom extends React.Component {
   constructor() {
@@ -32,6 +32,7 @@ class PracticeRoom extends React.Component {
     this.octaveDropDown = this.octaveDropDown.bind(this);
     this.configLoop = this.configLoop.bind(this);
     this.clearGrid = this.clearGrid.bind(this);
+    this.goHome = this.goHome.bind(this);
   }
 
   componentDidMount() {
@@ -135,11 +136,22 @@ class PracticeRoom extends React.Component {
     this.setState({ grid: rowGrid });
   }
 
+  goHome() {
+    history.push({
+      pathname: '/',
+    });
+  }
+
   render() {
     return (
       <div>
         <div id="synth-options-container">
           <h2 id="title-header">Let's Make Some Jams!</h2>
+        </div>
+        <div className="home-button-container">
+          <button type="button" className="home-button" onClick={this.goHome}>
+            <img src={'/homebutton.png'} className="home-arrow-img" />
+          </button>
         </div>
         <div>
           <div id="synth-options-container">
