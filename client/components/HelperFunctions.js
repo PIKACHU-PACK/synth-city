@@ -1,11 +1,11 @@
-import { AMOUNT_OF_NOTES } from "./Sequencer";
-import * as Tone from "tone";
+import { AMOUNT_OF_NOTES } from './Sequencer';
+import * as Tone from 'tone';
 
 export const amSynth = new Tone.AMSynth().toDestination();
 export const pluckySynth = new Tone.PluckSynth().toDestination();
 export const basicSynth = new Tone.Synth({
   oscillator: {
-    type: "square8",
+    type: 'square8',
   },
 }).toDestination();
 
@@ -28,7 +28,7 @@ export function makeGrid(notes, isFirst) {
   for (const note of notes) {
     const col = [];
     for (let i = 0; i < CORRECT_TOTAL; i++) {
-      if (note === "COUNT") {
+      if (note === 'COUNT') {
         col.push({
           note: countArray[currHeaderCount],
           isActive: false,
@@ -39,8 +39,8 @@ export function makeGrid(notes, isFirst) {
         col.push({
           note: note,
           isActive: false,
-          synth: "basicSynth",
-          octave: "4",
+          synth: 'basicSynth',
+          octave: '4',
           isPrevious: false,
         });
       }
@@ -52,11 +52,11 @@ export function makeGrid(notes, isFirst) {
 
 export function checkWhichSynth(stringName) {
   let synthIndex;
-  if (stringName === "amSynth") {
+  if (stringName === 'amSynth') {
     synthIndex = 0;
-  } else if (stringName === "pluckySynth") {
+  } else if (stringName === 'pluckySynth') {
     synthIndex = 1;
-  } else if (stringName === "basicSynth") {
+  } else if (stringName === 'basicSynth') {
     synthIndex = 2;
   }
   return synthIndex;
@@ -78,100 +78,100 @@ export function songCleanUp(grid, isFirst) {
 export const lastNotesSeed = [
   [
     {
-      note: "C",
+      note: 'C',
       isActive: true,
-      synth: "pluckySynth",
-      octave: "4",
+      synth: 'pluckySynth',
+      octave: '4',
     },
     {
-      note: "C",
+      note: 'C',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
   ],
   [
     {
-      note: "D",
+      note: 'D',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
     {
-      note: "D",
+      note: 'D',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "E",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "E",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
   ],
   [
     {
-      note: "F",
+      note: 'E',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
     {
-      note: "F",
+      note: 'E',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-  ],
-  [
-    {
-      note: "G",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
-    },
-    {
-      note: "G",
-      isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
   ],
   [
     {
-      note: "A",
+      note: 'F',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
     {
-      note: "A",
+      note: 'F',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
   ],
   [
     {
-      note: "B",
+      note: 'G',
       isActive: false,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
     {
-      note: "B",
+      note: 'G',
+      isActive: false,
+      synth: 'basicSynth',
+      octave: '4',
+    },
+  ],
+  [
+    {
+      note: 'A',
+      isActive: false,
+      synth: 'basicSynth',
+      octave: '4',
+    },
+    {
+      note: 'A',
+      isActive: false,
+      synth: 'basicSynth',
+      octave: '4',
+    },
+  ],
+  [
+    {
+      note: 'B',
+      isActive: false,
+      synth: 'basicSynth',
+      octave: '4',
+    },
+    {
+      note: 'B',
       isActive: true,
-      synth: "basicSynth",
-      octave: "4",
+      synth: 'basicSynth',
+      octave: '4',
     },
   ],
 ];
