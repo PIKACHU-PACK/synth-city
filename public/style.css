@@ -1,5 +1,5 @@
 * {
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: "Ropa Sans", sans-serif;
 }
 
 body {
@@ -66,7 +66,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -194,7 +194,7 @@ form div {
 }
 
 .waiting-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 70px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -507,7 +507,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
@@ -522,7 +522,7 @@ form div {
 /* GAME PLAY */
 
 .game-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 50px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -537,7 +537,7 @@ form div {
 /* PRACTICE ROOM */
 
 .practice-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 30px;
   color: #e12967;
   text-shadow: 2px 2px #320879;
@@ -560,4 +560,18 @@ form div {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+/* TIMER */
+
+.timer-wrapper {
+  font-size: 22px;
+  padding: 0px;
+  margin: 0px;
+  /* background-color: #db0035; */
+}
+
+#turn-ends {
+  padding: 0px;
+  margin: 0px;
 }

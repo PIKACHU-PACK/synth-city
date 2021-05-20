@@ -5,7 +5,7 @@ import { NoteButton } from "./NoteButton";
 import {
   makeGrid,
   makeSynths,
-  checkWhichSynth,
+  checkSynth,
   songCleanUp,
 } from "./HelperFunctions";
 import { stringify } from "flatted";
@@ -38,6 +38,7 @@ class Sequencer extends React.Component {
     this.addPreviousNotes = this.addPreviousNotes.bind(this);
     this.configLoop = this.configLoop.bind(this);
     this.timerEnd = this.timerEnd.bind(this);
+    this.performanceSound = this.performanceSound.bind(this);
   }
 
   componentDidMount() {
@@ -51,23 +52,39 @@ class Sequencer extends React.Component {
     }
     Tone.start();
     Tone.getDestination().volume.rampTo(-10, 0.001);
+    this.performanceSound();
   }
 
   configLoop() {
     //0: am, 1: plucky, 2: basic (order in state)
+    let synthsCount = 0;
     const repeat = (time) => {
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
-          const synthIndex = checkWhichSynth(note.synth);
+          const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          synth.triggerAttackRelease(note.note + note.octave, "8n", time);
+          if (note.synth === "pluckySynth") {
+            synth.triggerAttackRelease(
+              note.note + note.octave,
+              "+2",
+              time + synthsCount
+            );
+            synthsCount += 0.0001;
+          } else {
+            synth.triggerAttackRelease(
+              note.note + note.octave,
+              "8n",
+              time + synthsCount
+            );
+            synthsCount += 0.0001;
+          }
         }
       });
+      synthsCount = 0;
       const amountOfNotes = this.props.isFirst
         ? AMOUNT_OF_NOTES - 2
         : AMOUNT_OF_NOTES;
-
       if (this.state.beat === amountOfNotes - 1) {
         this.setState({ beat: 0, firstBeat: false });
       } else {
@@ -96,7 +113,7 @@ class Sequencer extends React.Component {
           note.synth = this.state.currSynth;
           note.octave = this.state.octave;
           if (note.isActive) {
-            const synthIndex = checkWhichSynth(note.synth);
+            const synthIndex = checkSynth(note.synth);
             let synth = this.state.synths[synthIndex];
             synth.triggerAttackRelease(note.note + note.octave, "8n");
           }
@@ -135,10 +152,12 @@ class Sequencer extends React.Component {
         playing: false,
         beat: 0,
       });
+      this.performanceSound(false);
     } else {
       e.target.innerText = "Stop";
       Tone.Transport.start();
       this.setState({ playing: true });
+      this.performanceSound(true);
     }
   }
 
@@ -210,6 +229,17 @@ class Sequencer extends React.Component {
     }
   }
 
+  performanceSound(isPlaying) {
+    const backgroundAudio = document.getElementById("bg-audio");
+    backgroundAudio.volume = 0.1;
+    backgroundAudio.loop = true;
+    if (!isPlaying) {
+      backgroundAudio.play();
+    } else {
+      backgroundAudio.pause();
+    }
+  }
+
   timerEnd() {
     const lastNotes = this.onTurnEnd();
     const sendNotes = stringify(lastNotes);
@@ -221,8 +251,10 @@ class Sequencer extends React.Component {
   render() {
     return (
       <div className="sequencer-view">
+        <h3 id="turn-ends">Your Turn Ends In:</h3>
         <Timer
           durationInSeconds={turnLength}
+          isPaused={false}
           onFinish={() => {
             this.timerEnd();
           }}
@@ -323,6 +355,9 @@ class Sequencer extends React.Component {
             </button>
           </div>
         </div>
+        <audio id="bg-audio">
+          <source src={"/empty_loop.wav"} type={"audio/wav"} />
+        </audio>
       </div>
     );
   }
