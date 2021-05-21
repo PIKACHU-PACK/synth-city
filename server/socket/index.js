@@ -9,7 +9,14 @@ module.exports = (io) => {
       if (room) {
         const socketRoom = io.sockets.adapter.rooms.get(room);
         const players = [...socketRoom];
-        updatedPlayers = players.filter((id) => id !== socket.id);
+        console.log('players:', players);
+        let updatedPlayers = players.map((player) => {
+          if (player === socket.id) {
+            player = null;
+          }
+          return player;
+        });
+        console.log('updatedPlayers:', updatedPlayers);
         io.in(room).emit('updatePlayers', updatedPlayers);
       }
     });
@@ -64,18 +71,27 @@ module.exports = (io) => {
       });
     });
 
-    socket.on('setTurn', (room, notesString, gridString, rounds, turn) => {
-      io.in(room).emit('sendSegment', notesString, gridString);
-      turn++;
-      if (turn === rounds) {
-        io.in(room).emit('gameOver');
-      } else {
-        const socketRoom = io.sockets.adapter.rooms.get(room);
-        const players = [...socketRoom];
-        const currentTurn = turn % players.length;
-        const nextPlayer = players[currentTurn];
-        io.in(room).emit('switchTurn', nextPlayer, turn);
+    socket.on(
+      'setTurn',
+      (room, notesString, gridString, rounds, turn, players) => {
+        io.in(room).emit('sendSegment', notesString, gridString);
+        turn++;
+        if (turn === rounds) {
+          io.in(room).emit('gameOver');
+        } else {
+          let currentTurn = turn % players.length;
+          let nextPlayer = players[currentTurn];
+          console.log(players);
+          console.log('nextPlayer before while', nextPlayer);
+          if (nextPlayer === null) {
+            turn++;
+            currentTurn = turn % players.length;
+            nextPlayer = players[currentTurn];
+            console.log('nextPlayer in while', nextPlayer);
+          }
+          io.in(room).emit('switchTurn', nextPlayer, turn);
+        }
       }
-    });
+    );
   });
 };
