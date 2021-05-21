@@ -19,9 +19,30 @@ class Routes extends Component {
           <Route exact path="/" component={Home} />
           <Route exact path="/sequencer" component={Sequencer} />
           <Route exact path="/practice" component={PracticeRoom} />
-          <Route exact path="/game/:roomId" component={GamePage} />
-          <Route exact path="/waiting/:roomId" component={WaitingRoom} />
-          <Route path="/song/:roomId" component={SongReveal} />
+          <Route
+            exact
+            path="/game/:room"
+            render={(routeProps) => (
+              <GamePage {...routeProps} room={routeProps.match.params.room} />
+            )}
+          />
+          <Route
+            exact
+            path="/waiting/:room"
+            render={(routeProps) => (
+              <WaitingRoom
+                {...routeProps}
+                room={routeProps.match.params.room}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/song/:room"
+            render={(routeProps) => (
+              <SongReveal {...routeProps} room={routeProps.match.params.room} />
+            )}
+          />
         </Switch>
       </div>
     );

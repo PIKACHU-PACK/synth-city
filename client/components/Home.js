@@ -13,20 +13,21 @@ export class Home extends React.Component {
     };
     this.handleCreate = this.handleCreate.bind(this);
     this.enterNewRoom = this.enterNewRoom.bind(this);
-    this.enterExistingRoom = this.enterExistingRoom.bind(this);
-    this.handleJoin = this.handleJoin.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleJoin = this.handleJoin.bind(this);
+    this.enterExistingRoom = this.enterExistingRoom.bind(this);
+    this.roomDoesNotExist = this.roomDoesNotExist.bind(this);
+    this.roomFull = this.roomFull.bind(this);
     this.displayInstructions = this.displayInstructions.bind(this);
+  }
+
+  handleCreate() {
+    createRoom(this.enterNewRoom);
   }
 
   enterNewRoom(room) {
     history.push({
       pathname: `/waiting/${room}`,
-    });
-  }
-  enterExistingRoom() {
-    history.push({
-      pathname: `/waiting/${this.state.roomKey}`,
     });
   }
 
@@ -36,8 +37,35 @@ export class Home extends React.Component {
     });
   }
 
-  handleCreate() {
-    createRoom(this.enterNewRoom);
+  handleJoin() {
+    joinRoom(
+      this.state.roomKey,
+      this.roomDoesNotExist,
+      this.enterExistingRoom,
+      this.roomFull
+    );
+  }
+
+  enterExistingRoom() {
+    history.push({
+      pathname: `/waiting/${this.state.roomKey}`,
+    });
+  }
+
+  roomDoesNotExist() {
+    Swal.fire({
+      title: "Error:",
+      html: "Room does not exist. Please try entering your code again.",
+      showCloseButton: true,
+    });
+  }
+
+  roomFull() {
+    Swal.fire({
+      title: "Error:",
+      html: "This room is full. Please create or join another room.",
+      showCloseButton: true,
+    });
   }
 
   displayInstructions() {
@@ -51,9 +79,6 @@ export class Home extends React.Component {
     });
   }
 
-  handleJoin() {
-    joinRoom(this.state.roomKey, this.enterExistingRoom);
-  }
   render() {
     return (
       <div className="home-view">

@@ -1,10 +1,14 @@
 import React from 'react';
 import Chat from './Chat';
-import { startGame, startListener } from '../socket';
+import {
+  startListener,
+  chatListener,
+  updatePlayersListener,
+  getInfo,
+  startGame,
+} from '../socket';
 import history from '../history';
-import socket from '../socket';
 import Swal from 'sweetalert2';
-import { getInfo, newPlayerListener } from '../socket';
 
 class WaitingRoom extends React.Component {
   constructor(props) {
@@ -14,60 +18,61 @@ class WaitingRoom extends React.Component {
       thisPlayer: '',
       chat: [],
     };
-    this.onStart = this.onStart.bind(this);
-    this.gameStarted = this.gameStarted.bind(this);
-    this.goHome = this.goHome.bind(this);
-    this.displayError = this.displayError.bind(this);
     this.setInfo = this.setState.bind(this);
-    this.newPlayer = this.newPlayer.bind(this);
+    this.getMessages = this.getMessages.bind(this);
+    this.gameStarted = this.gameStarted.bind(this);
+    this.updatePlayers = this.updatePlayers.bind(this);
+    this.goHome = this.goHome.bind(this);
+    this.onStart = this.onStart.bind(this);
+    this.wrongNumberPlayers = this.wrongNumberPlayers.bind(this);
     this.displayInstructions = this.displayInstructions.bind(this);
   }
 
   componentDidMount() {
+    getInfo(this.props.room, this.setInfo);
+    chatListener(this.getMessages);
     startListener(this.gameStarted);
-    getInfo(this.props.match.params.roomId, this.setInfo);
-    newPlayerListener(this.newPlayer);
-    socket.on('chat Message', (msg) => {
-      this.setState({
-        chat: [...this.state.chat, msg],
-      });
+    updatePlayersListener(this.updatePlayers);
+  }
+
+  setInfo({ thisPlayer, players }) {
+    this.setState({ thisPlayer: thisPlayer, players: players });
+  }
+
+  getMessages(msg) {
+    this.setState({ chat: [...this.state.chat, msg] });
+  }
+
+  gameStarted() {
+    history.push({
+      pathname: `/game/${this.props.room}`,
     });
   }
 
-  newPlayer(players) {
+  updatePlayers(players) {
     this.setState({ players: players });
   }
 
-  setInfo({ players, thisPlayer }) {
-    this.setState({ players: players, thisPlayer: thisPlayer });
-  }
-
-  displayError() {
-    Swal.fire({
-      title: 'Error:',
-      html: 'Sorry, you need 2-4 players to start the game.',
-      showCloseButton: true,
+  goHome() {
+    history.push({
+      pathname: '/',
     });
   }
 
   onStart() {
     const players = this.state.players;
     if (players.length > 1 && players.length <= 4) {
-      startGame(this.props.match.params.roomId);
+      startGame(this.props.room);
     } else {
-      this.displayError();
+      this.wrongNumberPlayers();
     }
   }
 
-  gameStarted() {
-    history.push({
-      pathname: `/game/${this.props.match.params.roomId}`,
-    });
-  }
-
-  goHome() {
-    history.push({
-      pathname: '/',
+  wrongNumberPlayers() {
+    Swal.fire({
+      title: 'Error:',
+      html: 'Sorry, you need 2-4 players to start the game.',
+      showCloseButton: true,
     });
   }
 
@@ -83,7 +88,8 @@ class WaitingRoom extends React.Component {
   }
 
   render() {
-    const { roomId } = this.props.match.params;
+    const room = this.props.room;
+    const players = this.state.players;
     return (
       <div className="waiting-room">
         <div className="waiting-view">
@@ -111,9 +117,9 @@ class WaitingRoom extends React.Component {
             </div>
             <div className="waiting-subinfo">
               <h2>
-                {this.state.players.length === 1
-                  ? `${this.state.players.length} Player Is Ready To Jam!`
-                  : `${this.state.players.length} Players Are Ready To Jam!`}
+                {players.length === 1
+                  ? `${players.length} Player Is Ready To Jam!`
+                  : `${players.length} Players Are Ready To Jam!`}
               </h2>
               <h2>
                 Invite Your Friends With This Code:{' '}
@@ -135,7 +141,7 @@ class WaitingRoom extends React.Component {
             </div>
           </div>
           <div className="chat-container">
-            <Chat roomId={roomId} chat={this.state.chat} />
+            <Chat roomId={room} chat={this.state.chat} />
           </div>
           <div className="waiting-instructions-container">
             <button
