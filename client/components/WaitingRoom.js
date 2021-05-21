@@ -3,7 +3,7 @@ import Chat from './Chat';
 import {
   startListener,
   chatListener,
-  newPlayerListener,
+  updatePlayersListener,
   getInfo,
   startGame,
 } from '../socket';
@@ -21,7 +21,7 @@ class WaitingRoom extends React.Component {
     this.setInfo = this.setState.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
-    this.newPlayer = this.newPlayer.bind(this);
+    this.updatePlayers = this.updatePlayers.bind(this);
     this.goHome = this.goHome.bind(this);
     this.onStart = this.onStart.bind(this);
     this.wrongNumberPlayers = this.wrongNumberPlayers.bind(this);
@@ -32,7 +32,7 @@ class WaitingRoom extends React.Component {
     getInfo(this.props.room, this.setInfo);
     chatListener(this.getMessages);
     startListener(this.gameStarted);
-    newPlayerListener(this.newPlayer);
+    updatePlayersListener(this.updatePlayers);
   }
 
   setInfo({ thisPlayer, players }) {
@@ -49,7 +49,7 @@ class WaitingRoom extends React.Component {
     });
   }
 
-  newPlayer(players) {
+  updatePlayers(players) {
     this.setState({ players: players });
   }
 

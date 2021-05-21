@@ -57,9 +57,9 @@ export function getInfo(room, infoState) {
   });
 }
 
-export function newPlayerListener(newPlayer) {
-  socket.on('newPlayer', (players) => {
-    newPlayer(players);
+export function updatePlayersListener(updatePlayers) {
+  socket.on('updatePlayers', (players) => {
+    updatePlayers(players);
   });
 }
 
@@ -90,5 +90,3 @@ export function gameEndListener(revealSong) {
     revealSong();
   });
 }
-
-export default socket;

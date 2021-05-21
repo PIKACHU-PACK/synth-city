@@ -4,6 +4,16 @@ module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log(`User Connected: ${socket.id}`);
 
+    socket.on('disconnecting', () => {
+      const room = socket.room;
+      if (room) {
+        const socketRoom = io.sockets.adapter.rooms.get(room);
+        const players = [...socketRoom];
+        updatedPlayers = players.filter((id) => id !== socket.id);
+        io.in(room).emit('updatePlayers', updatedPlayers);
+      }
+    });
+
     socket.on('disconnect', () => {
       console.log(`BYEEEEEE ${socket.id}`);
     });
@@ -15,6 +25,7 @@ module.exports = (io) => {
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
       socket.join(room);
+      socket.room = room;
       socket.emit('roomCreated', room);
     });
 
@@ -24,9 +35,10 @@ module.exports = (io) => {
         socket.emit('roomDoesNotExist');
       } else if (socketRoom.size < 4) {
         socket.join(roomKey);
+        socket.room = roomKey;
         socket.emit('roomJoined');
         const players = [...socketRoom];
-        io.in(roomKey).emit('newPlayer', players);
+        io.in(roomKey).emit('updatePlayers', players);
       } else {
         socket.emit('roomFull');
       }
