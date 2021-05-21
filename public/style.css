@@ -75,7 +75,7 @@ form div {
 }
 
 .home-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   color: #320879;
   font-size: 25px;
   text-shadow: 1px 1px white;
@@ -203,7 +203,7 @@ form div {
 }
 
 .waiting-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 25px;
   color: #320879;
   text-shadow: 1px 1px white;
@@ -214,13 +214,8 @@ form div {
 }
 
 .waiting-title {
-<<<<<<< HEAD
   font-family: "Orbitron", sans-serif;
-  font-size: 70px;
-=======
-  font-family: 'Orbitron', sans-serif;
   font-size: 65px;
->>>>>>> main
   color: #e12967;
   text-shadow: 6px 6px #320879;
 }
@@ -436,6 +431,10 @@ form div {
   justify-content: center;
 }
 
+#last-notes-text {
+  padding: 0px;
+}
+
 /* CHAT */
 
 .chat-container {
@@ -555,15 +554,11 @@ form div {
 /* GAME PLAY */
 
 .game-title {
-<<<<<<< HEAD
   font-family: "Orbitron", sans-serif;
-  font-size: 50px;
-=======
-  font-family: 'Orbitron', sans-serif;
   font-size: 45px;
->>>>>>> main
   color: #e12967;
   text-shadow: 3px 3px #320879;
+  padding: 0px;
 }
 
 .game-chat {
@@ -584,14 +579,9 @@ form div {
 }
 
 .practice-title {
-<<<<<<< HEAD
   font-family: "Orbitron", sans-serif;
-  font-size: 30px;
-=======
-  font-family: 'Orbitron', sans-serif;
   font-size: 50px;
   margin: 10px;
->>>>>>> main
   color: #e12967;
   text-shadow: 2px 2px #320879;
 }
@@ -623,7 +613,6 @@ form div {
   justify-content: center;
 }
 
-<<<<<<< HEAD
 /* TIMER */
 
 .timer-wrapper {
@@ -636,7 +625,7 @@ form div {
 #turn-ends {
   padding: 0px;
   margin: 0px;
-=======
+}
 /* SONG REVEAL */
 
 .song-reveal-banner {
@@ -655,5 +644,4 @@ form div {
 
 .song-reveal-buttons {
   align-self: center;
->>>>>>> main
 }

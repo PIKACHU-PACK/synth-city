@@ -91,10 +91,6 @@ class PracticeRoom extends React.Component {
           note.octave = this.state.octave;
           if (note.isActive) {
             if (!this.state.playButtonStarted) {
-              //StartAudioContext(Tone.context);
-              if (Tone.context.state !== "running") {
-                Tone.context.resume();
-              }
               Tone.start();
               Tone.getDestination().volume.rampTo(-10, 0.001);
               this.setState({ noteClickStarted: true });

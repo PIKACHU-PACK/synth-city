@@ -14,7 +14,7 @@ import { Timer } from "react-countdown-clock-timer";
 export const AMOUNT_OF_NOTES = 18;
 export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
 export const BPM = 120;
-export const turnLength = 10;
+export const turnLength = 40;
 
 class Sequencer extends React.Component {
   constructor(props) {
@@ -23,6 +23,8 @@ class Sequencer extends React.Component {
       synths: [],
       grid: [],
       beat: 0,
+      noteClickStarted: false,
+      playButtonStarted: false,
       playing: false,
       started: false,
       currSynth: "basicSynth",
@@ -52,11 +54,11 @@ class Sequencer extends React.Component {
     } else {
       this.setState({ grid: rowGrid, synths: synthsArr });
     }
-    this.performanceSound();
+    this.performanceSound(false);
   }
 
   configLoop() {
-    //0: am, 1: plucky, 2: basic (order in state)
+    //0: am, 1: plucky, 2: basic (order of synths in state)
     let synthsCount = 0;
     const repeat = (time) => {
       this.state.grid.forEach((row, index) => {
@@ -113,6 +115,11 @@ class Sequencer extends React.Component {
           note.synth = this.state.currSynth;
           note.octave = this.state.octave;
           if (note.isActive) {
+            if (!this.state.playButtonStarted) {
+              Tone.start();
+              Tone.getDestination().volume.rampTo(-10, 0.001);
+              this.setState({ noteClickStarted: true });
+            }
             const synthIndex = checkSynth(note.synth);
             let synth = this.state.synths[synthIndex];
             synth.triggerAttackRelease(note.note + note.octave, "8n");
@@ -139,11 +146,15 @@ class Sequencer extends React.Component {
   }
 
   configPlayButton(e) {
-    if (!this.state.started) {
-      // Tone.start();
-      // Tone.getDestination().volume.rampTo(-10, 0.001);
-      this.setState({ started: true });
+    if (!this.state.noteClickStarted) {
+      Tone.start();
+      Tone.getDestination().volume.rampTo(-10, 0.001);
       this.configLoop();
+      this.setState({ playButtonStarted: true });
+    }
+    if (this.state.noteClickStarted && !this.state.playButtonStarted) {
+      this.configLoop();
+      this.setState({ playButtonStarted: true });
     }
     if (this.state.playing) {
       e.target.innerText = "Play";
@@ -231,12 +242,20 @@ class Sequencer extends React.Component {
 
   performanceSound(isPlaying) {
     const backgroundAudio = document.getElementById("bg-audio");
-    backgroundAudio.volume = 0.1;
+    backgroundAudio.volume = 0.18;
     backgroundAudio.loop = true;
     if (!isPlaying) {
-      backgroundAudio.play();
+      try {
+        backgroundAudio.play();
+      } catch (error) {
+        //
+      }
     } else {
-      backgroundAudio.pause();
+      try {
+        backgroundAudio.pause();
+      } catch (error) {
+        //
+      }
     }
   }
 
@@ -308,6 +327,11 @@ class Sequencer extends React.Component {
         </div>
         <p></p>
         <div id="sequencer" className="container sequencer">
+          {this.props.isFirst ? (
+            <></>
+          ) : (
+            <h4 id="last-notes-text">From PreviousTurn</h4>
+          )}
           {this.state.grid.map((row, rowIndex) => {
             return (
               <div
