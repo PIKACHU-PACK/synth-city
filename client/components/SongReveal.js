@@ -11,7 +11,6 @@ class SongReveal extends React.Component {
       started: false,
       beat: 0,
       playing: false,
-      //recorder: new Tone.Recorder(),
       synths: [],
       finalSong: [],
     };
@@ -31,7 +30,6 @@ class SongReveal extends React.Component {
 
   cleanUpFinalSong(finalSongSegmented) {
     let newGrid = [[], [], [], [], [], [], []];
-
     for (let i = 0; i < finalSongSegmented.length; i++) {
       const currentSegment = finalSongSegmented[i];
       for (let j = 0; j < currentSegment.length; j++) {

@@ -7,10 +7,6 @@ import PracticeRoom from "./components/PracticeRoom";
 import GamePage from "./components/GamePage";
 import SongReveal from "./components/SongReveal";
 
-/**
- * COMPONENT
- */
-
 class Routes extends Component {
   render() {
     return (
