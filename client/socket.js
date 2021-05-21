@@ -49,7 +49,7 @@ export function joinRoom(
 export function startGame(room) {
   socket.emit('startGame', room);
 }
-// in GamePage componentDidMount - gets data from backend, then sets state
+
 export function getInfo(room, infoState) {
   socket.emit('getInfo', room);
   socket.on('info', (info) => {
@@ -58,34 +58,30 @@ export function getInfo(room, infoState) {
 }
 
 export function newPlayerListener(newPlayer) {
-  // socket.emit("getInfo", room);
   socket.on('newPlayer', (players) => {
     newPlayer(players);
   });
 }
 
-// in WaitingRoom componentDidMount - starts game for everyone when Start Game pressed
 export function startListener(gameStarted) {
   socket.on('gameStarted', () => {
     gameStarted();
   });
 }
-// triggered when timer runs out on player's turn
-export function endTurn(room, notesStr, gridStr) {
-  //console.log("notesStr in endTurn", notesStr);
-  socket.emit('setTurn', room, notesStr, gridStr);
+
+export function endTurn(room, notesStr, gridStr, rounds, turn) {
+  socket.emit('setTurn', room, notesStr, gridStr, rounds, turn);
 }
-// switches turns after backend hears that current player's turn ended
-export function turnListener(callback) {
-  socket.on('switchTurn', (nextPlayer, notesString, gridString) => {
-    //console.log("notesStr in switchTrn is", notesString);
-    callback(nextPlayer, notesString, gridString);
+
+export function turnListener(sendTurn) {
+  socket.on('switchTurn', (notesString, gridString, nextPlayer, turn) => {
+    sendTurn(notesString, gridString, nextPlayer, turn);
   });
 }
-// listens for backend that all rounds finished, then redirects to SongReveal
-export function gameEndListener(callback) {
+
+export function gameEndListener(revealSong) {
   socket.on('gameOver', () => {
-    callback();
+    revealSong();
   });
 }
 

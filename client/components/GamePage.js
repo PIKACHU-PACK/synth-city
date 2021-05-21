@@ -1,10 +1,15 @@
 import React from 'react';
-import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
+import {
+  getInfo,
+  chatListener,
+  turnListener,
+  endTurn,
+  gameEndListener,
+} from '../socket';
 import Sequencer, { turnLength } from './Sequencer';
 import history from '../history';
 import { parse } from 'flatted';
 import Chat from './Chat';
-import socket from '../socket';
 import { Timer } from 'react-countdown-clock-timer';
 
 export class GamePage extends React.Component {
@@ -23,24 +28,20 @@ export class GamePage extends React.Component {
       finalSong: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
-    this.finishTurn = this.finishTurn.bind(this);
+    this.getMessages = this.getMessages.bind(this);
     this.sendTurn = this.sendTurn.bind(this);
+    this.finishTurn = this.finishTurn.bind(this);
     this.revealSong = this.revealSong.bind(this);
   }
 
   componentDidMount() {
-    getInfo(this.props.match.params.roomId, this.stateInfo);
+    getInfo(this.props.room, this.stateInfo);
+    chatListener(this.getMessages);
     turnListener(this.sendTurn);
-    socket.on('chat Message', (msg) => {
-      this.setState({
-        chat: [...this.state.chat, msg],
-      });
-    });
     gameEndListener(this.revealSong);
   }
 
-  stateInfo(info) {
-    const { thisPlayer, players, musician, rounds, turn } = info;
+  stateInfo({ thisPlayer, players, musician, rounds, turn }) {
     this.setState({
       thisPlayer: thisPlayer,
       players: players,
@@ -50,7 +51,11 @@ export class GamePage extends React.Component {
     });
   }
 
-  sendTurn(nextPlayer, notesStr, gridStr) {
+  getMessages(msg) {
+    this.setState({ chat: [...this.state.chat, msg] });
+  }
+
+  sendTurn(notesStr, gridStr, nextPlayer, turn) {
     const notes = parse(notesStr);
     const segment = parse(gridStr);
     const songSoFar = this.state.finalSong.slice();
@@ -60,25 +65,31 @@ export class GamePage extends React.Component {
       previousNotes: notes,
       isFirst: false,
       finalSong: songSoFar,
+      turn: turn,
     });
   }
 
   finishTurn(notesString, gridString) {
-    endTurn(this.props.match.params.roomId, notesString, gridString);
+    endTurn(
+      this.props.room,
+      notesString,
+      gridString,
+      this.state.rounds,
+      this.state.turn
+    );
   }
 
   revealSong() {
-    this.props.history.push({
-      pathname: `/song/${this.props.match.params.roomId}`,
+    history.push({
+      pathname: `/song/${this.props.room}`,
       finalSong: this.state.finalSong,
     });
   }
 
   render() {
-    console.log(this.state);
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician;
-    const roomId = this.props.match.params.roomId;
+    const room = this.props.room;
     return (
       <>
         {thisPlayer === musician ? (
@@ -95,7 +106,7 @@ export class GamePage extends React.Component {
               <h2 className="game-title">WAITING FOR YOUR TURN</h2>
               {/* <Timer durationInSeconds={turnLength} /> */}
               <div className="game-chat">
-                <Chat roomId={roomId} chat={this.state.chat} />
+                <Chat roomId={room} chat={this.state.chat} />
               </div>
             </div>
           </>
