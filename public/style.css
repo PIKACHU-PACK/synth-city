@@ -1,5 +1,5 @@
 * {
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: "Ropa Sans", sans-serif;
 }
 
 body {
@@ -66,7 +66,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -75,7 +75,7 @@ form div {
 }
 
 .home-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   color: #320879;
   font-size: 25px;
   text-shadow: 1px 1px white;
@@ -203,7 +203,7 @@ form div {
 }
 
 .waiting-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 25px;
   color: #320879;
   text-shadow: 1px 1px white;
@@ -214,7 +214,7 @@ form div {
 }
 
 .waiting-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 65px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -431,6 +431,10 @@ form div {
   justify-content: center;
 }
 
+#last-notes-text {
+  padding: 0px;
+}
+
 /* CHAT */
 
 .chat-container {
@@ -535,7 +539,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
@@ -550,10 +554,11 @@ form div {
 /* GAME PLAY */
 
 .game-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 45px;
   color: #e12967;
   text-shadow: 3px 3px #320879;
+  padding: 0px;
 }
 
 .game-chat {
@@ -574,7 +579,7 @@ form div {
 }
 
 .practice-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 50px;
   margin: 10px;
   color: #e12967;
@@ -608,6 +613,19 @@ form div {
   justify-content: center;
 }
 
+/* TIMER */
+
+.timer-wrapper {
+  font-size: 22px;
+  padding: 0px;
+  margin: 0px;
+  /* background-color: #db0035; */
+}
+
+#turn-ends {
+  padding: 0px;
+  margin: 0px;
+}
 /* SONG REVEAL */
 
 .song-reveal-banner {

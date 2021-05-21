@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   getInfo,
   chatListener,
@@ -6,20 +6,19 @@ import {
   turnListener,
   endTurn,
   gameEndListener,
-} from '../socket';
-import Sequencer, { turnLength } from './Sequencer';
-import history from '../history';
-import { parse } from 'flatted';
-import Chat from './Chat';
-import { Timer } from 'react-countdown-clock-timer';
+} from "../socket";
+import Sequencer, { turnLength } from "./Sequencer";
+import history from "../history";
+import { parse } from "flatted";
+import Chat from "./Chat";
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: '',
-      musician: '',
+      thisPlayer: "",
+      musician: "",
       rounds: null,
       turn: null,
       previousNotes: [],
@@ -96,7 +95,7 @@ export class GamePage extends React.Component {
 
   render() {
     const thisPlayer = this.state.thisPlayer;
-    const musician = this.state.musician;
+    const musician = this.state.musician || "test";
     const room = this.props.room;
     return (
       <>

@@ -1,8 +1,8 @@
-import React from 'react';
-import * as Tone from 'tone';
-import { checkWhichSynth, makeSynths } from './HelperFunctions';
-import history from '../history';
-import { BPM } from './Sequencer';
+import React from "react";
+import * as Tone from "tone";
+import { checkSynth, makeSynths } from "./HelperFunctions";
+import history from "../history";
+import { BPM } from "./Sequencer";
 
 class SongReveal extends React.Component {
   constructor() {
@@ -11,7 +11,6 @@ class SongReveal extends React.Component {
       started: false,
       beat: 0,
       playing: false,
-      //recorder: new Tone.Recorder(),
       synths: [],
       finalSong: [],
     };
@@ -31,7 +30,6 @@ class SongReveal extends React.Component {
 
   cleanUpFinalSong(finalSongSegmented) {
     let newGrid = [[], [], [], [], [], [], []];
-
     for (let i = 0; i < finalSongSegmented.length; i++) {
       const currentSegment = finalSongSegmented[i];
       for (let j = 0; j < currentSegment.length; j++) {
@@ -51,9 +49,9 @@ class SongReveal extends React.Component {
       fullSong.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
-          const synthIndex = checkWhichSynth(note.synth);
+          const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          synth.triggerAttackRelease(note.note + note.octave, '8n', time);
+          synth.triggerAttackRelease(note.note + note.octave, "8n", time);
         }
       });
       this.setState({
@@ -62,7 +60,7 @@ class SongReveal extends React.Component {
       });
     };
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, '8n');
+    Tone.Transport.scheduleRepeat(repeat, "8n");
   }
 
   configPlayButton(e) {
@@ -73,14 +71,14 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = 'Play';
+      e.target.innerText = "Play";
       Tone.Transport.stop();
       this.setState({
         playing: false,
         beat: 0,
       });
     } else {
-      e.target.innerText = 'Stop';
+      e.target.innerText = "Stop";
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -88,7 +86,7 @@ class SongReveal extends React.Component {
 
   goHome() {
     history.push({
-      pathname: '/',
+      pathname: "/",
     });
   }
 

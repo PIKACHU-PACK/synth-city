@@ -1,17 +1,17 @@
-import classNames from 'classnames';
-import * as Tone from 'tone';
-import React from 'react';
-import { NoteButton } from './NoteButton';
+import classNames from "classnames";
+import * as Tone from "tone";
+import React from "react";
+import { NoteButton } from "./NoteButton";
 import {
   makeGrid,
   makeSynths,
   basicSynth,
   amSynth,
   pluckySynth,
-  checkWhichSynth,
-} from './HelperFunctions';
-import { AMOUNT_OF_NOTES, BPM, notes } from './Sequencer';
-import history from '../history';
+  checkSynth,
+} from "./HelperFunctions";
+import { BPM, notes } from "./Sequencer";
+import history from "../history";
 
 class PracticeRoom extends React.Component {
   constructor() {
@@ -21,9 +21,10 @@ class PracticeRoom extends React.Component {
       grid: [],
       beat: 0,
       playing: false,
-      started: false,
-      currSynth: 'basicSynth',
-      octave: '4',
+      noteClickStarted: false,
+      playButtonStarted: false,
+      currSynth: "basicSynth",
+      octave: "4",
       firstBeat: true,
     };
     this.handleNoteClick = this.handleNoteClick.bind(this);
@@ -36,23 +37,37 @@ class PracticeRoom extends React.Component {
   }
 
   componentDidMount() {
-    Tone.start();
-    Tone.getDestination().volume.rampTo(-10, 0.001);
     const rowGrid = makeGrid(notes, true);
     const synthsArr = makeSynths(basicSynth);
     this.setState({ grid: rowGrid, synths: synthsArr });
   }
 
   configLoop() {
+    let synthsCount = 0;
     const repeat = (time) => {
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
-          const synthIndex = checkWhichSynth(note.synth);
+          const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          synth.triggerAttackRelease(note.note + note.octave, '8n', time);
+          if (note.synth === "pluckySynth") {
+            synth.triggerAttackRelease(
+              note.note + note.octave,
+              "+2",
+              time + synthsCount
+            );
+            synthsCount += 0.0001;
+          } else {
+            synth.triggerAttackRelease(
+              note.note + note.octave,
+              "8n",
+              time + synthsCount
+            );
+            synthsCount += 0.0001;
+          }
         }
       });
+      synthsCount = 0;
       if (this.state.beat === 15) {
         this.setState({ beat: 0, firstBeat: false });
       } else {
@@ -61,35 +76,40 @@ class PracticeRoom extends React.Component {
     };
 
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, '8n');
+    Tone.Transport.scheduleRepeat(repeat, "8n");
   }
 
   handleNoteClick(clickedRowIndex, clickedNoteIndex, e) {
     let newGrid = this.state.grid.map((row, rowIndex) => {
       row.map((note, noteIndex) => {
         if (clickedRowIndex === rowIndex && clickedNoteIndex === noteIndex) {
-          if (typeof note.note === 'number') {
+          if (typeof note.note === "number") {
             return;
           }
           note.isActive = !note.isActive;
           note.synth = this.state.currSynth;
           note.octave = this.state.octave;
           if (note.isActive) {
-            const synthIndex = checkWhichSynth(note.synth);
+            if (!this.state.playButtonStarted) {
+              Tone.start();
+              Tone.getDestination().volume.rampTo(-10, 0.001);
+              this.setState({ noteClickStarted: true });
+            }
+            const synthIndex = checkSynth(note.synth);
             let synth = this.state.synths[synthIndex];
-            synth.triggerAttackRelease(note.note + note.octave, '8n');
+            synth.triggerAttackRelease(note.note + note.octave, "8n");
           }
 
           e.target.className = classNames(
-            'note',
-            { 'note-not-active': !note.isActive },
+            "note",
+            { "note-not-active": !note.isActive },
             {
-              'fuchsia-synth': note.synth === basicSynth && note.isActive,
+              "fuchsia-synth": note.synth === basicSynth && note.isActive,
             },
             {
-              'blue-synth': note.synth === pluckySynth && note.isActive,
+              "blue-synth": note.synth === pluckySynth && note.isActive,
             },
-            { 'orange-synth': note.synth === amSynth && note.isActive }
+            { "orange-synth": note.synth === amSynth && note.isActive }
           );
         }
         return note;
@@ -100,21 +120,25 @@ class PracticeRoom extends React.Component {
   }
 
   configPlayButton(e) {
-    if (!this.state.started) {
-      // Tone.start();
-      // Tone.getDestination().volume.rampTo(-10, 0.001);
+    if (!this.state.noteClickStarted) {
+      Tone.start();
+      Tone.getDestination().volume.rampTo(-10, 0.001);
       this.configLoop();
-      this.setState({ started: true });
+      this.setState({ playButtonStarted: true });
+    }
+    if (this.state.noteClickStarted && !this.state.playButtonStarted) {
+      this.configLoop();
+      this.setState({ playButtonStarted: true });
     }
     if (this.state.playing) {
-      e.target.innerText = 'Play';
+      e.target.innerText = "Play";
       Tone.Transport.stop();
       this.setState({
         playing: false,
         beat: 0,
       });
     } else {
-      e.target.innerText = 'Stop';
+      e.target.innerText = "Stop";
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -126,7 +150,7 @@ class PracticeRoom extends React.Component {
 
   octaveDropDown(evt) {
     const newOctave = evt.target.value;
-    if (newOctave !== 'none') {
+    if (newOctave !== "none") {
       this.setState({ octave: newOctave });
     }
   }
@@ -138,7 +162,7 @@ class PracticeRoom extends React.Component {
 
   goHome() {
     history.push({
-      pathname: '/',
+      pathname: "/",
     });
   }
 
@@ -150,7 +174,7 @@ class PracticeRoom extends React.Component {
           className="practice-home-button"
           onClick={this.goHome}
         >
-          <img src={'/homebutton.png'} className="practice-home-arrow-img" />
+          <img src={"/homebutton.png"} className="practice-home-arrow-img" />
         </button>
         <div>
           <div className="practice-banner">
@@ -165,21 +189,21 @@ class PracticeRoom extends React.Component {
             <button
               className="main-cta"
               id="orange-synth-button"
-              onClick={() => this.chooseSynth('amSynth')}
+              onClick={() => this.chooseSynth("amSynth")}
             >
               AM Synth
             </button>
             <button
               className="main-cta"
               id="blue-synth-button"
-              onClick={() => this.chooseSynth('pluckySynth')}
+              onClick={() => this.chooseSynth("pluckySynth")}
             >
               Plucky Synth
             </button>
             <button
               className="main-cta"
               id="fuchsia-synth-button"
-              onClick={() => this.chooseSynth('basicSynth')}
+              onClick={() => this.chooseSynth("basicSynth")}
             >
               Basic Synth
             </button>
@@ -210,13 +234,13 @@ class PracticeRoom extends React.Component {
               <div
                 id="rowIndex"
                 className="sequencer-row"
-                key={rowIndex + 'row'}
+                key={rowIndex + "row"}
               >
                 {row.map(({ note, isActive, synth, octave }, noteIndex) => {
                   return (
                     <NoteButton
                       note={note}
-                      key={noteIndex + 'note'}
+                      key={noteIndex + "note"}
                       isActive={isActive}
                       beat={this.state.beat}
                       synth={synth}
