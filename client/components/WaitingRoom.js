@@ -6,6 +6,7 @@ import {
   updatePlayersListener,
   getInfo,
   startGame,
+  exitRoom,
 } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
@@ -54,6 +55,7 @@ class WaitingRoom extends React.Component {
   }
 
   goHome() {
+    exitRoom(this.props.room);
     history.push({
       pathname: '/',
     });

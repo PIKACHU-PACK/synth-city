@@ -20,6 +20,10 @@ export function createRoom(callback) {
   });
 }
 
+export function exitRoom(room) {
+  socket.emit('exitRoom', room);
+}
+
 export function chatMessage(message, room) {
   socket.emit('chatMessage', message, room);
 }

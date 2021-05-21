@@ -3,6 +3,7 @@ import * as Tone from 'tone';
 import { checkWhichSynth, makeSynths } from './HelperFunctions';
 import history from '../history';
 import { BPM } from './Sequencer';
+import { exitRoom } from '../socket';
 
 class SongReveal extends React.Component {
   constructor() {
@@ -87,6 +88,7 @@ class SongReveal extends React.Component {
   }
 
   goHome() {
+    exitRoom(this.props.room);
     history.push({
       pathname: '/',
     });

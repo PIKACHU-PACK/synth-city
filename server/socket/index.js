@@ -25,6 +25,10 @@ module.exports = (io) => {
       console.log(`BYEEEEEE ${socket.id}`);
     });
 
+    socket.on('exitRoom', (room) => {
+      socket.leave(room);
+    });
+
     socket.on('chatMessage', (message, room) => {
       io.in(room).emit('chat Message', message);
     });
@@ -57,8 +61,8 @@ module.exports = (io) => {
 
     socket.on('getInfo', (room) => {
       const thisPlayer = socket.id;
-      const socketRoom = io.sockets.adapter.rooms.get(room);
-      const players = [...socketRoom];
+      const socketRoom = io.sockets.adapter.rooms.get(socket.room);
+      let players = [...socketRoom];
       const musician = players[0];
       const rounds = players.length === 3 ? 6 : 4;
       const turn = 0;
