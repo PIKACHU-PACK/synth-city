@@ -12,7 +12,6 @@ export const NoteButton = ({
   isFirst,
   ...rest
 }) => {
-  let isLast = note === 16 && beat === 0;
   return (
     <button
       className={classNames(

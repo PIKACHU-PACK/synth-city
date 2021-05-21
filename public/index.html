@@ -20,4 +20,8 @@
   <body id="page-container">
     <div id="app" id="content-wrap"></div>
   </body>
+  <script>
+    //so we don't get console SharedArrayBuffer error because of older react version
+    if (!crossOriginIsolated) SharedArrayBuffer = ArrayBuffer;
+  </script>
 </html>
