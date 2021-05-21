@@ -50,10 +50,10 @@ export function startGame(room) {
   socket.emit('startGame', room);
 }
 // in GamePage componentDidMount - gets data from backend, then sets state
-export function getInfo(room, setInfo) {
+export function getInfo(room, infoState) {
   socket.emit('getInfo', room);
   socket.on('info', (info) => {
-    setInfo(info);
+    infoState(info);
   });
 }
 
