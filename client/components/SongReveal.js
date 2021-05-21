@@ -105,18 +105,24 @@ class SongReveal extends React.Component {
 
   render() {
     return (
-      <div>
-        <h2 className="home-title">Your Masterpiece</h2>
-        <button
-          id="play-button"
-          className="main-cta"
-          onClick={(event) => this.configPlayButton(event)}
-        >
-          Play Song
-        </button>
-        <button type="button" className="main-cta" onClick={this.goHome}>
-          Go Home
-        </button>
+      <div className="song-reveal-view">
+        <div className="song-reveal-banner">
+          <h2 className="home-title">Your Masterpiece</h2>
+        </div>
+
+        <div className="toggle-play">
+          <div className="play-container">
+            <button
+              className="play-button"
+              onClick={(event) => this.configPlayButton(event)}
+            >
+              Play Song
+            </button>
+            <button className="play-button" onClick={this.goHome}>
+              New Game
+            </button>
+          </div>
+        </div>
       </div>
     );
   }

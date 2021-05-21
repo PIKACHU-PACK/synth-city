@@ -261,7 +261,7 @@ class Sequencer extends React.Component {
         />
 
         <div id="synth-options-container">
-          <h2 id="title-header">Let's Make Some Jams!</h2>
+          <h2 className="game-title">Let's Make Some Jams!</h2>
         </div>
         <div>
           <div id="synth-options-container">

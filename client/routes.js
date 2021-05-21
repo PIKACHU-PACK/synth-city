@@ -10,6 +10,7 @@ import SongReveal from "./components/SongReveal";
 /**
  * COMPONENT
  */
+
 class Routes extends Component {
   render() {
     return (
