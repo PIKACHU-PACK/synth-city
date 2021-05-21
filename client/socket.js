@@ -73,9 +73,15 @@ export function endTurn(room, notesStr, gridStr, rounds, turn) {
   socket.emit('setTurn', room, notesStr, gridStr, rounds, turn);
 }
 
+export function segmentListener(getSegment) {
+  socket.on('sendSegment', (notesStr, gridStr) => {
+    getSegment(notesStr, gridStr);
+  });
+}
+
 export function turnListener(sendTurn) {
-  socket.on('switchTurn', (notesString, gridString, nextPlayer, turn) => {
-    sendTurn(notesString, gridString, nextPlayer, turn);
+  socket.on('switchTurn', (nextPlayer, turn) => {
+    sendTurn(nextPlayer, turn);
   });
 }
 

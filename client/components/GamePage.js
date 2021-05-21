@@ -2,6 +2,7 @@ import React from 'react';
 import {
   getInfo,
   chatListener,
+  segmentListener,
   turnListener,
   endTurn,
   gameEndListener,
@@ -29,6 +30,7 @@ export class GamePage extends React.Component {
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.getMessages = this.getMessages.bind(this);
+    this.getSegment = this.getSegment.bind(this);
     this.sendTurn = this.sendTurn.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
     this.revealSong = this.revealSong.bind(this);
@@ -37,6 +39,7 @@ export class GamePage extends React.Component {
   componentDidMount() {
     getInfo(this.props.room, this.stateInfo);
     chatListener(this.getMessages);
+    segmentListener(this.getSegment);
     turnListener(this.sendTurn);
     gameEndListener(this.revealSong);
   }
@@ -55,15 +58,20 @@ export class GamePage extends React.Component {
     this.setState({ chat: [...this.state.chat, msg] });
   }
 
-  sendTurn(notesStr, gridStr, nextPlayer, turn) {
+  getSegment(notesStr, gridStr) {
     const notes = parse(notesStr);
     const segment = parse(gridStr);
     const songSoFar = this.state.finalSong.slice();
     songSoFar.push(segment);
     this.setState({
       finalSong: songSoFar,
-      musician: nextPlayer,
       previousNotes: notes,
+    });
+  }
+
+  sendTurn(nextPlayer, turn) {
+    this.setState({
+      musician: nextPlayer,
       isFirst: false,
       turn: turn,
     });

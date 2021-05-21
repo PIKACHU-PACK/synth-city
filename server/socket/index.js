@@ -53,22 +53,16 @@ module.exports = (io) => {
     });
 
     socket.on('setTurn', (room, notesString, gridString, rounds, turn) => {
+      io.in(room).emit('sendSegment', notesString, gridString);
       turn++;
       if (turn === rounds) {
-        io.in(room).emit('switchTurn', notesString, gridString, null, null);
         io.in(room).emit('gameOver');
       } else {
         const socketRoom = io.sockets.adapter.rooms.get(room);
         const players = [...socketRoom];
         const currentTurn = turn % players.length;
         const nextPlayer = players[currentTurn];
-        io.in(room).emit(
-          'switchTurn',
-          notesString,
-          gridString,
-          nextPlayer,
-          turn
-        );
+        io.in(room).emit('switchTurn', nextPlayer, turn);
       }
     });
   });

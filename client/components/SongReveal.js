@@ -58,8 +58,7 @@ class SongReveal extends React.Component {
       });
       this.setState({
         beat:
-          (this.state.beat + 1) %
-          ((this.props.location.finalSong.length - 1) * 16),
+          (this.state.beat + 1) % (this.props.location.finalSong.length * 16),
       });
     };
     Tone.Transport.bpm.value = BPM;
