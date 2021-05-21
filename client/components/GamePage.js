@@ -2,6 +2,7 @@ import React from "react";
 import {
   getInfo,
   chatListener,
+  updatePlayersListener,
   segmentListener,
   turnListener,
   endTurn,
@@ -29,6 +30,7 @@ export class GamePage extends React.Component {
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.getMessages = this.getMessages.bind(this);
+    this.updatePlayers = this.updatePlayers.bind(this);
     this.getSegment = this.getSegment.bind(this);
     this.sendTurn = this.sendTurn.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
@@ -38,6 +40,7 @@ export class GamePage extends React.Component {
   componentDidMount() {
     getInfo(this.props.room, this.stateInfo);
     chatListener(this.getMessages);
+    updatePlayersListener(this.updatePlayers);
     segmentListener(this.getSegment);
     turnListener(this.sendTurn);
     gameEndListener(this.revealSong);
@@ -55,6 +58,10 @@ export class GamePage extends React.Component {
 
   getMessages(msg) {
     this.setState({ chat: [...this.state.chat, msg] });
+  }
+
+  updatePlayers(players) {
+    this.setState({ players: players });
   }
 
   getSegment(notesStr, gridStr) {
@@ -82,7 +89,8 @@ export class GamePage extends React.Component {
       notesString,
       gridString,
       this.state.rounds,
-      this.state.turn
+      this.state.turn,
+      this.state.players
     );
   }
 

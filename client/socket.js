@@ -20,6 +20,10 @@ export function createRoom(callback) {
   });
 }
 
+export function exitRoom(room) {
+  socket.emit('exitRoom', room);
+}
+
 export function chatMessage(message, room) {
   socket.emit("chatMessage", message, room);
 }
@@ -69,8 +73,8 @@ export function startListener(gameStarted) {
   });
 }
 
-export function endTurn(room, notesStr, gridStr, rounds, turn) {
-  socket.emit("setTurn", room, notesStr, gridStr, rounds, turn);
+export function endTurn(room, notesStr, gridStr, rounds, turn, players) {
+  socket.emit('setTurn', room, notesStr, gridStr, rounds, turn, players);
 }
 
 export function segmentListener(getSegment) {

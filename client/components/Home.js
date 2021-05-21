@@ -1,9 +1,10 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { createRoom, joinRoom } from "../socket";
-import Footer from "./Footer";
-import history from "../history";
-import Swal from "sweetalert2";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { createRoom, joinRoom } from '../socket';
+import Footer from './Footer';
+import history from '../history';
+import Swal from 'sweetalert2';
+import { turnLength } from './Sequencer';
 
 export class Home extends React.Component {
   constructor() {
@@ -72,7 +73,7 @@ export class Home extends React.Component {
     Swal.fire({
       title: "HOW TO PLAY:",
       html:
-        "Each player will have two 45-second turns to compose an 8-second section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>" +
+        `Each player will have two ${turnLength}-second turns to compose an 8-second section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>` +
         "When it is your turn, the first two notes on your display will display the final two notes from the previous player. To compose your section, click on the Sequencer's buttons. Use the menu at the top to change Octaves and Synths.<br></br>" +
         "At the end of the game, you and your teammates will be able to listen to your grammy-nominated masterpiece!",
       showCloseButton: true,

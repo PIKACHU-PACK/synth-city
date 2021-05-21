@@ -6,9 +6,11 @@ import {
   updatePlayersListener,
   getInfo,
   startGame,
+  exitRoom,
 } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
+import { turnLength } from './Sequencer';
 
 class WaitingRoom extends React.Component {
   constructor(props) {
@@ -54,6 +56,7 @@ class WaitingRoom extends React.Component {
   }
 
   goHome() {
+    exitRoom(this.props.room);
     history.push({
       pathname: '/',
     });
@@ -80,9 +83,9 @@ class WaitingRoom extends React.Component {
     Swal.fire({
       title: 'HOW TO PLAY:',
       html:
-        'Each player will have two 25-second turns to compose a section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>' +
-        "To compose your section, click on the Sequencer's buttons. Use the menu at the top to change Octaves and Synths.<br></br>" +
-        "At the end of the game, you'll be able to hear and download your grammy-nominated masterpiece!",
+        `Each player will have two ${turnLength}-second turns to compose an 8-second section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>` +
+        "When it is your turn, the first two notes on your display will display the final two notes from the previous player. To compose your section, click on the Sequencer's buttons. Use the menu at the top to change Octaves and Synths.<br></br>" +
+        'At the end of the game, you and your teammates will be able to listen to your grammy-nominated masterpiece!',
       showCloseButton: true,
     });
   }
