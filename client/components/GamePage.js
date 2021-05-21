@@ -61,10 +61,10 @@ export class GamePage extends React.Component {
     const songSoFar = this.state.finalSong.slice();
     songSoFar.push(segment);
     this.setState({
+      finalSong: songSoFar,
       musician: nextPlayer,
       previousNotes: notes,
       isFirst: false,
-      finalSong: songSoFar,
       turn: turn,
     });
   }

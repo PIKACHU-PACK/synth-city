@@ -28,7 +28,6 @@ module.exports = (io) => {
         const players = [...socketRoom];
         io.in(roomKey).emit('newPlayer', players);
       } else {
-        console.log('more than 3!');
         socket.emit('roomFull');
       }
     });
@@ -55,17 +54,14 @@ module.exports = (io) => {
 
     socket.on('setTurn', (room, notesString, gridString, rounds, turn) => {
       turn++;
-      console.log('turn: ', turn);
       if (turn === rounds) {
-        io.in(room).emit('switchTurn', notesString, gridString);
+        io.in(room).emit('switchTurn', notesString, gridString, null, null);
         io.in(room).emit('gameOver');
       } else {
         const socketRoom = io.sockets.adapter.rooms.get(room);
         const players = [...socketRoom];
         const currentTurn = turn % players.length;
-        console.log('currentTurn:', currentTurn);
         const nextPlayer = players[currentTurn];
-        console.log('nextPlayer:', nextPlayer);
         io.in(room).emit(
           'switchTurn',
           notesString,
