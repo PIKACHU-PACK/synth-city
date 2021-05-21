@@ -42,6 +42,8 @@ class Sequencer extends React.Component {
   }
 
   componentDidMount() {
+    Tone.start();
+    Tone.getDestination().volume.rampTo(-10, 0.001);
     let rowGrid = makeGrid(notes, this.props.isFirst);
     const synthsArr = makeSynths();
     if (!this.props.isFirst) {
@@ -50,8 +52,6 @@ class Sequencer extends React.Component {
     } else {
       this.setState({ grid: rowGrid, synths: synthsArr });
     }
-    Tone.start();
-    Tone.getDestination().volume.rampTo(-10, 0.001);
     this.performanceSound();
   }
 

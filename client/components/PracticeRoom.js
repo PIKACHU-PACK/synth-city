@@ -37,7 +37,6 @@ class PracticeRoom extends React.Component {
   }
 
   componentDidMount() {
-    //StartAudioContext(Tone.context);
     const rowGrid = makeGrid(notes, true);
     const synthsArr = makeSynths(basicSynth);
     this.setState({ grid: rowGrid, synths: synthsArr });
@@ -93,6 +92,9 @@ class PracticeRoom extends React.Component {
           if (note.isActive) {
             if (!this.state.playButtonStarted) {
               //StartAudioContext(Tone.context);
+              if (Tone.context.state !== "running") {
+                Tone.context.resume();
+              }
               Tone.start();
               Tone.getDestination().volume.rampTo(-10, 0.001);
               this.setState({ noteClickStarted: true });
@@ -123,7 +125,6 @@ class PracticeRoom extends React.Component {
 
   configPlayButton(e) {
     if (!this.state.noteClickStarted) {
-      //StartAudioContext(Tone.context);
       Tone.start();
       Tone.getDestination().volume.rampTo(-10, 0.001);
       this.configLoop();

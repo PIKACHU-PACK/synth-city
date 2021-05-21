@@ -4,6 +4,7 @@ import { createRoom, joinRoom } from "../socket";
 import Footer from "./Footer";
 import history from "../history";
 import Swal from "sweetalert2";
+import { start } from "tone";
 
 export class Home extends React.Component {
   constructor() {
@@ -87,7 +88,10 @@ export class Home extends React.Component {
             </div>
             <div className="column">
               <Link to={"/practice"}>
-                <div className="option-card">
+                <div
+                  onClick={async () => await start()}
+                  className="option-card"
+                >
                   <h3>Try it out</h3>
                 </div>
               </Link>
