@@ -145,19 +145,21 @@ class PracticeRoom extends React.Component {
   render() {
     return (
       <div className="sequencer-view">
-        <div className="practice-home-button-container">
-          <button
-            type="button"
-            className="practice-home-button"
-            onClick={this.goHome}
-          >
-            <img src={'/homebutton.png'} className="practice-home-arrow-img" />
-          </button>
+        <button
+          type="button"
+          className="practice-home-button"
+          onClick={this.goHome}
+        >
+          <img src={'/homebutton.png'} className="practice-home-arrow-img" />
+        </button>
+        <div>
+          <div className="practice-banner">
+            <h2 className="practice-title">Practice Room</h2>
+            {/* <h3 className="waiting-subheading">
+                Try out the Sequencer to become a Real Pro
+              </h3> */}
+          </div>
         </div>
-        <div id="synth-options-container">
-          <h2 className="practice-title">Let's Make Some Jams!</h2>
-        </div>
-
         <div>
           <div id="synth-options-container">
             <button
@@ -181,6 +183,7 @@ class PracticeRoom extends React.Component {
             >
               Basic Synth
             </button>
+            <p></p>
           </div>
           <div id="synth-options-container">
             <select

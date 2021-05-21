@@ -100,22 +100,45 @@ class WaitingRoom extends React.Component {
           </div>
           <div className="waiting-info">
             <div className="banner">
-              <h2 className="waiting-title">Loading...</h2>
+              {this.state.thisPlayer === this.state.players[0] ? (
+                <h2 className="waiting-title">Loading Players...</h2>
+              ) : (
+                <h2 className="waiting-title">Waiting on Host...</h2>
+              )}
+              <h3 className="waiting-subheading">
+                You'll need 2-4 players to start a game
+              </h3>
+              <p>
+                Once the game begins, one player will be sent to the studio.{' '}
+                <br></br>
+                Everyone else, just chill and chat until it's your time to
+                shine!
+              </p>
             </div>
-            <h2>
-              {players.length === 1
-                ? `${players.length} Player Is Ready To Jam!`
-                : `${players.length} Players Are Ready To Jam!`}
-            </h2>
-            <h4>SynthCity is for 2-4 players.</h4>
-            <h2>Invite Your Friends With This Code: {room}</h2>
-            {this.state.thisPlayer === players[0] ? (
-              <button type="button" className="main-cta" onClick={this.onStart}>
-                Start Game
-              </button>
-            ) : (
-              <h2>Waiting for host to start game~</h2>
-            )}
+            <div className="waiting-subinfo">
+              <h2>
+                {players.length === 1
+                  ? `${players.length} Player Is Ready To Jam!`
+                  : `${players.length} Players Are Ready To Jam!`}
+              </h2>
+              <h2>
+                Invite Your Friends With This Code:{' '}
+                <h2 className="bold">{roomId}</h2>
+              </h2>
+              {this.state.thisPlayer === this.state.players[0] ? (
+                <button
+                  type="button"
+                  className="main-cta"
+                  onClick={this.onStart}
+                >
+                  Start Game
+                </button>
+              ) : (
+                <h3>
+                  Your host will start the game when everyone is ready to rock
+                </h3>
+              )}
+            </div>
           </div>
           <div className="chat-container">
             <Chat roomId={room} chat={this.state.chat} />
