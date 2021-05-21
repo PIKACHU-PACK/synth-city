@@ -27,10 +27,6 @@ class SongReveal extends React.Component {
     this.setState({ synths: synthsArr });
     const finalCleanSong = this.cleanUpFinalSong(this.props.location.finalSong);
     this.setState({ finalSong: finalCleanSong });
-    //getSong(this.props.match.params.roomId, this.setFinalSong);
-    // setTimeout(function () {
-    //   this.state.recorder.start;
-    // }, 5000);
   }
 
   cleanUpFinalSong(finalSongSegmented) {
@@ -62,8 +58,7 @@ class SongReveal extends React.Component {
       });
       this.setState({
         beat:
-          (this.state.beat + 1) %
-          ((this.props.location.finalSong.length - 1) * 16),
+          (this.state.beat + 1) % (this.props.location.finalSong.length * 16),
       });
     };
     Tone.Transport.bpm.value = BPM;
@@ -99,7 +94,7 @@ class SongReveal extends React.Component {
 
   goToWaitingRoom() {
     history.push({
-      pathname: `/waiting/${this.props.match.params.roomId}`,
+      pathname: `/waiting/${this.props.room}`,
     });
   }
 
