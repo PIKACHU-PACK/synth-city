@@ -1,19 +1,21 @@
-import React from "react";
-import { getInfo, turnListener, endTurn, gameEndListener } from "../socket";
-import Sequencer, { turnLength } from "./Sequencer";
-import history from "../history";
-import { parse } from "flatted";
-import Chat from "./Chat";
-import socket from "../socket";
-import { Timer } from "react-countdown-clock-timer";
+import React from 'react';
+import { getInfo, turnListener, endTurn, gameEndListener } from '../socket';
+import Sequencer, { turnLength } from './Sequencer';
+import history from '../history';
+import { parse } from 'flatted';
+import Chat from './Chat';
+import socket from '../socket';
+import { Timer } from 'react-countdown-clock-timer';
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: "",
-      musician: "",
+      thisPlayer: '',
+      musician: '',
+      rounds: null,
+      turn: null,
       previousNotes: [],
       isFirst: true,
       chosenBeat: [],
@@ -29,7 +31,7 @@ export class GamePage extends React.Component {
   componentDidMount() {
     getInfo(this.props.match.params.roomId, this.stateInfo);
     turnListener(this.sendTurn);
-    socket.on("chat Message", (msg) => {
+    socket.on('chat Message', (msg) => {
       this.setState({
         chat: [...this.state.chat, msg],
       });
@@ -38,11 +40,13 @@ export class GamePage extends React.Component {
   }
 
   stateInfo(info) {
-    const { thisPlayer, players, musician } = info;
+    const { thisPlayer, players, musician, rounds, turn } = info;
     this.setState({
       thisPlayer: thisPlayer,
       players: players,
       musician: musician,
+      rounds: rounds,
+      turn: turn,
     });
   }
 
@@ -71,6 +75,7 @@ export class GamePage extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician;
     const roomId = this.props.match.params.roomId;
