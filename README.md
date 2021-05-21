@@ -20,6 +20,6 @@ Charlotte Ulrich - https://www.linkedin.com/in/charlotteulrich/
 
 
 ## To Start
-Run npm install
+Run npm install\
 Run `npm run start:dev` 
 
