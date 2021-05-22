@@ -1,17 +1,19 @@
-import React from 'react';
-import * as Tone from 'tone';
-import { checkWhichSynth, makeSynths } from './HelperFunctions';
-import history from '../history';
-import { BPM } from './Sequencer';
-import { exitRoom } from '../socket';
+import React from "react";
+import * as Tone from "tone";
+import { checkSynth, makeSynths, lastNotesSeed } from "./HelperFunctions";
+import history from "../history";
+import { BPM } from "./Sequencer";
+import { exitRoom } from "../socket";
+import { NoteButton } from "./NoteButtonSongReveal";
 
 class SongReveal extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       started: false,
-      beat: 0,
+      beat: 3,
       playing: false,
+      firstBeat: true,
       synths: [],
       finalSong: [],
     };
@@ -31,6 +33,12 @@ class SongReveal extends React.Component {
 
   cleanUpFinalSong(finalSongSegmented) {
     let newGrid = [[], [], [], [], [], [], []];
+    let initialNote = {
+      note: "♫",
+      isActive: false,
+      synth: "",
+      octave: "",
+    };
     for (let i = 0; i < finalSongSegmented.length; i++) {
       const currentSegment = finalSongSegmented[i];
       for (let j = 0; j < currentSegment.length; j++) {
@@ -39,6 +47,10 @@ class SongReveal extends React.Component {
           newGrid[j].push(note);
         });
       }
+    }
+    for (let i = 0; i < newGrid.length; i++) {
+      newGrid[i].unshift(initialNote, initialNote, initialNote);
+      newGrid[i].push(initialNote, initialNote, initialNote);
     }
     return newGrid;
   }
@@ -57,7 +69,8 @@ class SongReveal extends React.Component {
       });
       this.setState({
         beat:
-          (this.state.beat + 1) % (this.props.location.finalSong.length * 16),
+          (this.state.beat + 1) %
+          (this.props.location.finalSong.length * 16 + 6),
       });
     };
     Tone.Transport.bpm.value = BPM;
@@ -72,11 +85,10 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = "Play";
+      e.target.innerText = "Play Song";
       Tone.Transport.stop();
       this.setState({
         playing: false,
-        beat: 0,
       });
     } else {
       e.target.innerText = "Stop";
@@ -100,11 +112,37 @@ class SongReveal extends React.Component {
 
   render() {
     return (
-      <div className="song-reveal-view">
+      <div className="sequencer-view">
         <div className="song-reveal-banner">
           <h2 className="home-title">Your Masterpiece</h2>
         </div>
-
+        <h3 id="beat-title">Beat</h3>
+        <div id="sequencer" className="container sequencer">
+          {this.state.finalSong.map((row, rowIndex) => {
+            return (
+              <div
+                id="rowIndex"
+                className="sequencer-row"
+                key={rowIndex + "row"}
+              >
+                {row.map(({ note, isActive, synth, octave }, noteIndex) => {
+                  return (
+                    <NoteButton
+                      note={note}
+                      key={noteIndex + "note"}
+                      isActive={isActive}
+                      beat={this.state.beat}
+                      synth={synth}
+                      octave={octave}
+                      firstBeat={this.state.firstBeat}
+                      index={noteIndex}
+                    />
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
         <div className="toggle-play">
           <div className="play-container">
             <button

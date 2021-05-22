@@ -39,6 +39,8 @@ class Routes extends Component {
               <SongReveal {...routeProps} room={routeProps.match.params.room} />
             )}
           />
+          {/* REMOVE THIS ROUTE AFTER */}
+          <Route exact path="/reveal" component={SongReveal} />
         </Switch>
       </div>
     );

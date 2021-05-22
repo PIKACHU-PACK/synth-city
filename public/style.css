@@ -279,7 +279,7 @@ form div {
 /* SEQUENCER */
 
 .sequencer-view {
-  overflow: scroll;
+  /* overflow: scroll; */
   height: 100vh;
 }
 
@@ -301,7 +301,6 @@ form div {
   border-color: lightgray;
   margin: 2px;
   outline: none;
-  /* background-color: rgb(202, 202, 202); */
 }
 
 .previous-note {
@@ -644,4 +643,37 @@ form div {
 
 .song-reveal-buttons {
   align-self: center;
+}
+
+/* SONG REVEAL */
+.song-reveal-container {
+  display: flex;
+  align-items: center;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.hidden-note {
+  display: none;
+}
+
+.reveal-note {
+  border-radius: 5px;
+  height: 5em;
+  width: 5em;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgb(0, 0, 0);
+  margin: 2px;
+  outline: none;
+}
+
+.reveal-current-beat {
+  background-color: rgb(202, 200, 200);
+}
+
+#beat-title {
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
 }

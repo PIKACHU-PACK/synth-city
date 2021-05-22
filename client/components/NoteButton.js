@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import AMOUNT_OF_NOTES from "./Sequencer";
 
 export const NoteButton = ({
   note,
@@ -17,8 +18,14 @@ export const NoteButton = ({
       className={classNames(
         { "inactive-beat": typeof note === "number" },
         { "active-beat": note === beat },
-        { "active-beat": note === 16 && beat === 0 && !firstBeat && isFirst },
-        { "active-beat": note === 18 && beat === 0 && !firstBeat && !isFirst },
+        {
+          "active-beat":
+            note === AMOUNT_OF_NOTES - 2 && beat === 0 && !firstBeat && isFirst,
+        },
+        {
+          "active-beat":
+            note === AMOUNT_OF_NOTES && beat === 0 && !firstBeat && !isFirst,
+        },
         { "note ": typeof note !== "number" },
         {
           "previous-note": typeof note !== "number" && isPrevious && !isActive,
