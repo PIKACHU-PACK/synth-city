@@ -6,6 +6,7 @@ import Sequencer from "./components/Sequencer";
 import PracticeRoom from "./components/PracticeRoom";
 import GamePage from "./components/GamePage";
 import SongReveal from "./components/SongReveal";
+import { Intro } from "./components/Intro";
 
 class Routes extends Component {
   render() {
@@ -39,6 +40,7 @@ class Routes extends Component {
               <SongReveal {...routeProps} room={routeProps.match.params.room} />
             )}
           />
+          <Route exact path="/intro" component={Intro} />
         </Switch>
       </div>
     );
