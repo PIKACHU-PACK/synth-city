@@ -90,8 +90,8 @@ export function segmentListener(getSegment) {
 }
 
 export function turnListener(sendTurn) {
-  socket.on('switchTurn', (nextPlayer, turn) => {
-    sendTurn(nextPlayer, turn);
+  socket.on('switchTurn', (nextPlayer, nickname, turn) => {
+    sendTurn(nextPlayer, nickname, turn);
   });
 }
 

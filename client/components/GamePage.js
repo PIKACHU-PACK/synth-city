@@ -21,6 +21,7 @@ export class GamePage extends React.Component {
       players: [],
       thisPlayer: '',
       musician: '',
+      musicianNickname: '',
       rounds: null,
       turn: null,
       previousNotes: [],
@@ -49,11 +50,12 @@ export class GamePage extends React.Component {
     gameEndListener(this.revealSong);
   }
 
-  stateInfo({ thisPlayer, players, musician, rounds, turn }) {
+  stateInfo({ thisPlayer, players, musician, nickname, rounds, turn }) {
     this.setState({
       thisPlayer: thisPlayer,
       players: players,
       musician: musician,
+      musicianNickname: nickname,
       rounds: rounds,
       turn: turn,
     });
@@ -90,9 +92,10 @@ export class GamePage extends React.Component {
     });
   }
 
-  sendTurn(nextPlayer, turn) {
+  sendTurn(nextPlayer, nickname, turn) {
     this.setState({
       musician: nextPlayer,
+      musicianNickname: nickname,
       isFirst: false,
       turn: turn,
     });
@@ -118,7 +121,8 @@ export class GamePage extends React.Component {
 
   render() {
     const thisPlayer = this.state.thisPlayer;
-    const musician = this.state.musician || '';
+    const musician = this.state.musician || 'tbd';
+    const musicianNickname = this.state.musicianNickname;
     const room = this.props.room;
     return (
       <>
@@ -134,7 +138,11 @@ export class GamePage extends React.Component {
           <>
             <div>
               <h2 className="game-title">WAITING FOR YOUR TURN</h2>
-              {/* <Timer durationInSeconds={turnLength} /> */}
+              {musicianNickname ? (
+                <h2 className="game-title">{musicianNickname}</h2>
+              ) : (
+                <div></div>
+              )}
               <div className="game-chat">
                 <Chat roomId={room} chat={this.state.chat} />
               </div>
