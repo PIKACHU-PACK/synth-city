@@ -1,25 +1,26 @@
-import React from "react";
+import React from 'react';
 import {
   getInfo,
   chatListener,
+  playerLeftListener,
   updatePlayersListener,
   segmentListener,
   turnListener,
   endTurn,
   gameEndListener,
-} from "../socket";
-import Sequencer, { turnLength } from "./Sequencer";
-import history from "../history";
-import { parse } from "flatted";
-import Chat from "./Chat";
+} from '../socket';
+import Sequencer, { turnLength } from './Sequencer';
+import history from '../history';
+import { parse } from 'flatted';
+import Chat from './Chat';
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: "",
-      musician: "",
+      thisPlayer: '',
+      musician: '',
       rounds: null,
       turn: null,
       previousNotes: [],
@@ -30,6 +31,7 @@ export class GamePage extends React.Component {
     };
     this.stateInfo = this.stateInfo.bind(this);
     this.getMessages = this.getMessages.bind(this);
+    this.playerLeft = this.playerLeft.bind(this);
     this.updatePlayers = this.updatePlayers.bind(this);
     this.getSegment = this.getSegment.bind(this);
     this.sendTurn = this.sendTurn.bind(this);
@@ -40,6 +42,7 @@ export class GamePage extends React.Component {
   componentDidMount() {
     getInfo(this.props.room, this.stateInfo);
     chatListener(this.getMessages);
+    playerLeftListener(this.playerLeft);
     updatePlayersListener(this.updatePlayers);
     segmentListener(this.getSegment);
     turnListener(this.sendTurn);
@@ -58,6 +61,18 @@ export class GamePage extends React.Component {
 
   getMessages(msg) {
     this.setState({ chat: [...this.state.chat, msg] });
+  }
+
+  playerLeft(departedPlayer) {
+    let players = this.state.players || [];
+    console.log(players, 'players');
+    let updatedPlayers = players.map((player) => {
+      if (player === departedPlayer) {
+        player = null;
+      }
+      return player;
+    });
+    this.setState({ players: updatedPlayers });
   }
 
   updatePlayers(players) {
@@ -103,7 +118,7 @@ export class GamePage extends React.Component {
 
   render() {
     const thisPlayer = this.state.thisPlayer;
-    const musician = this.state.musician || "test";
+    const musician = this.state.musician || '';
     const room = this.props.room;
     return (
       <>

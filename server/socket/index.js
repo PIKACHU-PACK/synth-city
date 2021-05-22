@@ -7,17 +7,17 @@ module.exports = (io) => {
     socket.on('disconnecting', () => {
       const room = socket.room;
       if (room) {
-        const socketRoom = io.sockets.adapter.rooms.get(room);
-        const players = [...socketRoom];
-        console.log('players:', players);
-        let updatedPlayers = players.map((player) => {
-          if (player === socket.id) {
-            player = null;
-          }
-          return player;
-        });
-        console.log('updatedPlayers:', updatedPlayers);
-        io.in(room).emit('updatePlayers', updatedPlayers);
+        // const socketRoom = io.sockets.adapter.rooms.get(room);
+        // const players = [...socketRoom];
+        // console.log('players:', players);
+        // let updatedPlayers = players.map((player) => {
+        //   if (player === socket.id) {
+        //     player = null;
+        //   }
+        //   return player;
+        // });
+        // console.log('updatedPlayers:', updatedPlayers);
+        io.in(room).emit('playerLeft', socket.id);
       }
     });
 
@@ -87,7 +87,7 @@ module.exports = (io) => {
           let nextPlayer = players[currentTurn];
           console.log(players);
           console.log('nextPlayer before while', nextPlayer);
-          if (nextPlayer === null) {
+          while (nextPlayer === null) {
             turn++;
             currentTurn = turn % players.length;
             nextPlayer = players[currentTurn];
