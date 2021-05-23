@@ -126,7 +126,7 @@ class WaitingRoom extends React.Component {
               </h2>
               <h2>
                 Invite Your Friends With This Code:{' '}
-                <h2 className="bold">{room}</h2>
+                <p className="bold">{room}</p>
               </h2>
               {this.state.thisPlayer === this.state.players[0] ? (
                 <button
