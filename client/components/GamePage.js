@@ -5,6 +5,7 @@ import {
   playerLeftListener,
   segmentListener,
   turnListener,
+  passSegment,
   endTurn,
   gameEndListener,
   exitRoom,
@@ -111,14 +112,8 @@ export class GamePage extends React.Component {
   }
 
   finishTurn(notesString, gridString) {
-    endTurn(
-      this.props.room,
-      notesString,
-      gridString,
-      this.state.rounds,
-      this.state.turn,
-      this.state.players
-    );
+    passSegment(notesString, gridString);
+    endTurn(this.state.rounds, this.state.turn, this.state.players);
   }
 
   revealSong() {

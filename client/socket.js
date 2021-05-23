@@ -78,8 +78,12 @@ export function startGame(room) {
   socket.emit('startGame', room);
 }
 
-export function endTurn(room, notesStr, gridStr, rounds, turn, players) {
-  socket.emit('setTurn', room, notesStr, gridStr, rounds, turn, players);
+export function passSegment(notesStr, gridStr) {
+  socket.emit('passSegment', notesStr, gridStr);
+}
+
+export function endTurn(rounds, turn, players) {
+  socket.emit('setTurn', rounds, turn, players);
 }
 
 export function segmentListener(getSegment) {
