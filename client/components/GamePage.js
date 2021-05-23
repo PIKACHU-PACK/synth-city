@@ -20,6 +20,7 @@ export class GamePage extends React.Component {
     this.state = {
       players: [],
       thisPlayer: '',
+      nickname: '',
       musician: '',
       musicianNickname: '',
       rounds: null,
@@ -50,19 +51,28 @@ export class GamePage extends React.Component {
     gameEndListener(this.revealSong);
   }
 
-  stateInfo({ thisPlayer, players, musician, nickname, rounds, turn }) {
+  stateInfo({
+    thisPlayer,
+    nickname,
+    players,
+    musician,
+    musicianNickname,
+    rounds,
+    turn,
+  }) {
     this.setState({
       thisPlayer: thisPlayer,
+      nickname: nickname,
       players: players,
       musician: musician,
-      musicianNickname: nickname,
+      musicianNickname: musicianNickname,
       rounds: rounds,
       turn: turn,
     });
   }
 
-  getMessages(msg) {
-    this.setState({ chat: [...this.state.chat, msg] });
+  getMessages(received) {
+    this.setState({ chat: [...this.state.chat, received] });
   }
 
   playerLeft(departedPlayer) {
@@ -92,10 +102,10 @@ export class GamePage extends React.Component {
     });
   }
 
-  sendTurn(nextPlayer, nickname, turn) {
+  sendTurn(nextPlayer, musicianNickname, turn) {
     this.setState({
       musician: nextPlayer,
-      musicianNickname: nickname,
+      musicianNickname: musicianNickname,
       isFirst: false,
       turn: turn,
     });
@@ -144,7 +154,11 @@ export class GamePage extends React.Component {
                 <div></div>
               )}
               <div className="game-chat">
-                <Chat roomId={room} chat={this.state.chat} />
+                <Chat
+                  roomId={room}
+                  nickname={this.state.nickname}
+                  chat={this.state.chat}
+                />
               </div>
             </div>
           </>

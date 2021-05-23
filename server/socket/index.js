@@ -25,8 +25,9 @@ module.exports = (io) => {
       socket.leave(room);
     });
 
-    socket.on('chatMessage', (message, room) => {
-      io.in(room).emit('chat Message', message);
+    socket.on('messageSent', (nickname, message, room) => {
+      const received = { nickname: nickname, msg: message };
+      io.in(room).emit('messageReceived', received);
     });
 
     socket.on('createRoom', () => {
@@ -57,20 +58,22 @@ module.exports = (io) => {
       io.in(room).emit('gameStarted');
     });
 
-    socket.on('getInfo', async (room) => {
+    socket.on('getInfo', async () => {
       const thisPlayer = socket.id;
+      const nickname = socket.nickname;
       const socketRoom = io.sockets.adapter.rooms.get(socket.room);
       let players = [...socketRoom];
       const musician = players[0];
       const sockets = await io.in(musician).fetchSockets();
-      const nickname = sockets[0].nickname;
+      const musicianNickname = sockets[0].nickname;
       const rounds = players.length === 3 ? 6 : 4;
       const turn = 0;
       io.to(thisPlayer).emit('info', {
         thisPlayer,
+        nickname,
         players,
         musician,
-        nickname,
+        musicianNickname,
         rounds,
         turn,
       });

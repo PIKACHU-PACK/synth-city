@@ -24,13 +24,13 @@ export function exitRoom(room) {
   socket.emit('exitRoom', room);
 }
 
-export function chatMessage(message, room) {
-  socket.emit('chatMessage', message, room);
+export function chatMessage(nickname, message, room) {
+  socket.emit('messageSent', nickname, message, room);
 }
 
 export function chatListener(getMessages) {
-  socket.on('chat Message', (msg) => {
-    getMessages(msg);
+  socket.on('messageReceived', (received) => {
+    getMessages(received);
   });
 }
 

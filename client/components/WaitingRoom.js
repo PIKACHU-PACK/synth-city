@@ -18,6 +18,7 @@ class WaitingRoom extends React.Component {
     this.state = {
       players: [],
       thisPlayer: '',
+      nickname: '',
       chat: [],
     };
     this.setInfo = this.setState.bind(this);
@@ -37,8 +38,12 @@ class WaitingRoom extends React.Component {
     updatePlayersListener(this.updatePlayers);
   }
 
-  setInfo({ thisPlayer, players }) {
-    this.setState({ thisPlayer: thisPlayer, players: players });
+  setInfo({ thisPlayer, nickname, players }) {
+    this.setState({
+      thisPlayer: thisPlayer,
+      nickname: nickname,
+      players: players,
+    });
   }
 
   getMessages(msg) {
@@ -144,7 +149,11 @@ class WaitingRoom extends React.Component {
             </div>
           </div>
           <div className="chat-container">
-            <Chat roomId={room} chat={this.state.chat} />
+            <Chat
+              roomId={room}
+              nickname={this.state.nickname}
+              chat={this.state.chat}
+            />
           </div>
           <div className="waiting-instructions-container">
             <button
