@@ -99,3 +99,10 @@ export function gameEndListener(revealSong) {
     revealSong();
   });
 }
+
+export function waitingRoomUnmounted() {
+  socket.off('info');
+  socket.off('gameStarted');
+  socket.off('messageReceived');
+  socket.off('updatePlayers');
+}

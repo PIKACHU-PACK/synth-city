@@ -14,6 +14,10 @@ module.exports = (io) => {
       const room = socket.room;
       if (room) {
         io.in(room).emit('playerLeft', socket.id);
+        const socketRoom = io.sockets.adapter.rooms.get(room);
+        let players = [...socketRoom];
+        let updatedPlayers = players.filter((player) => player !== socket.id);
+        io.in(room).emit('updatePlayers', updatedPlayers);
       }
     });
 

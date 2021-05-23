@@ -1,12 +1,13 @@
 import React from 'react';
 import Chat from './Chat';
 import {
-  startListener,
-  chatListener,
-  updatePlayersListener,
   getInfo,
+  chatListener,
+  startListener,
+  updatePlayersListener,
   startGame,
   exitRoom,
+  waitingRoomUnmounted,
 } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
@@ -36,6 +37,10 @@ class WaitingRoom extends React.Component {
     chatListener(this.getMessages);
     startListener(this.gameStarted);
     updatePlayersListener(this.updatePlayers);
+  }
+
+  componentWillUnmount() {
+    waitingRoomUnmounted();
   }
 
   setInfo({ thisPlayer, nickname, players }) {
@@ -114,7 +119,8 @@ class WaitingRoom extends React.Component {
                 <h2 className="waiting-title">Waiting on Host...</h2>
               )}
               <h3 className="waiting-subheading">
-                You'll need 2-4 players to start a game
+                Welcome {this.state.nickname}. You'll need 2-4 players to start
+                a game
               </h3>
               <p>
                 Once the game begins, one player will be sent to the studio.{' '}

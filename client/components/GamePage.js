@@ -3,13 +3,12 @@ import {
   getInfo,
   chatListener,
   playerLeftListener,
-  updatePlayersListener,
   segmentListener,
   turnListener,
   endTurn,
   gameEndListener,
 } from '../socket';
-import Sequencer, { turnLength } from './Sequencer';
+import Sequencer from './Sequencer';
 import history from '../history';
 import { parse } from 'flatted';
 import Chat from './Chat';
@@ -34,7 +33,6 @@ export class GamePage extends React.Component {
     this.stateInfo = this.stateInfo.bind(this);
     this.getMessages = this.getMessages.bind(this);
     this.playerLeft = this.playerLeft.bind(this);
-    this.updatePlayers = this.updatePlayers.bind(this);
     this.getSegment = this.getSegment.bind(this);
     this.sendTurn = this.sendTurn.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
@@ -45,7 +43,6 @@ export class GamePage extends React.Component {
     getInfo(this.props.room, this.stateInfo);
     chatListener(this.getMessages);
     playerLeftListener(this.playerLeft);
-    updatePlayersListener(this.updatePlayers);
     segmentListener(this.getSegment);
     turnListener(this.sendTurn);
     gameEndListener(this.revealSong);
@@ -84,10 +81,6 @@ export class GamePage extends React.Component {
       return player;
     });
     this.setState({ players: updatedPlayers });
-  }
-
-  updatePlayers(players) {
-    this.setState({ players: players });
   }
 
   getSegment(notesStr, gridStr) {
@@ -148,7 +141,9 @@ export class GamePage extends React.Component {
             <div>
               <h2 className="game-title">WAITING FOR YOUR TURN</h2>
               {musicianNickname ? (
-                <h2 className="game-title">{musicianNickname}</h2>
+                <h2 className="game-title">
+                  {musicianNickname} is composing now
+                </h2>
               ) : (
                 <div></div>
               )}
