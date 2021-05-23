@@ -19,20 +19,6 @@ export function createRoom(callback) {
   });
 }
 
-export function exitRoom(room) {
-  socket.emit('exitRoom', room);
-}
-
-export function chatMessage(nickname, message, room) {
-  socket.emit('messageSent', nickname, message, room);
-}
-
-export function chatListener(getMessages) {
-  socket.on('messageReceived', (received) => {
-    getMessages(received);
-  });
-}
-
 export function joinRoom(
   roomKey,
   roomDoesNotExist,
@@ -49,8 +35,18 @@ export function joinRoom(
   });
 }
 
-export function startGame(room) {
-  socket.emit('startGame', room);
+export function exitRoom(room) {
+  socket.emit('exitRoom', room);
+}
+
+export function chatMessage(nickname, message, room) {
+  socket.emit('messageSent', nickname, message, room);
+}
+
+export function chatListener(getMessages) {
+  socket.on('messageReceived', (received) => {
+    getMessages(received);
+  });
 }
 
 export function getInfo(room, infoState) {
@@ -76,6 +72,10 @@ export function startListener(gameStarted) {
   socket.on('gameStarted', () => {
     gameStarted();
   });
+}
+
+export function startGame(room) {
+  socket.emit('startGame', room);
 }
 
 export function endTurn(room, notesStr, gridStr, rounds, turn, players) {
