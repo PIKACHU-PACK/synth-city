@@ -1,11 +1,15 @@
 import { AMOUNT_OF_NOTES } from "./Sequencer";
 import * as Tone from "tone";
 
-export const amSynth = new Tone.AMSynth().toDestination();
+export const amSynth = new Tone.AMSynth({
+  oscillator: {
+    type: "square",
+  },
+}).toDestination();
 export const pluckySynth = new Tone.PluckSynth().toDestination();
 export const basicSynth = new Tone.Synth({
   oscillator: {
-    type: "square8",
+    type: "sawtooth",
   },
 }).toDestination();
 
