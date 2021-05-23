@@ -7,11 +7,13 @@ import {
   turnListener,
   endTurn,
   gameEndListener,
+  exitRoom,
 } from '../socket';
 import Sequencer from './Sequencer';
 import history from '../history';
 import { parse } from 'flatted';
 import Chat from './Chat';
+import Swal from 'sweetalert2';
 
 export class GamePage extends React.Component {
   constructor() {
@@ -37,6 +39,7 @@ export class GamePage extends React.Component {
     this.sendTurn = this.sendTurn.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
     this.revealSong = this.revealSong.bind(this);
+    this.everyoneElseLeft = this.everyoneElseLeft.bind(this);
   }
 
   componentDidMount() {
@@ -80,7 +83,11 @@ export class GamePage extends React.Component {
       }
       return player;
     });
-    this.setState({ players: updatedPlayers });
+    if (updatedPlayers.filter((player) => player !== null).length < 2) {
+      this.everyoneElseLeft();
+    } else {
+      this.setState({ players: updatedPlayers });
+    }
   }
 
   getSegment(notesStr, gridStr) {
@@ -118,6 +125,18 @@ export class GamePage extends React.Component {
     history.push({
       pathname: `/song/${this.props.room}`,
       finalSong: this.state.finalSong,
+    });
+  }
+
+  everyoneElseLeft() {
+    Swal.fire({
+      title: 'Error:',
+      html: 'Sorry, it looks like everyone else left.',
+      showCloseButton: true,
+    });
+    exitRoom(this.props.room);
+    history.push({
+      pathname: '/',
     });
   }
 

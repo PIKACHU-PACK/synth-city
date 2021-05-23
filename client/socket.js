@@ -106,3 +106,12 @@ export function waitingRoomUnmounted() {
   socket.off('messageReceived');
   socket.off('updatePlayers');
 }
+
+export function gameRoomUnmounted() {
+  socket.off('info');
+  socket.off('gameOver');
+  socket.off('messageReceived');
+  socket.off('switchTurn');
+  socket.off('sendSegment');
+  socket.off('playerLeft');
+}
