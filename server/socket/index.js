@@ -29,9 +29,9 @@ module.exports = (io) => {
       socket.leave(room);
     });
 
-    socket.on('messageSent', (nickname, message, room) => {
+    socket.on('messageSent', (nickname, message) => {
       const received = { nickname: nickname, msg: message };
-      io.in(room).emit('messageReceived', received);
+      io.in(socket.room).emit('messageReceived', received);
     });
 
     socket.on('createRoom', () => {

@@ -39,8 +39,8 @@ export function exitRoom(room) {
   socket.emit('exitRoom', room);
 }
 
-export function chatMessage(nickname, message, room) {
-  socket.emit('messageSent', nickname, message, room);
+export function chatMessage(nickname, message) {
+  socket.emit('messageSent', nickname, message);
 }
 
 export function chatListener(getMessages) {

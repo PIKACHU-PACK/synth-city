@@ -37,8 +37,7 @@ export class Chat extends React.Component {
     e.preventDefault();
     const nickname = this.props.nickname;
     const { msg } = this.state;
-    const room = this.props.roomId;
-    chatMessage(nickname, msg, room); //emits message to server
+    chatMessage(nickname, msg); //emits message to server
     this.setState({ chat: [...this.state.chat, msg], msg: '' });
   }
 
