@@ -89,13 +89,10 @@ module.exports = (io) => {
         } else {
           let idx = turn % players.length;
           let nextPlayer = players[idx];
-          console.log(players);
-          console.log('nextPlayer before while', nextPlayer);
           while (nextPlayer === null) {
             turn++;
             idx = turn % players.length;
             nextPlayer = players[idx];
-            console.log('nextPlayer in while', nextPlayer);
           }
           const sockets = await io.in(nextPlayer).fetchSockets();
           const nickname = sockets[0].nickname;

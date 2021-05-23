@@ -77,7 +77,6 @@ export class GamePage extends React.Component {
 
   playerLeft(departedPlayer) {
     let players = this.state.players || [];
-    console.log(players, 'players');
     let updatedPlayers = players.map((player) => {
       if (player === departedPlayer) {
         player = null;
