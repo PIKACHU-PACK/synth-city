@@ -2,13 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 export const Intro = () => {
-  document.body.addEventListener("click", function (e) {});
+  //   document.body.addEventListener("click", function (e) {});
 
   return (
-    <video width="1280" height="720" autoPlay muted>
-      <source src={"./test.mp4"} type="video/mp4" />
-      Your browser does not support the video tag.
-    </video>
+    <img src={"anim.gif"} />
+    // <video width="1280" height="720" autoPlay muted>
+    //   <source src={"./anim.mov"} type="video/mov" />
+    //   Your browser does not support the video tag.
+    // </video>
   );
 };
 //
