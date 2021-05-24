@@ -1,11 +1,11 @@
-import React from 'react';
-import * as Tone from 'tone';
-import { checkSynth, makeSynths, lastNotesSeed } from './HelperFunctions';
-import history from '../history';
-import { BPM } from './Sequencer';
-import { exitRoom } from '../socket';
-import { NoteButton } from './NoteButtonSongReveal';
-import Chat from './Chat';
+import React from "react";
+import * as Tone from "tone";
+import { checkSynth, makeSynths, lastNotesSeed } from "./HelperFunctions";
+import history from "../history";
+import { BPM } from "./Sequencer";
+import { exitRoom } from "../socket";
+import { NoteButton } from "./NoteButtonSongReveal";
+import Chat from "./Chat";
 
 class SongReveal extends React.Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class SongReveal extends React.Component {
       firstBeat: true,
       synths: [],
       finalSong: [],
-      nickname: '',
+      nickname: "",
       chat: [],
     };
     this.configPlayButton = this.configPlayButton.bind(this);
@@ -37,10 +37,10 @@ class SongReveal extends React.Component {
   cleanUpFinalSong(finalSongSegmented) {
     let newGrid = [[], [], [], [], [], [], []];
     let initialNote = {
-      note: '♫',
+      note: "♫",
       isActive: false,
-      synth: '',
-      octave: '',
+      synth: "",
+      octave: "",
     };
     for (let i = 0; i < finalSongSegmented.length; i++) {
       const currentSegment = finalSongSegmented[i];
@@ -92,7 +92,7 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = 'Play Song';
+      e.target.innerText = "Play Song";
       Tone.Transport.stop();
       this.setState({
         playing: false,
@@ -133,13 +133,13 @@ class SongReveal extends React.Component {
                   <div
                     id="rowIndex"
                     className="sequencer-row"
-                    key={rowIndex + 'row'}
+                    key={rowIndex + "row"}
                   >
                     {row.map(({ note, isActive, synth, octave }, noteIndex) => {
                       return (
                         <NoteButton
                           note={note}
-                          key={noteIndex + 'note'}
+                          key={noteIndex + "note"}
                           isActive={isActive}
                           beat={this.state.beat}
                           synth={synth}
