@@ -198,6 +198,7 @@ class Sequencer extends React.Component {
       let newRow = [];
       newRow.push(currRow[penultimate]);
       newRow.push(currRow[ultimate]);
+
       nextNotes.push(newRow);
     }
     Tone.Transport.stop();
