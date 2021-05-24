@@ -198,6 +198,16 @@ form div {
 
 /* WAITING ROOM */
 
+.waiting-banner {
+  width: 100%;
+  height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  /* margin-bottom: 32px; */
+}
+
 .waiting-room {
   background-size: 40px 40px;
   background-image: linear-gradient(
@@ -216,10 +226,10 @@ form div {
   color: #320879;
   text-shadow: 1px 1px white;
 }
-
+/* 
 .banner p {
   font-size: 22px;
-}
+} */
 
 .waiting-title {
   font-family: 'Orbitron', sans-serif;
@@ -288,7 +298,7 @@ form div {
 /* SEQUENCER */
 
 .sequencer-view {
-  /* overflow: scroll; */
+  overflow: scroll;
   height: 100vh;
 }
 
@@ -636,6 +646,15 @@ form div {
 }
 /* SONG REVEAL */
 
+.song-reveal-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 70px;
+  color: #e12967;
+  text-shadow: 6px 6px #320879;
+  justify-content: center;
+  text-align: center;
+}
+
 .song-reveal-banner {
   width: 100%;
   display: flex;
@@ -655,11 +674,26 @@ form div {
 }
 
 /* SONG REVEAL */
-.song-reveal-container {
+/* .song-reveal-container {
   display: flex;
   align-items: center;
   display: inline-block;
   white-space: nowrap;
+} */
+
+.song-reveal-content {
+  width: 100%;
+  display: flex;
+  flex-wrap: column;
+  justify-content: space-between;
+}
+
+.song-reveal-column {
+  float: left;
+  width: 1 0 50%;
+  padding: 25px;
+  margin: 10px;
+  /* display: inline-block; */
 }
 
 .hidden-note {
