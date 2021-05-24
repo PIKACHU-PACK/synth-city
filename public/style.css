@@ -1,5 +1,5 @@
 * {
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: "Ropa Sans", sans-serif;
 }
 
 body {
@@ -35,6 +35,89 @@ form div {
   box-shadow: 3px 3px #df21c3;
 }
 
+/* HOVER */
+
+.glow-on-hover {
+  width: 230px;
+  height: 110px;
+  border: none;
+  outline: none;
+  color: #fff;
+  background: #111;
+  cursor: pointer;
+  position: relative;
+  margin: 0 auto;
+  line-height: 6.5em;
+  z-index: 0;
+  border-radius: 10px;
+  text-align: center;
+  vertical-align: center;
+}
+
+.glow-on-hover:before {
+  content: "";
+  background: linear-gradient(
+    45deg,
+    #ff0000,
+    #ff7300,
+    #fffb00,
+    #48ff00,
+    #00ffd5,
+    #002bff,
+    #7a00ff,
+    #ff00c8,
+    #ff0000
+  );
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  background-size: 400%;
+  z-index: -1;
+  filter: blur(5px);
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  animation: glowing 20s linear infinite;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 10px;
+}
+
+.glow-on-hover:active {
+  color: #000;
+}
+
+.glow-on-hover:active:after {
+  background: transparent;
+}
+
+.glow-on-hover:hover:before {
+  opacity: 1;
+}
+
+.glow-on-hover:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  left: 0;
+  top: 0;
+  border-radius: 10px;
+}
+
+@keyframes glowing {
+  0% {
+    background-position: 0 0;
+  }
+  50% {
+    background-position: 400% 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
 /* FOOTER */
 
 #footer {
@@ -66,7 +149,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -75,7 +158,7 @@ form div {
 }
 
 .home-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   color: #320879;
   font-size: 25px;
   text-shadow: 1px 1px white;
@@ -203,7 +286,7 @@ form div {
 }
 
 .waiting-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 25px;
   color: #320879;
   text-shadow: 1px 1px white;
@@ -214,7 +297,7 @@ form div {
 }
 
 .waiting-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 65px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -535,7 +618,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
@@ -550,7 +633,7 @@ form div {
 /* GAME PLAY */
 
 .game-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 45px;
   color: #e12967;
   text-shadow: 3px 3px #320879;
@@ -574,7 +657,7 @@ form div {
 }
 
 .practice-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 50px;
   margin: 10px;
   color: #e12967;
