@@ -1,5 +1,4 @@
 import React from 'react';
-import io from 'socket.io-client';
 import { chatMessage } from '../socket';
 
 export class Chat extends React.Component {
@@ -36,9 +35,9 @@ export class Chat extends React.Component {
 
   onMessageSubmit(e) {
     e.preventDefault();
+    const nickname = this.props.nickname;
     const { msg } = this.state;
-    const room = this.props.roomId;
-    chatMessage(msg, room); //emits message to server
+    chatMessage(nickname, msg); //emits message to server
     this.setState({ chat: [...this.state.chat, msg], msg: '' });
   }
 
@@ -58,8 +57,10 @@ export class Chat extends React.Component {
           }}
         >
           <div id="messages">
-            {chat.map((m, i) => (
-              <p key={i}>{m}</p>
+            {chat.map((rec, i) => (
+              <p key={i}>
+                {rec.nickname}: {rec.msg}
+              </p>
             ))}
           </div>
           <i id="typing"></i>
