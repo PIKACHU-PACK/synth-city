@@ -6,6 +6,7 @@ import { BPM } from "./Sequencer";
 import { exitRoom } from "../socket";
 import { NoteButton } from "./NoteButtonSongReveal";
 
+
 class SongReveal extends React.Component {
   constructor(props) {
     super(props);
@@ -64,7 +65,7 @@ class SongReveal extends React.Component {
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          synth.triggerAttackRelease(note.note + note.octave, "8n", time);
+          synth.triggerAttackRelease(note.note + note.octave, '8n', time);
         }
       });
       this.setState({
@@ -74,7 +75,7 @@ class SongReveal extends React.Component {
       });
     };
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, "8n");
+    Tone.Transport.scheduleRepeat(repeat, '8n');
   }
 
   configPlayButton(e) {
@@ -85,13 +86,15 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
+
       e.target.innerText = "Play Song";
+
       Tone.Transport.stop();
       this.setState({
         playing: false,
       });
     } else {
-      e.target.innerText = "Stop";
+      e.target.innerText = 'Stop';
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -100,7 +103,7 @@ class SongReveal extends React.Component {
   goHome() {
     exitRoom(this.props.room);
     history.push({
-      pathname: "/",
+      pathname: '/',
     });
   }
 
