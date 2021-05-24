@@ -112,24 +112,23 @@ class WaitingRoom extends React.Component {
             </button>
           </div>
           <div className="waiting-info">
-            <div className="banner">
+            <div className="waiting-banner">
               {this.state.thisPlayer === this.state.players[0] ? (
                 <h2 className="waiting-title">Loading Players...</h2>
               ) : (
                 <h2 className="waiting-title">Waiting on Host...</h2>
               )}
-              <h3 className="waiting-subheading">
-                Welcome {this.state.nickname}. You'll need 2-4 players to start
-                a game
-              </h3>
-              <p>
-                Once the game begins, one player will be sent to the studio.{' '}
-                <br></br>
+            </div>
+            <h3 className="waiting-subheading">
+              You'll need 2-4 players to start a game
+            </h3>
+            <div className="waiting-subinfo">
+              <h3>
+                Welcome, {this.state.nickname}!<br></br> Once the game begins,
+                one player will be sent to the studio. <br></br>
                 Everyone else, just chill and chat until it's your time to
                 shine!
-              </p>
-            </div>
-            <div className="waiting-subinfo">
+              </h3>
               <h2>
                 {players.length === 1
                   ? `${players.length} Player Is Ready To Jam!`
