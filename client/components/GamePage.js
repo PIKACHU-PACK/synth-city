@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   getInfo,
   chatListener,
@@ -9,22 +9,24 @@ import {
   endTurn,
   gameEndListener,
   exitRoom,
-} from '../socket';
-import Sequencer from './Sequencer';
-import history from '../history';
-import { parse } from 'flatted';
-import Chat from './Chat';
-import Swal from 'sweetalert2';
+} from "../socket";
+import Sequencer from "./Sequencer";
+import history from "../history";
+import { parse } from "flatted";
+import Chat from "./Chat";
+import Swal from "sweetalert2";
+
+//const pathToImage = process.env.PUBLIC_URL + "/anim.gif"
 
 export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
       players: [],
-      thisPlayer: '',
-      nickname: '',
-      musician: '',
-      musicianNickname: '',
+      thisPlayer: "",
+      nickname: "",
+      musician: "",
+      musicianNickname: "",
       rounds: null,
       turn: null,
       previousNotes: [],
@@ -125,19 +127,19 @@ export class GamePage extends React.Component {
 
   everyoneElseLeft() {
     Swal.fire({
-      title: 'Error:',
-      html: 'Sorry, it looks like everyone else left.',
+      title: "Error:",
+      html: "Sorry, it looks like everyone else left.",
       showCloseButton: true,
     });
     exitRoom(this.props.room);
     history.push({
-      pathname: '/',
+      pathname: "/",
     });
   }
 
   render() {
     const thisPlayer = this.state.thisPlayer;
-    const musician = this.state.musician || 'tbd';
+    const musician = this.state.musician || "tbd";
     const musicianNickname = this.state.musicianNickname;
     const room = this.props.room;
     return (
@@ -161,6 +163,11 @@ export class GamePage extends React.Component {
               ) : (
                 <div></div>
               )}
+              {/* <img
+                src={window.location.origin + "/anim.gif"}
+                width="506"
+                height="900"
+              /> */}
               <div className="game-chat">
                 <Chat
                   roomId={room}
