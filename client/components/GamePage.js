@@ -136,7 +136,7 @@ export class GamePage extends React.Component {
       pathname: "/",
     });
   }
-
+  //delete this
   render() {
     const thisPlayer = this.state.thisPlayer;
     const musician = this.state.musician || "tbd";
