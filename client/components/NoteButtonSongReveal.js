@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import AMOUNT_OF_NOTES from "./Sequencer";
 
 export const NoteButton = ({
   note,
@@ -20,6 +19,7 @@ export const NoteButton = ({
         { "blue-synth": synth === "pluckySynth" && isActive },
         { "orange-synth": synth === "amSynth" && isActive },
         { "reveal-current-beat": index === beat && !isActive },
+        { "current-col": index === beat },
         {
           "hidden-note":
             index !== beat &&
