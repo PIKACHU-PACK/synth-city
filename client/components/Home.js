@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { turnLength } from './Sequencer';
 import Aos from 'aos';
 
+
 export class Home extends React.Component {
   constructor() {
     super();
@@ -93,6 +94,8 @@ export class Home extends React.Component {
             <h2 className="home-title" data-aos="fade-in">
               SynthCity
             </h2>
+            <img src={"anim.gif"} width="506" height="900" />
+
             <h3 className="home-subheading">
               Make music with your friends before the timer runs out! <br></br>{' '}
               Your sick tunes will be passed to the next player until everyone
