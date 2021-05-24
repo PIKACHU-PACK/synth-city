@@ -1,10 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { createRoom, joinRoom } from '../socket';
-import Footer from './Footer';
-import history from '../history';
-import Swal from 'sweetalert2';
-import { turnLength } from './Sequencer';
+import React from "react";
+import { Link } from "react-router-dom";
+import { createRoom, joinRoom } from "../socket";
+import Footer from "./Footer";
+import history from "../history";
+import Swal from "sweetalert2";
+import { turnLength } from "./Sequencer";
 
 export class Home extends React.Component {
   constructor() {
@@ -86,6 +86,8 @@ export class Home extends React.Component {
         <div className="home-page">
           <div className="banner">
             <h2 className="home-title">SynthCity</h2>
+            <img src={"anim.gif"} width="506" height="900" />
+
             <h3 className="home-subheading">
               Make music with your friends before the timer runs out! <br></br>{" "}
               Your sick tunes will be passed to the next player until everyone
