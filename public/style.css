@@ -131,6 +131,10 @@ form div {
   color: #f3b4cf;
 } */
 
+.option-card:hover {
+  box-shadow: 7px 7px #f3b4cf;
+}
+
 .join-card {
   color: white;
   display: flex;
@@ -144,6 +148,10 @@ form div {
   justify-content: space-between;
   align-items: center;
   background-color: #320879;
+}
+
+.join-card:hover {
+  box-shadow: 7px 7px #f3b4cf;
 }
 
 .join-cta {
