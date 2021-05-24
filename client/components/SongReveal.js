@@ -11,11 +11,13 @@ class SongReveal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      started: false,
       beat: 3,
+      started: false,
       playing: false,
       firstBeat: true,
       synths: [],
+      noteClickStarted: false,
+      playButtonStarted: false,
       finalSong: [],
       nickname: "",
       chat: [],
@@ -63,6 +65,7 @@ class SongReveal extends React.Component {
   }
 
   configLoop() {
+    let synthsCount = 0;
     const fullSong = this.state.finalSong;
     //0: am, 1: plucky, 2: basic (order in state)
     const repeat = (time) => {
@@ -71,9 +74,24 @@ class SongReveal extends React.Component {
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          synth.triggerAttackRelease(note.note + note.octave, "8n", time);
+          if (note.synth === "pluckySynth") {
+            synth.triggerAttackRelease(
+              note.note + note.octave,
+              "+2",
+              time + synthsCount
+            );
+            synthsCount += 0.0001;
+          } else {
+            synth.triggerAttackRelease(
+              note.note + note.octave,
+              "8n",
+              time + synthsCount
+            );
+            synthsCount += 0.0001;
+          }
         }
       });
+      synthsCount = 0;
       this.setState({
         beat:
           (this.state.beat + 1) %
@@ -124,7 +142,6 @@ class SongReveal extends React.Component {
         <div className="song-reveal-banner">
           <h2 className="song-reveal-title">Your Masterpiece</h2>
         </div>
-        {/* <h3 id="beat-title">Beat</h3> */}
         <div className="song-reveal-content">
           <div className="song-reveal-column">
             <div className="sequencer-container">

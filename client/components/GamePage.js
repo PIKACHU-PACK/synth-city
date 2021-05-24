@@ -157,7 +157,7 @@ export class GamePage extends React.Component {
             <div>
               <h2 className="game-title">WAITING FOR YOUR TURN</h2>
               {musicianNickname ? (
-                <h2 className="waiting-subheading">
+                <h2 className="game-title">
                   {musicianNickname} is composing now
                 </h2>
               ) : (
