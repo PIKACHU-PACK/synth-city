@@ -1,5 +1,5 @@
 * {
-  font-family: "Ropa Sans", sans-serif;
+  font-family: 'Ropa Sans', sans-serif;
 }
 
 body {
@@ -66,7 +66,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -75,7 +75,7 @@ form div {
 }
 
 .home-subheading {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   color: #320879;
   font-size: 25px;
   text-shadow: 1px 1px white;
@@ -131,6 +131,10 @@ form div {
   color: #f3b4cf;
 } */
 
+.option-card:hover {
+  box-shadow: 7px 7px #f3b4cf;
+}
+
 .join-card {
   color: white;
   display: flex;
@@ -144,6 +148,10 @@ form div {
   justify-content: space-between;
   align-items: center;
   background-color: #320879;
+}
+
+.join-card:hover {
+  box-shadow: 7px 7px #f3b4cf;
 }
 
 .join-cta {
@@ -203,7 +211,7 @@ form div {
 }
 
 .waiting-subheading {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 25px;
   color: #320879;
   text-shadow: 1px 1px white;
@@ -214,7 +222,7 @@ form div {
 }
 
 .waiting-title {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 65px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -237,6 +245,7 @@ form div {
 
 .bold {
   font-weight: bold;
+  font-size: 40px;
 }
 
 .home-button {
@@ -539,7 +548,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: "";
+  content: '';
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
@@ -554,7 +563,7 @@ form div {
 /* GAME PLAY */
 
 .game-title {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 45px;
   color: #e12967;
   text-shadow: 3px 3px #320879;
@@ -579,7 +588,7 @@ form div {
 }
 
 .practice-title {
-  font-family: "Orbitron", sans-serif;
+  font-family: 'Orbitron', sans-serif;
   font-size: 50px;
   margin: 10px;
   color: #e12967;

@@ -20,6 +20,8 @@
   "author": "Fullstack Academy of Code",
   "license": "MIT",
   "dependencies": {
+    "aod": "^1.0.3",
+    "aos": "^2.3.4",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
     "classnames": "^2.3.1",
