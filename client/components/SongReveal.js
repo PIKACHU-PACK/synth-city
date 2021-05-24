@@ -6,7 +6,6 @@ import { BPM } from "./Sequencer";
 import { exitRoom } from "../socket";
 import { NoteButton } from "./NoteButtonSongReveal";
 
-
 class SongReveal extends React.Component {
   constructor(props) {
     super(props);
@@ -45,6 +44,10 @@ class SongReveal extends React.Component {
       for (let j = 0; j < currentSegment.length; j++) {
         const currRow = currentSegment[j];
         currRow.forEach((note) => {
+          if (!note.isActive) {
+            note.note = "♫";
+            note.octave = "";
+          }
           newGrid[j].push(note);
         });
       }
@@ -65,7 +68,7 @@ class SongReveal extends React.Component {
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          synth.triggerAttackRelease(note.note + note.octave, '8n', time);
+          synth.triggerAttackRelease(note.note + note.octave, "8n", time);
         }
       });
       this.setState({
@@ -75,7 +78,7 @@ class SongReveal extends React.Component {
       });
     };
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, '8n');
+    Tone.Transport.scheduleRepeat(repeat, "8n");
   }
 
   configPlayButton(e) {
@@ -86,7 +89,6 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-
       e.target.innerText = "Play Song";
 
       Tone.Transport.stop();
@@ -94,7 +96,7 @@ class SongReveal extends React.Component {
         playing: false,
       });
     } else {
-      e.target.innerText = 'Stop';
+      e.target.innerText = "Stop";
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -103,7 +105,7 @@ class SongReveal extends React.Component {
   goHome() {
     exitRoom(this.props.room);
     history.push({
-      pathname: '/',
+      pathname: "/",
     });
   }
 
@@ -119,7 +121,6 @@ class SongReveal extends React.Component {
         <div className="song-reveal-banner">
           <h2 className="home-title">Your Masterpiece</h2>
         </div>
-        <h3 id="beat-title">Beat</h3>
         <div id="sequencer" className="container sequencer">
           {this.state.finalSong.map((row, rowIndex) => {
             return (

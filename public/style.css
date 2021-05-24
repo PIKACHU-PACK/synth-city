@@ -1,5 +1,5 @@
 * {
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: "Ropa Sans", sans-serif;
 }
 
 body {
@@ -66,7 +66,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -75,7 +75,7 @@ form div {
 }
 
 .home-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   color: #320879;
   font-size: 25px;
   text-shadow: 1px 1px white;
@@ -211,7 +211,7 @@ form div {
 }
 
 .waiting-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 25px;
   color: #320879;
   text-shadow: 1px 1px white;
@@ -222,7 +222,7 @@ form div {
 }
 
 .waiting-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 65px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -327,12 +327,16 @@ form div {
 }
 
 .blue-synth {
-  background-color: rgb(46, 241, 241);
+  background-color: rgb(30, 233, 206);
   border: 1px solid black;
 }
 
 .orange-synth {
   background-color: rgb(255, 176, 30);
+  border: 1px solid black;
+}
+
+.seq-border-style {
   border: 1px solid black;
 }
 
@@ -547,7 +551,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
@@ -562,7 +566,7 @@ form div {
 /* GAME PLAY */
 
 .game-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 45px;
   color: #e12967;
   text-shadow: 3px 3px #320879;
@@ -587,7 +591,7 @@ form div {
 }
 
 .practice-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 50px;
   margin: 10px;
   color: #e12967;
@@ -678,11 +682,18 @@ form div {
 }
 
 .reveal-current-beat {
-  background-color: rgb(202, 200, 200);
+  background-color: rgb(197, 197, 197);
+  /* border-width: 3px;
+  border-color: rgb(53, 238, 192); */
 }
 
 #beat-title {
   display: flex;
   justify-content: center;
   font-weight: bold;
+}
+
+.current-col {
+  border-width: 3px;
+  border-color: #df21c3;
 }
