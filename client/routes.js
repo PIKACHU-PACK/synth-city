@@ -40,7 +40,7 @@ class Routes extends Component {
               <SongReveal {...routeProps} room={routeProps.match.params.room} />
             )}
           />
-          <Route exact path="/intro" component={Intro} />
+          <Route exact path="/intro" component={Intro} history={history} />
         </Switch>
       </div>
     );

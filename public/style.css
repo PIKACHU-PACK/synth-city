@@ -1,5 +1,5 @@
 * {
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: "Ropa Sans", sans-serif;
 }
 
 body {
@@ -66,7 +66,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -75,7 +75,7 @@ form div {
 }
 
 .home-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   color: #320879;
   font-size: 25px;
   text-shadow: 1px 1px white;
@@ -221,7 +221,7 @@ form div {
 }
 
 .waiting-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 25px;
   color: #320879;
   text-shadow: 1px 1px white;
@@ -232,7 +232,7 @@ form div {
 } */
 
 .waiting-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 65px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -563,7 +563,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
@@ -578,7 +578,7 @@ form div {
 /* GAME PLAY */
 
 .game-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 45px;
   color: #e12967;
   text-shadow: 3px 3px #320879;
@@ -603,7 +603,7 @@ form div {
 }
 
 .practice-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 50px;
   margin: 0;
   padding: 0;
@@ -654,7 +654,7 @@ form div {
 /* SONG REVEAL */
 
 .song-reveal-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 70px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -739,4 +739,22 @@ form div {
 .current-col {
   border-width: 3px;
   border-color: #df21c3;
+}
+
+/* animation */
+
+.anim-container {
+  display: flex;
+  justify-content: center;
+}
+
+#anim-text {
+  font-family: "Orbitron", sans-serif;
+  font-size: 90px;
+  color: #e12967;
+  text-shadow: 6px 6px #320879;
+  justify-content: center;
+  text-align: center;
+  margin: 0px;
+  margin-top: 30px;
 }
