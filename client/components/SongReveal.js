@@ -80,14 +80,14 @@ class SongReveal extends React.Component {
               '+2',
               time + synthsCount
             );
-            synthsCount += 0.001;
+            synthsCount += 0.05;
           } else {
             synth.triggerAttackRelease(
               note.note + note.octave,
               '8n',
               time + synthsCount
             );
-            synthsCount += 0.001;
+            synthsCount += 0.05;
           }
         }
       });
