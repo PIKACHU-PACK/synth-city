@@ -73,18 +73,17 @@ class Sequencer extends React.Component {
               "+2",
               time + synthsCount
             );
-            synthsCount += 0.001;
+            synthsCount += 0.0001;
           } else {
             synth.triggerAttackRelease(
               note.note + note.octave,
               "8n",
               time + synthsCount
             );
-            synthsCount += 0.001;
+            synthsCount += 0.0001;
           }
         }
       });
-      synthsCount = 0;
       const amountOfNotes = this.props.isFirst
         ? AMOUNT_OF_NOTES - 2
         : AMOUNT_OF_NOTES;
