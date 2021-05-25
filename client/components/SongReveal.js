@@ -91,7 +91,6 @@ class SongReveal extends React.Component {
           }
         }
       });
-      //synthsCount = 0;
       this.setState({
         beat:
           (this.state.beat + 1) %
