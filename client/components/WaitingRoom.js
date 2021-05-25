@@ -1,12 +1,13 @@
 import React from 'react';
 import Chat from './Chat';
 import {
-  startListener,
-  chatListener,
-  updatePlayersListener,
   getInfo,
+  chatListener,
+  startListener,
+  updatePlayersListener,
   startGame,
   exitRoom,
+  waitingRoomUnmounted,
 } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
@@ -18,6 +19,7 @@ class WaitingRoom extends React.Component {
     this.state = {
       players: [],
       thisPlayer: '',
+      nickname: '',
       chat: [],
     };
     this.setInfo = this.setState.bind(this);
@@ -37,8 +39,16 @@ class WaitingRoom extends React.Component {
     updatePlayersListener(this.updatePlayers);
   }
 
-  setInfo({ thisPlayer, players }) {
-    this.setState({ thisPlayer: thisPlayer, players: players });
+  componentWillUnmount() {
+    waitingRoomUnmounted();
+  }
+
+  setInfo({ thisPlayer, nickname, players }) {
+    this.setState({
+      thisPlayer: thisPlayer,
+      nickname: nickname,
+      players: players,
+    });
   }
 
   getMessages(msg) {
@@ -102,23 +112,23 @@ class WaitingRoom extends React.Component {
             </button>
           </div>
           <div className="waiting-info">
-            <div className="banner">
+            <div className="waiting-banner">
               {this.state.thisPlayer === this.state.players[0] ? (
                 <h2 className="waiting-title">Loading Players...</h2>
               ) : (
                 <h2 className="waiting-title">Waiting on Host...</h2>
               )}
-              <h3 className="waiting-subheading">
-                You'll need 2-4 players to start a game
-              </h3>
-              <p>
-                Once the game begins, one player will be sent to the studio.{' '}
-                <br></br>
+            </div>
+            <h3 className="waiting-subheading">
+              You'll need 2-4 players to start a game
+            </h3>
+            <div className="waiting-subinfo">
+              <h3>
+                Welcome, {this.state.nickname}!<br></br> Once the game begins,
+                one player will be sent to the studio. <br></br>
                 Everyone else, just chill and chat until it's your time to
                 shine!
-              </p>
-            </div>
-            <div className="waiting-subinfo">
+              </h3>
               <h2>
                 {players.length === 1
                   ? `${players.length} Player Is Ready To Jam!`
@@ -126,7 +136,7 @@ class WaitingRoom extends React.Component {
               </h2>
               <h2>
                 Invite Your Friends With This Code:{' '}
-                <h2 className="bold">{room}</h2>
+                <p className="bold">{room}</p>
               </h2>
               {this.state.thisPlayer === this.state.players[0] ? (
                 <button
@@ -144,7 +154,11 @@ class WaitingRoom extends React.Component {
             </div>
           </div>
           <div className="chat-container">
-            <Chat roomId={room} chat={this.state.chat} />
+            <Chat
+              roomId={room}
+              nickname={this.state.nickname}
+              chat={this.state.chat}
+            />
           </div>
           <div className="waiting-instructions-container">
             <button

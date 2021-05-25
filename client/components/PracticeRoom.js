@@ -67,7 +67,6 @@ class PracticeRoom extends React.Component {
           }
         }
       });
-      synthsCount = 0;
       if (this.state.beat === 15) {
         this.setState({ beat: 0, firstBeat: false });
       } else {

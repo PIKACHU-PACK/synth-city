@@ -14,7 +14,8 @@ import { Timer } from "react-countdown-clock-timer";
 export const AMOUNT_OF_NOTES = 18;
 export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
 export const BPM = 120;
-export const turnLength = 40;
+const dev = process.env.NODE_ENV !== "production";
+export const turnLength = dev ? 8 : 40;
 
 class Sequencer extends React.Component {
   constructor(props) {
@@ -83,7 +84,6 @@ class Sequencer extends React.Component {
           }
         }
       });
-      synthsCount = 0;
       const amountOfNotes = this.props.isFirst
         ? AMOUNT_OF_NOTES - 2
         : AMOUNT_OF_NOTES;
@@ -197,6 +197,7 @@ class Sequencer extends React.Component {
       let newRow = [];
       newRow.push(currRow[penultimate]);
       newRow.push(currRow[ultimate]);
+
       nextNotes.push(newRow);
     }
     Tone.Transport.stop();
