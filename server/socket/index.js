@@ -36,8 +36,8 @@ module.exports = (io) => {
 
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
-      socket.join(room);
-      socket.room = room;
+      // socket.join(room);
+      // socket.room = room;
       socket.nickname = getPlayerNames(nicknames);
       socket.emit('roomCreated', room);
     });
@@ -47,12 +47,8 @@ module.exports = (io) => {
       if (!socketRoom) {
         socket.emit('roomDoesNotExist');
       } else if (socketRoom.size < 4) {
-        socket.join(roomKey);
-        socket.room = roomKey;
         socket.nickname = getPlayerNames(nicknames);
         socket.emit('roomJoined');
-        const players = [...socketRoom];
-        io.in(roomKey).emit('updatePlayers', players);
       } else {
         socket.emit('roomFull');
       }
@@ -61,6 +57,12 @@ module.exports = (io) => {
     socket.on('joinGame', (room) => {
       socket.join(room);
       socket.room = room;
+      const newPlayer = { id: socket.id, nickname: socket.nickname };
+      socket.emit('newPlayer', newPlayer);
+    });
+
+    socket.on('getThisPlayer', () => {
+      socket.emit('playerInfo', socket.id, socket.nickname);
     });
 
     socket.on('startGame', (room) => {

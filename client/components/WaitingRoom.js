@@ -1,6 +1,7 @@
 import React from 'react';
 import Chat from './Chat';
 import {
+  newPlayerListener,
   getInfo,
   chatListener,
   startListener,
@@ -17,15 +18,15 @@ class WaitingRoom extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      players: [],
-      thisPlayer: '',
-      nickname: '',
-      chat: [],
+      // players: [],
+      // thisPlayer: '',
+      // nickname: '',
+      // chat: [],
     };
-    this.setInfo = this.setState.bind(this);
+    //this.setInfo = this.setState.bind(this);
     //this.getMessages = this.getMessages.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
-    this.updatePlayers = this.updatePlayers.bind(this);
+    //this.updatePlayers = this.updatePlayers.bind(this);
     this.goHome = this.goHome.bind(this);
     this.onStart = this.onStart.bind(this);
     this.wrongNumberPlayers = this.wrongNumberPlayers.bind(this);
@@ -33,7 +34,8 @@ class WaitingRoom extends React.Component {
   }
 
   componentDidMount() {
-    getInfo(this.props.room, this.setInfo);
+    newPlayerListener(this.props.addPlayer);
+    //getInfo(this.props.room, this.setInfo);
     // chatListener(this.getMessages);
     startListener(this.gameStarted);
     updatePlayersListener(this.updatePlayers);
@@ -43,13 +45,13 @@ class WaitingRoom extends React.Component {
     waitingRoomUnmounted();
   }
 
-  setInfo({ thisPlayer, nickname, players }) {
-    this.setState({
-      thisPlayer: thisPlayer,
-      nickname: nickname,
-      players: players,
-    });
-  }
+  // setInfo({ thisPlayer, nickname, players }) {
+  //   this.setState({
+  //     thisPlayer: thisPlayer,
+  //     nickname: nickname,
+  //     players: players,
+  //   });
+  // }
 
   // getMessages(msg) {
   //   this.setState({ chat: [...this.state.chat, msg] });
@@ -61,9 +63,9 @@ class WaitingRoom extends React.Component {
     });
   }
 
-  updatePlayers(players) {
-    this.setState({ players: players });
-  }
+  // updatePlayers(players) {
+  //   this.setState({ players: players });
+  // }
 
   goHome() {
     exitRoom(this.props.room);
@@ -73,7 +75,7 @@ class WaitingRoom extends React.Component {
   }
 
   onStart() {
-    const players = this.state.players;
+    const players = this.props.players;
     if (players.length > 1 && players.length <= 4) {
       startGame(this.props.room);
     } else {
@@ -102,7 +104,9 @@ class WaitingRoom extends React.Component {
 
   render() {
     const room = this.props.room;
-    const players = this.state.players;
+    const players = this.props.players;
+    const thisPlayer = this.props.thisPlayer;
+    const hostID = players[0] ? players[0].id : players[0];
     return (
       <div className="waiting-room">
         <div className="waiting-view">
@@ -113,7 +117,7 @@ class WaitingRoom extends React.Component {
           </div>
           <div className="waiting-info">
             <div className="waiting-banner">
-              {this.state.thisPlayer === this.state.players[0] ? (
+              {thisPlayer === hostID ? (
                 <h2 className="waiting-title">Loading Players...</h2>
               ) : (
                 <h2 className="waiting-title">Waiting on Host...</h2>
@@ -138,7 +142,7 @@ class WaitingRoom extends React.Component {
                 Invite Your Friends With This Code:{' '}
                 <p className="bold">{room}</p>
               </h2>
-              {this.state.thisPlayer === this.state.players[0] ? (
+              {thisPlayer === hostID ? (
                 <button
                   type="button"
                   className="main-cta"
@@ -156,8 +160,8 @@ class WaitingRoom extends React.Component {
           <div className="chat-container">
             <Chat
               roomId={room}
-              nickname={this.state.nickname}
-              chat={this.state.chat}
+              nickname={this.props.nickname}
+              chat={this.props.chat}
             />
           </div>
           <div className="waiting-instructions-container">

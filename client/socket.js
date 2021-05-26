@@ -12,10 +12,10 @@ socket.on('disconnect', () => {
   console.log(`${socket.id} Connection has Ended`);
 });
 
-export function createRoom(callback) {
+export function createRoom(enterNewRoom) {
   socket.emit('createRoom');
   socket.on('roomCreated', (room) => {
-    callback(room);
+    enterNewRoom(room);
   });
 }
 
@@ -37,6 +37,19 @@ export function joinRoom(
 
 export function joinGame(room) {
   socket.emit('joinGame', room);
+}
+
+export function getThisPlayer(setThisPlayer) {
+  socket.emit('getThisPlayer');
+  socket.on('playerInfo', (id, nickname) => {
+    setThisPlayer(id, nickname);
+  });
+}
+
+export function newPlayerListener(addPlayer) {
+  socket.on('newPlayer', (newPlayer) => {
+    addPlayer(newPlayer);
+  });
 }
 
 export function exitRoom(room) {
@@ -109,6 +122,7 @@ export function gameEndListener(revealSong) {
 }
 
 export function waitingRoomUnmounted() {
+  socket.off('newPlayer');
   socket.off('info');
   socket.off('gameStarted');
   socket.off('messageReceived');
