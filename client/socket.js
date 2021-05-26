@@ -35,6 +35,10 @@ export function joinRoom(
   });
 }
 
+export function joinGame(room) {
+  socket.emit('joinGame', room);
+}
+
 export function exitRoom(room) {
   socket.emit('exitRoom', room);
 }

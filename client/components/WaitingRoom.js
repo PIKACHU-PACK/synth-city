@@ -23,7 +23,7 @@ class WaitingRoom extends React.Component {
       chat: [],
     };
     this.setInfo = this.setState.bind(this);
-    this.getMessages = this.getMessages.bind(this);
+    //this.getMessages = this.getMessages.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
     this.updatePlayers = this.updatePlayers.bind(this);
     this.goHome = this.goHome.bind(this);
@@ -34,7 +34,7 @@ class WaitingRoom extends React.Component {
 
   componentDidMount() {
     getInfo(this.props.room, this.setInfo);
-    chatListener(this.getMessages);
+    // chatListener(this.getMessages);
     startListener(this.gameStarted);
     updatePlayersListener(this.updatePlayers);
   }
@@ -51,9 +51,9 @@ class WaitingRoom extends React.Component {
     });
   }
 
-  getMessages(msg) {
-    this.setState({ chat: [...this.state.chat, msg] });
-  }
+  // getMessages(msg) {
+  //   this.setState({ chat: [...this.state.chat, msg] });
+  // }
 
   gameStarted() {
     history.push({

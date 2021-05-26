@@ -58,6 +58,11 @@ module.exports = (io) => {
       }
     });
 
+    socket.on('joinGame', (room) => {
+      socket.join(room);
+      socket.room = room;
+    });
+
     socket.on('startGame', (room) => {
       io.in(room).emit('gameStarted');
     });
