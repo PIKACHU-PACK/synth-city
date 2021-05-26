@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {
-  getThisPlayer,
-  chatListener,
   joinGame,
-  createRoom,
-  joinRoom,
+  chatListener,
+  getPlayers,
+  getThisPlayer,
+  startListener,
 } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
@@ -22,42 +22,52 @@ export class Environment extends React.Component {
       page: 'waiting',
       chat: [],
       players: [],
-      thisPlayer: '',
-      nickname: '',
-      musician: '',
-      musicianNickname: '',
+      thisPlayer: {},
+      musician: {},
       isFirst: true,
       rounds: null,
       turn: null,
       previousNotes: [],
       finalSong: [],
     };
-    this.setThisPlayer = this.setThisPlayer.bind(this);
     this.getMessage = this.getMessage.bind(this);
-    this.addPlayer = this.addPlayer.bind(this);
+    this.setPlayers = this.setPlayers.bind(this);
+    this.setThisPlayer = this.setThisPlayer.bind(this);
+    //this.addPlayer = this.addPlayer.bind(this);
+    this.gameStarted = this.gameStarted.bind(this);
   }
 
   componentDidMount() {
     const room = this.props.room;
-    getThisPlayer(this.setThisPlayer);
-    chatListener(this.getMessage);
     joinGame(room);
+    chatListener(this.getMessage);
+    getPlayers(this.setPlayers);
+    getThisPlayer(this.setThisPlayer);
+    startListener(this.gameStarted);
   }
 
   getMessage(msg) {
     this.setState({ chat: [...this.state.chat, msg] });
   }
 
-  setThisPlayer(id, nickname) {
-    this.setState({ thisPlayer: id, nickname: nickname });
+  setPlayers(players) {
+    this.setState({ players: players });
   }
 
-  addPlayer(newPlayer) {
-    this.setState({ players: [...this.state.players, newPlayer] });
+  setThisPlayer(player) {
+    this.setState({ thisPlayer: player });
+  }
+
+  //   addPlayer(newPlayer) {
+  //     this.setState({ players: [...this.state.players, newPlayer] });
+  //   }
+
+  gameStarted() {
+    this.setState({ page: 'game' });
   }
 
   render() {
-    console.log(this.state);
+    console.log('Environment: ', this.state);
     const page = this.state.page;
     return (
       <>
@@ -67,8 +77,6 @@ export class Environment extends React.Component {
             chat={this.state.chat}
             players={this.state.players}
             thisPlayer={this.state.thisPlayer}
-            nickname={this.state.nickname}
-            addPlayer={this.addPlayer}
           />
         ) : page === 'game' ? (
           <GamePage />

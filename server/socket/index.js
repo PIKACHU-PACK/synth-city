@@ -54,15 +54,26 @@ module.exports = (io) => {
       }
     });
 
-    socket.on('joinGame', (room) => {
+    socket.on('joinGame', async (room) => {
       socket.join(room);
       socket.room = room;
-      const newPlayer = { id: socket.id, nickname: socket.nickname };
-      socket.emit('newPlayer', newPlayer);
+      const sockets = await io.in(socket.room).fetchSockets();
+      const players = sockets.map((socket) => {
+        return { id: socket.id, nickname: socket.nickname };
+      });
+      io.in(room).emit('setPlayers', players);
+    });
+
+    socket.on('getPlayers', async () => {
+      const sockets = await io.in(socket.room).fetchSockets();
+      const players = sockets.map((socket) => {
+        return { id: socket.id, nickname: socket.nickname };
+      });
+      socket.emit('setPlayers', players);
     });
 
     socket.on('getThisPlayer', () => {
-      socket.emit('playerInfo', socket.id, socket.nickname);
+      socket.emit('playerInfo', { id: socket.id, nickname: socket.nickname });
     });
 
     socket.on('startGame', (room) => {

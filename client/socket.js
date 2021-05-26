@@ -39,10 +39,17 @@ export function joinGame(room) {
   socket.emit('joinGame', room);
 }
 
+export function getPlayers(setPlayers) {
+  socket.emit('getPlayers');
+  socket.on('setPlayers', (players) => {
+    setPlayers(players);
+  });
+}
+
 export function getThisPlayer(setThisPlayer) {
   socket.emit('getThisPlayer');
-  socket.on('playerInfo', (id, nickname) => {
-    setThisPlayer(id, nickname);
+  socket.on('playerInfo', (thisPlayer) => {
+    setThisPlayer(thisPlayer);
   });
 }
 
