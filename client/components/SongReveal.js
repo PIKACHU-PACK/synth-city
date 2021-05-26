@@ -77,7 +77,7 @@ class SongReveal extends React.Component {
           if (note.synth === "pluckySynth") {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              "+2",
+              "+1",
               time + synthsCount
             );
             synthsCount += 0.0001;
