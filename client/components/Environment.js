@@ -22,7 +22,7 @@ export class Environment extends React.Component {
       chat: [],
       players: [],
       thisPlayer: {},
-      musician: {},
+      // musician: {},
       isFirst: true,
       rounds: null,
       turn: 0,
@@ -42,7 +42,6 @@ export class Environment extends React.Component {
     chatListener(this.getMessage);
     getThisPlayer(this.setThisPlayer);
     startListener(this.gameStarted);
-    this.setState({ musician: this.state.players[0] });
   }
 
   getMessage(msg) {
@@ -57,14 +56,16 @@ export class Environment extends React.Component {
     this.setState({ thisPlayer: player });
   }
 
-  gameStarted() {
-    this.setState({ page: 'game' });
+  gameStarted(rounds) {
+    this.setState({ page: 'game', rounds: rounds });
   }
 
   render() {
     console.log('Environment: ', this.state);
     const page = this.state.page;
-    const musician = this.state.players[this.state.turn];
+    const turnIdx = this.state.turn % this.state.players.length;
+    console.log('turnIdx', turnIdx);
+    const musician = this.state.players[turnIdx];
     return (
       <>
         {page === 'waiting' ? (
@@ -85,7 +86,11 @@ export class Environment extends React.Component {
             isFirst={this.state.isFirst}
           />
         ) : (
-          <SongReveal />
+          <SongReveal
+            room={this.props.room}
+            chat={this.state.chat}
+            thisPlayer={this.state.thisPlayer}
+          />
         )}
       </>
     );

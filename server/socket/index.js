@@ -90,29 +90,32 @@ module.exports = (io) => {
     });
 
     socket.on('startGame', (room) => {
-      io.in(room).emit('gameStarted');
-    });
-
-    socket.on('getInfo', async () => {
-      const thisPlayer = socket.id;
-      const nickname = socket.nickname;
       const socketRoom = io.sockets.adapter.rooms.get(socket.room);
       let players = [...socketRoom];
-      const musician = players[0];
-      const sockets = await io.in(musician).fetchSockets();
-      const musicianNickname = sockets[0].nickname;
       const rounds = players.length === 3 ? 6 : 4;
-      const turn = 0;
-      io.to(thisPlayer).emit('info', {
-        thisPlayer,
-        nickname,
-        players,
-        musician,
-        musicianNickname,
-        rounds,
-        turn,
-      });
+      io.in(room).emit('gameStarted', rounds);
     });
+
+    // socket.on('getInfo', async () => {
+    //   // const thisPlayer = socket.id;
+    //   // const nickname = socket.nickname;
+    //   const socketRoom = io.sockets.adapter.rooms.get(socket.room);
+    //   let players = [...socketRoom];
+    //   // const musician = players[0];
+    //   // const sockets = await io.in(musician).fetchSockets();
+    //   // const musicianNickname = sockets[0].nickname;
+    //   const rounds = players.length === 3 ? 6 : 4;
+    //   const turn = 0;
+    //   io.to(thisPlayer).emit('info', {
+    //     // thisPlayer,
+    //     // nickname,
+    //     // players,
+    //     // musician,
+    //     // musicianNickname,
+    //     rounds,
+    //     turn,
+    //   });
+    // });
 
     socket.on('passSegment', (notesString, gridString) => {
       io.in(socket.room).emit('sendSegment', notesString, gridString);

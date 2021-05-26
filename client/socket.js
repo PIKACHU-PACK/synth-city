@@ -82,12 +82,12 @@ export function chatListener(getMessage) {
   });
 }
 
-export function getInfo(room, infoState) {
-  socket.emit('getInfo', room);
-  socket.on('info', (info) => {
-    infoState(info);
-  });
-}
+// export function getInfo(room, infoState) {
+//   socket.emit('getInfo', room);
+//   socket.on('info', (info) => {
+//     infoState(info);
+//   });
+// }
 
 export function updatePlayersListener(updatePlayers) {
   socket.on('updatePlayers', (players) => {
@@ -102,8 +102,8 @@ export function playerLeftListener(playerLeft) {
 }
 
 export function startListener(gameStarted) {
-  socket.on('gameStarted', () => {
-    gameStarted();
+  socket.on('gameStarted', (rounds) => {
+    gameStarted(rounds);
   });
 }
 

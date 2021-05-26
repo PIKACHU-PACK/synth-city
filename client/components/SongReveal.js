@@ -34,7 +34,7 @@ class SongReveal extends React.Component {
   }
 
   componentDidMount() {
-    getInfo(this.props.room, this.stateInfo);
+    //getInfo(this.props.room, this.stateInfo);
     //chatListener(this.getMessages);
     const synthsArr = makeSynths();
     this.setState({ synths: synthsArr });
@@ -154,6 +154,9 @@ class SongReveal extends React.Component {
 
   render() {
     const room = this.props.room;
+    const nickname = this.props.thisPlayer.nickname
+      ? this.props.thisPlayer.nickname
+      : '';
     return (
       <div className="reveal-view">
         <div className="song-reveal-banner">
@@ -202,11 +205,7 @@ class SongReveal extends React.Component {
             </div>
           </div>
           <div className="song-reveal-column">
-            <Chat
-              roomId={room}
-              nickname={this.state.nickname}
-              chat={this.state.chat}
-            />
+            <Chat room={room} nickname={nickname} chat={this.props.chat} />
           </div>
         </div>
       </div>
