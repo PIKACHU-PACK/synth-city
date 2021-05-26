@@ -4,7 +4,6 @@ import {
   getPlayersListener,
   newPlayerListener,
   getInfo,
-  chatListener,
   startListener,
   updatePlayersListener,
   startGame,

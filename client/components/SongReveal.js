@@ -35,7 +35,7 @@ class SongReveal extends React.Component {
 
   componentDidMount() {
     getInfo(this.props.room, this.stateInfo);
-    chatListener(this.getMessages);
+    //chatListener(this.getMessages);
     const synthsArr = makeSynths();
     this.setState({ synths: synthsArr });
     const finalCleanSong = this.cleanUpFinalSong(this.props.location.finalSong);

@@ -71,7 +71,7 @@ export function exitWaiting(room) {
 }
 
 export function chatMessage(room, nickname, message) {
-  console.log('chatMes', nickname, message);
+  console.log('chatMessage', room, nickname, message);
   socket.emit('messageSent', room, nickname, message);
 }
 
@@ -141,14 +141,12 @@ export function waitingRoomUnmounted() {
   socket.off('newPlayer');
   socket.off('info');
   socket.off('gameStarted');
-  socket.off('messageReceived');
   socket.off('updatePlayers');
 }
 
 export function gameRoomUnmounted() {
   socket.off('info');
   socket.off('gameOver');
-  socket.off('messageReceived');
   socket.off('switchTurn');
   socket.off('sendSegment');
   socket.off('playerLeft');

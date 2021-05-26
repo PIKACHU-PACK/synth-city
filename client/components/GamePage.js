@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   getInfo,
-  chatListener,
   playerLeftListener,
   segmentListener,
   turnListener,
@@ -27,7 +26,7 @@ export class GamePage extends React.Component {
       previousNotes: [],
       isFirst: true,
       chosenBeat: [],
-      chat: [],
+      //chat: [],
       finalSong: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
@@ -41,12 +40,12 @@ export class GamePage extends React.Component {
   }
 
   componentDidMount() {
-    getInfo(this.props.room, this.stateInfo);
+    //getInfo(this.props.room, this.stateInfo);
     //chatListener(this.getMessages);
-    playerLeftListener(this.playerLeft);
-    segmentListener(this.getSegment);
-    turnListener(this.sendTurn);
-    gameEndListener(this.revealSong);
+    //playerLeftListener(this.playerLeft);
+    // segmentListener(this.getSegment);
+    // turnListener(this.sendTurn);
+    // gameEndListener(this.revealSong);
   }
 
   stateInfo({ rounds, turn }) {
@@ -131,7 +130,7 @@ export class GamePage extends React.Component {
     const musicianNickname = this.props.musician.nickname
       ? this.props.musician.nickname
       : '';
-    //console.log(room, nickname, this.props.chat);
+    console.log('gameProps', this.props);
     return (
       <>
         {thisPlayerID === musicianID ? (
