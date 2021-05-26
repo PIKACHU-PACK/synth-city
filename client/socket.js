@@ -138,16 +138,16 @@ export function gameEndListener(revealSong) {
 }
 
 export function waitingRoomUnmounted() {
-  socket.off('newPlayer');
-  socket.off('info');
-  socket.off('gameStarted');
-  socket.off('updatePlayers');
+  // socket.off('newPlayer');
+  // socket.off('info');
+  // socket.off('gameStarted');
+  // socket.off('updatePlayers');
 }
 
 export function gameRoomUnmounted() {
-  socket.off('info');
-  socket.off('gameOver');
-  socket.off('switchTurn');
-  socket.off('sendSegment');
-  socket.off('playerLeft');
+  // socket.off('info');
+  // socket.off('gameOver');
+  // socket.off('switchTurn');
+  // socket.off('sendSegment');
+  // socket.off('playerLeft');
 }

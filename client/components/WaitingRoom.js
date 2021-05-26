@@ -134,7 +134,7 @@ class WaitingRoom extends React.Component {
             </div>
           </div>
           <div className="chat-container">
-            <Chat roomId={room} nickname={nickname} chat={this.props.chat} />
+            <Chat room={room} nickname={nickname} chat={this.props.chat} />
           </div>
           <div className="waiting-instructions-container">
             <button

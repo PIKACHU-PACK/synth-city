@@ -21,10 +21,10 @@ export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
-      rounds: null,
-      turn: null,
+      //rounds: null,
+      //turn: null,
       previousNotes: [],
-      isFirst: true,
+      //isFirst: true,
       chosenBeat: [],
       //chat: [],
       finalSong: [],
@@ -43,7 +43,7 @@ export class GamePage extends React.Component {
     //getInfo(this.props.room, this.stateInfo);
     //chatListener(this.getMessages);
     //playerLeftListener(this.playerLeft);
-    // segmentListener(this.getSegment);
+    //segmentListener(this.getSegment);
     // turnListener(this.sendTurn);
     // gameEndListener(this.revealSong);
   }
@@ -126,8 +126,8 @@ export class GamePage extends React.Component {
     const thisPlayerID = this.props.thisPlayer.id
       ? this.props.thisPlayer.id
       : '';
-    const musicianID = this.props.musician.id ? this.props.musician.id : null;
-    const musicianNickname = this.props.musician.nickname
+    const musicianID = this.props.musician ? this.props.musician.id : null;
+    const musicianNickname = this.props.musician
       ? this.props.musician.nickname
       : '';
     console.log('gameProps', this.props);
@@ -138,7 +138,7 @@ export class GamePage extends React.Component {
             <Sequencer
               finishTurn={this.finishTurn}
               previousNotes={this.state.previousNotes}
-              isFirst={this.state.isFirst}
+              isFirst={this.props.isFirst}
             />
           </>
         ) : (
@@ -153,11 +153,7 @@ export class GamePage extends React.Component {
                 <div></div>
               )}
               <div className="game-chat">
-                <Chat
-                  roomId={room}
-                  nickname={nickname}
-                  chat={this.props.chat}
-                />
+                <Chat room={room} nickname={nickname} chat={this.props.chat} />
               </div>
             </div>
           </>
