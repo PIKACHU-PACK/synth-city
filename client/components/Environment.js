@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import {
   joinGame,
   chatListener,
-  getPlayers,
   getThisPlayer,
   startListener,
 } from '../socket';
@@ -39,9 +38,8 @@ export class Environment extends React.Component {
 
   componentDidMount() {
     const room = this.props.room;
-    joinGame(room);
+    joinGame(room, this.setPlayers); // JOINS THE SOCKET AND LISTENS FOR PLAYERS
     chatListener(this.getMessage);
-    getPlayers(this.setPlayers);
     getThisPlayer(this.setThisPlayer);
     startListener(this.gameStarted);
   }
@@ -58,10 +56,6 @@ export class Environment extends React.Component {
     this.setState({ thisPlayer: player });
   }
 
-  //   addPlayer(newPlayer) {
-  //     this.setState({ players: [...this.state.players, newPlayer] });
-  //   }
-
   gameStarted() {
     this.setState({ page: 'game' });
   }
@@ -77,9 +71,16 @@ export class Environment extends React.Component {
             chat={this.state.chat}
             players={this.state.players}
             thisPlayer={this.state.thisPlayer}
+            setPlayers={this.setPlayers}
           />
         ) : page === 'game' ? (
-          <GamePage />
+          <GamePage
+            room={this.props.room}
+            chat={this.state.chat}
+            players={this.state.players}
+            thisPlayer={this.state.thisPlayer}
+            musician={this.state.musician}
+          />
         ) : (
           <SongReveal />
         )}

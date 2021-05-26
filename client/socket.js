@@ -35,12 +35,15 @@ export function joinRoom(
   });
 }
 
-export function joinGame(room) {
+export function joinGame(room, setPlayers) {
   socket.emit('joinGame', room);
+  socket.on('setPlayers', (players) => {
+    setPlayers(players);
+  });
 }
 
-export function getPlayers(setPlayers) {
-  socket.emit('getPlayers');
+export function getPlayersListener(setPlayers, room) {
+  socket.emit('getPlayers', room);
   socket.on('setPlayers', (players) => {
     setPlayers(players);
   });
@@ -63,13 +66,19 @@ export function exitRoom(room) {
   socket.emit('exitRoom', room);
 }
 
-export function chatMessage(nickname, message) {
-  socket.emit('messageSent', nickname, message);
+export function exitWaiting(room) {
+  socket.emit('exitWaiting', room);
 }
 
-export function chatListener(getMessages) {
+export function chatMessage(room, nickname, message) {
+  console.log('chatMes', nickname, message);
+  socket.emit('messageSent', room, nickname, message);
+}
+
+export function chatListener(getMessage) {
   socket.on('messageReceived', (received) => {
-    getMessages(received);
+    console.log('in messageRecieved', received);
+    getMessage(received);
   });
 }
 

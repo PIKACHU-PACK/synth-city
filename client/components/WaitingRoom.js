@@ -1,13 +1,14 @@
 import React from 'react';
 import Chat from './Chat';
 import {
+  getPlayersListener,
   newPlayerListener,
   getInfo,
   chatListener,
   startListener,
   updatePlayersListener,
   startGame,
-  exitRoom,
+  exitWaiting,
   waitingRoomUnmounted,
 } from '../socket';
 import history from '../history';
@@ -17,64 +18,34 @@ import { turnLength } from './Sequencer';
 class WaitingRoom extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      // players: [],
-      // thisPlayer: '',
-      // nickname: '',
-      // chat: [],
-    };
-    //this.setInfo = this.setState.bind(this);
-    //this.getMessages = this.getMessages.bind(this);
-    // this.gameStarted = this.gameStarted.bind(this);
-    //this.updatePlayers = this.updatePlayers.bind(this);
+    this.state = {};
     this.goHome = this.goHome.bind(this);
-    this.onStart = this.onStart.bind(this);
+    this.clickStart = this.clickStart.bind(this);
     this.wrongNumberPlayers = this.wrongNumberPlayers.bind(this);
     this.displayInstructions = this.displayInstructions.bind(this);
   }
 
   componentDidMount() {
-    //newPlayerListener(this.props.addPlayer);
-    //getInfo(this.props.room, this.setInfo);
-    // chatListener(this.getMessages);
-    //startListener(this.gameStarted);
-    updatePlayersListener(this.updatePlayers);
+    //getPlayersListener(this.props.setPlayers, this.props.room);
+    //updatePlayersListener(this.updatePlayers);
   }
 
   componentWillUnmount() {
     waitingRoomUnmounted();
   }
 
-  // setInfo({ thisPlayer, nickname, players }) {
-  //   this.setState({
-  //     thisPlayer: thisPlayer,
-  //     nickname: nickname,
-  //     players: players,
-  //   });
-  // }
-
-  // getMessages(msg) {
-  //   this.setState({ chat: [...this.state.chat, msg] });
-  // }
-
-  // gameStarted() {
-  //   history.push({
-  //     pathname: `/game/${this.props.room}`,
-  //   });
-  // }
-
   // updatePlayers(players) {
   //   this.setState({ players: players });
   // }
 
   goHome() {
-    exitRoom(this.props.room);
+    exitWaiting(this.props.room);
     history.push({
       pathname: '/',
     });
   }
 
-  onStart() {
+  clickStart() {
     const players = this.props.players;
     if (players.length > 1 && players.length <= 4) {
       startGame(this.props.room);
@@ -152,7 +123,7 @@ class WaitingRoom extends React.Component {
                 <button
                   type="button"
                   className="main-cta"
-                  onClick={this.onStart}
+                  onClick={this.clickStart}
                 >
                   Start Game
                 </button>

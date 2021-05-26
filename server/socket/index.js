@@ -15,9 +15,9 @@ module.exports = (io) => {
       if (room) {
         io.in(room).emit('playerLeft', socket.id);
         const socketRoom = io.sockets.adapter.rooms.get(room);
-        let players = [...socketRoom];
+        let players = socketRoom ? [...socketRoom] : [];
         let updatedPlayers = players.filter((player) => player !== socket.id);
-        io.in(room).emit('updatePlayers', updatedPlayers);
+        io.in(room).emit('setPlayers', updatedPlayers);
       }
     });
 
@@ -29,9 +29,20 @@ module.exports = (io) => {
       socket.leave(room);
     });
 
-    socket.on('messageSent', (nickname, message) => {
+    socket.on('exitWaiting', async (room) => {
+      socket.leave(room);
+      socket.room = null;
+      const sockets = await io.in(room).fetchSockets();
+      const players = sockets.map((socket) => {
+        return { id: socket.id, nickname: socket.nickname };
+      });
+      io.in(room).emit('setPlayers', players);
+    });
+
+    socket.on('messageSent', (room, nickname, message) => {
       const received = { nickname: nickname, msg: message };
-      io.in(socket.room).emit('messageReceived', received);
+      console.log('received', received);
+      io.in(room).emit('messageReceived', received);
     });
 
     socket.on('createRoom', () => {
@@ -57,20 +68,22 @@ module.exports = (io) => {
     socket.on('joinGame', async (room) => {
       socket.join(room);
       socket.room = room;
-      const sockets = await io.in(socket.room).fetchSockets();
+      const sockets = await io.in(room).fetchSockets();
       const players = sockets.map((socket) => {
         return { id: socket.id, nickname: socket.nickname };
       });
       io.in(room).emit('setPlayers', players);
     });
 
-    socket.on('getPlayers', async () => {
-      const sockets = await io.in(socket.room).fetchSockets();
-      const players = sockets.map((socket) => {
-        return { id: socket.id, nickname: socket.nickname };
-      });
-      socket.emit('setPlayers', players);
-    });
+    // socket.on('getPlayers', async (room) => {
+    //   console.log('room in get', room);
+    //   const sockets = await io.in(room).fetchSockets();
+    //   const players = sockets.map((socket) => {
+    //     return { id: socket.id, nickname: socket.nickname };
+    //   });
+    //   console.log('players in get', players);
+    //   io.in(room).emit('setPlayers', players);
+    // });
 
     socket.on('getThisPlayer', () => {
       socket.emit('playerInfo', { id: socket.id, nickname: socket.nickname });

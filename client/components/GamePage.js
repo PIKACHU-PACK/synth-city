@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   getInfo,
   chatListener,
@@ -9,12 +9,12 @@ import {
   endTurn,
   gameEndListener,
   exitRoom,
-} from "../socket";
-import Sequencer from "./Sequencer";
-import history from "../history";
-import { parse } from "flatted";
-import Chat from "./Chat";
-import Swal from "sweetalert2";
+} from '../socket';
+import Sequencer from './Sequencer';
+import history from '../history';
+import { parse } from 'flatted';
+import Chat from './Chat';
+import Swal from 'sweetalert2';
 
 //const pathToImage = process.env.PUBLIC_URL + "/anim.gif"
 
@@ -22,11 +22,6 @@ export class GamePage extends React.Component {
   constructor() {
     super();
     this.state = {
-      players: [],
-      thisPlayer: "",
-      nickname: "",
-      musician: "",
-      musicianNickname: "",
       rounds: null,
       turn: null,
       previousNotes: [],
@@ -36,7 +31,7 @@ export class GamePage extends React.Component {
       finalSong: [],
     };
     this.stateInfo = this.stateInfo.bind(this);
-    this.getMessages = this.getMessages.bind(this);
+    //this.getMessages = this.getMessages.bind(this);
     this.playerLeft = this.playerLeft.bind(this);
     this.getSegment = this.getSegment.bind(this);
     this.sendTurn = this.sendTurn.bind(this);
@@ -47,36 +42,23 @@ export class GamePage extends React.Component {
 
   componentDidMount() {
     getInfo(this.props.room, this.stateInfo);
-    chatListener(this.getMessages);
+    //chatListener(this.getMessages);
     playerLeftListener(this.playerLeft);
     segmentListener(this.getSegment);
     turnListener(this.sendTurn);
     gameEndListener(this.revealSong);
   }
 
-  stateInfo({
-    thisPlayer,
-    nickname,
-    players,
-    musician,
-    musicianNickname,
-    rounds,
-    turn,
-  }) {
+  stateInfo({ rounds, turn }) {
     this.setState({
-      thisPlayer: thisPlayer,
-      nickname: nickname,
-      players: players,
-      musician: musician,
-      musicianNickname: musicianNickname,
       rounds: rounds,
       turn: turn,
     });
   }
 
-  getMessages(received) {
-    this.setState({ chat: [...this.state.chat, received] });
-  }
+  // getMessages(received) {
+  //   this.setState({ chat: [...this.state.chat, received] });
+  // }
 
   playerLeft(departedPlayer) {
     let players = this.state.players || [];
@@ -127,24 +109,32 @@ export class GamePage extends React.Component {
 
   everyoneElseLeft() {
     Swal.fire({
-      title: "Error:",
-      html: "Sorry, it looks like everyone else left.",
+      title: 'Error:',
+      html: 'Sorry, it looks like everyone else left.',
       showCloseButton: true,
     });
     exitRoom(this.props.room);
     history.push({
-      pathname: "/",
+      pathname: '/',
     });
   }
-  //delete this
+
   render() {
-    const thisPlayer = this.state.thisPlayer;
-    const musician = this.state.musician || "tbd";
-    const musicianNickname = this.state.musicianNickname;
     const room = this.props.room;
+    const nickname = this.props.thisPlayer.nickname
+      ? this.props.thisPlayer.nickname
+      : '';
+    const thisPlayerID = this.props.thisPlayer.id
+      ? this.props.thisPlayer.id
+      : '';
+    const musicianID = this.props.musician.id ? this.props.musician.id : null;
+    const musicianNickname = this.props.musician.nickname
+      ? this.props.musician.nickname
+      : '';
+    //console.log(room, nickname, this.props.chat);
     return (
       <>
-        {thisPlayer === musician ? (
+        {thisPlayerID === musicianID ? (
           <>
             <Sequencer
               finishTurn={this.finishTurn}
@@ -163,16 +153,11 @@ export class GamePage extends React.Component {
               ) : (
                 <div></div>
               )}
-              {/* <img
-                src={window.location.origin + "/anim.gif"}
-                width="506"
-                height="900"
-              /> */}
               <div className="game-chat">
                 <Chat
                   roomId={room}
-                  nickname={this.state.nickname}
-                  chat={this.state.chat}
+                  nickname={nickname}
+                  chat={this.props.chat}
                 />
               </div>
             </div>
