@@ -3,7 +3,7 @@ import * as Tone from 'tone';
 import { checkSynth, makeSynths, lastNotesSeed } from './HelperFunctions';
 import history from '../history';
 import { BPM } from './Sequencer';
-import { exitRoom, getInfo, chatListener } from '../socket';
+import { exitRoom } from '../socket';
 import { NoteButton } from './NoteButtonSongReveal';
 import Chat from './Chat';
 
@@ -18,40 +18,18 @@ class SongReveal extends React.Component {
       synths: [],
       noteClickStarted: false,
       playButtonStarted: false,
-      finalSong: [],
-      nickname: '',
-      musician: '',
-      musicianNickname: '',
-      chat: [],
     };
-    this.stateInfo = this.stateInfo.bind(this);
-    this.getMessages = this.getMessages.bind(this);
     this.configPlayButton = this.configPlayButton.bind(this);
     this.configLoop = this.configLoop.bind(this);
     this.goHome = this.goHome.bind(this);
-    this.goToWaitingRoom = this.goToWaitingRoom.bind(this);
     this.cleanUpFinalSong = this.cleanUpFinalSong.bind(this);
   }
 
   componentDidMount() {
-    //getInfo(this.props.room, this.stateInfo);
-    //chatListener(this.getMessages);
     const synthsArr = makeSynths();
     this.setState({ synths: synthsArr });
     const finalCleanSong = this.cleanUpFinalSong(this.props.finalSong);
     this.setState({ finalSong: finalCleanSong });
-  }
-
-  stateInfo({ nickname, musician, musicianNickname }) {
-    this.setState({
-      nickname: nickname,
-      musician: musician,
-      musicianNickname: musicianNickname,
-    });
-  }
-
-  getMessages(received) {
-    this.setState({ chat: [...this.state.chat, received] });
   }
 
   cleanUpFinalSong(finalSongSegmented) {
@@ -141,12 +119,6 @@ class SongReveal extends React.Component {
     exitRoom(this.props.room);
     history.push({
       pathname: '/',
-    });
-  }
-
-  goToWaitingRoom() {
-    history.push({
-      pathname: `/waiting/${this.props.room}`,
     });
   }
 

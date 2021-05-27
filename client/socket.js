@@ -82,13 +82,6 @@ export function chatListener(getMessage) {
   });
 }
 
-// export function getInfo(room, infoState) {
-//   socket.emit('getInfo', room);
-//   socket.on('info', (info) => {
-//     infoState(info);
-//   });
-// }
-
 export function updatePlayersListener(updatePlayers) {
   socket.on('updatePlayers', (players) => {
     updatePlayers(players);
@@ -130,12 +123,6 @@ export function turnListener(setTurn) {
     setTurn();
   });
 }
-
-// export function gameEndListener(revealSong) {
-//   socket.on('gameOver', () => {
-//     revealSong();
-//   });
-// }
 
 export function waitingRoomUnmounted() {
   // socket.off('newPlayer');
