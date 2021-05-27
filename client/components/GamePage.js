@@ -1,92 +1,15 @@
 import React from 'react';
-import {
-  getInfo,
-  playerLeftListener,
-  segmentListener,
-  turnListener,
-  passSegment,
-  endTurn,
-  gameEndListener,
-  exitRoom,
-} from '../socket';
+import { exitRoom } from '../socket';
 import Sequencer from './Sequencer';
 import history from '../history';
-import { parse } from 'flatted';
 import Chat from './Chat';
 import Swal from 'sweetalert2';
 
 export class GamePage extends React.Component {
   constructor() {
     super();
-    this.state = {
-      //previousNotes: [],
-      //isFirst: true,
-      //chosenBeat: [],
-      //finalSong: [],
-    };
-    //this.playerLeft = this.playerLeft.bind(this);
-    //this.getSegment = this.getSegment.bind(this);
-    //this.sendTurn = this.sendTurn.bind(this);
-    // this.finishTurn = this.finishTurn.bind(this);
-    //this.revealSong = this.revealSong.bind(this);
-    //this.everyoneElseLeft = this.everyoneElseLeft.bind(this);
+    this.state = {};
   }
-
-  componentDidMount() {
-    //getInfo(this.props.room, this.stateInfo);
-    //chatListener(this.getMessages);
-    //playerLeftListener(this.playerLeft);
-    //segmentListener(this.getSegment);
-    // turnListener(this.sendTurn);
-    // gameEndListener(this.revealSong);
-  }
-
-  playerLeft(departedPlayer) {
-    let players = this.state.players || [];
-    let updatedPlayers = players.map((player) => {
-      if (player === departedPlayer) {
-        player = null;
-      }
-      return player;
-    });
-    if (updatedPlayers.filter((player) => player !== null).length < 2) {
-      this.everyoneElseLeft();
-    } else {
-      this.setState({ players: updatedPlayers });
-    }
-  }
-
-  // getSegment(notesStr, gridStr) {
-  //   const notes = parse(notesStr);
-  //   const segment = parse(gridStr);
-  //   const songSoFar = this.state.finalSong.slice();
-  //   songSoFar.push(segment);
-  //   this.setState({
-  //     finalSong: songSoFar,
-  //     previousNotes: notes,
-  //   });
-  // }
-
-  sendTurn(nextPlayer, musicianNickname, turn) {
-    this.setState({
-      musician: nextPlayer,
-      musicianNickname: musicianNickname,
-      isFirst: false,
-      turn: turn,
-    });
-  }
-
-  // finishTurn(notesString, gridString) {
-  //   passSegment(notesString, gridString);
-  //   endTurn(this.state.rounds, this.state.turn, this.state.players);
-  // }
-
-  // revealSong() {
-  //   history.push({
-  //     pathname: `/song/${this.props.room}`,
-  //     finalSong: this.state.finalSong,
-  //   });
-  // }
 
   everyoneElseLeft() {
     Swal.fire({

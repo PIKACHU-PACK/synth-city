@@ -42,12 +42,12 @@ export function joinGame(room, setPlayers) {
   });
 }
 
-export function getPlayersListener(setPlayers, room) {
-  socket.emit('getPlayers', room);
-  socket.on('setPlayers', (players) => {
-    setPlayers(players);
-  });
-}
+// export function getPlayersListener(setPlayers, room) {
+//   socket.emit('getPlayers', room);
+//   socket.on('setPlayers', (players) => {
+//     setPlayers(players);
+//   });
+// }
 
 export function getThisPlayer(setThisPlayer) {
   socket.emit('getThisPlayer');
@@ -56,11 +56,11 @@ export function getThisPlayer(setThisPlayer) {
   });
 }
 
-export function newPlayerListener(addPlayer) {
-  socket.on('newPlayer', (newPlayer) => {
-    addPlayer(newPlayer);
-  });
-}
+// export function newPlayerListener(addPlayer) {
+//   socket.on('newPlayer', (newPlayer) => {
+//     addPlayer(newPlayer);
+//   });
+// }
 
 export function exitRoom(room) {
   socket.emit('exitRoom', room);
@@ -80,15 +80,21 @@ export function chatListener(getMessage) {
   });
 }
 
-export function updatePlayersListener(updatePlayers) {
-  socket.on('updatePlayers', (players) => {
-    updatePlayers(players);
-  });
-}
+// export function updatePlayersListener(updatePlayers) {
+//   socket.on('updatePlayers', (players) => {
+//     updatePlayers(players);
+//   });
+// }
 
 export function playerLeftListener(playerLeft) {
   socket.on('playerLeft', (departedPlayer) => {
     playerLeft(departedPlayer);
+  });
+}
+
+export function kickOutListener(sendHome) {
+  socket.on('kickOut', () => {
+    sendHome();
   });
 }
 
@@ -122,17 +128,13 @@ export function turnListener(setTurn) {
   });
 }
 
-export function waitingRoomUnmounted() {
-  // socket.off('newPlayer');
-  // socket.off('info');
-  // socket.off('gameStarted');
-  // socket.off('updatePlayers');
-}
-
-export function gameRoomUnmounted() {
-  // socket.off('info');
-  // socket.off('gameOver');
-  // socket.off('switchTurn');
-  // socket.off('sendSegment');
-  // socket.off('playerLeft');
+export function environmnetUnmount() {
+  socket.off('setPlayers');
+  socket.off('playerInfo');
+  socket.off('messageReceived');
+  socket.off('playerLeft');
+  socket.off('kickOut');
+  socket.off('gameStarted');
+  socket.off('sendSegment');
+  socket.off('switchTurn');
 }

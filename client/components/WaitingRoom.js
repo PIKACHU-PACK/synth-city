@@ -15,15 +15,6 @@ class WaitingRoom extends React.Component {
     this.displayInstructions = this.displayInstructions.bind(this);
   }
 
-  componentDidMount() {
-    //getPlayersListener(this.props.setPlayers, this.props.room);
-    //updatePlayersListener(this.updatePlayers);
-  }
-
-  componentWillUnmount() {
-    waitingRoomUnmounted();
-  }
-
   goHome() {
     exitWaiting(this.props.room);
     history.push({

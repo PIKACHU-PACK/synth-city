@@ -16,28 +16,19 @@ module.exports = (io) => {
       socket.room = null;
       socket.page = null;
       if (room) {
-        const sockets = await io.in(room).fetchSockets();
-        let players;
         if (page === 'game') {
-          players = sockets.map((player) => {
-            if (player.id === socket.id) {
-              player = null;
-            } else {
-              player = { id: player.id, nickname: player.nickname };
-            }
-            return player;
-          });
+          io.in(room).emit('playerLeft', socket.id);
         } else {
-          players = sockets
+          const sockets = await io.in(room).fetchSockets();
+          const players = sockets
             .filter((player) => {
               return player.id !== socket.id;
             })
             .map((player) => {
               return { id: player.id, nickname: player.nickname };
             });
+          io.in(room).emit('setPlayers', players);
         }
-        console.log('updatedPlayers', players);
-        io.in(room).emit('setPlayers', players);
       }
     });
 
@@ -81,14 +72,26 @@ module.exports = (io) => {
     });
 
     socket.on('joinGame', async (room) => {
-      socket.join(room);
-      socket.room = room;
       socket.nickname = getPlayerNames(nicknames);
-      const sockets = await io.in(room).fetchSockets();
-      const players = sockets.map((socket) => {
-        return { id: socket.id, nickname: socket.nickname };
+      let sockets = await io.in(room).fetchSockets();
+      const inGame = sockets.some((player) => {
+        if (player === null) {
+          return true;
+        } else if (player.page === 'game') {
+          return true;
+        }
       });
-      io.in(room).emit('setPlayers', players);
+      if (!inGame) {
+        socket.join(room);
+        socket.room = room;
+        sockets = await io.in(room).fetchSockets();
+        const players = sockets.map((socket) => {
+          return { id: socket.id, nickname: socket.nickname };
+        });
+        io.in(room).emit('setPlayers', players);
+      } else {
+        socket.emit('kickOut');
+      }
     });
 
     socket.on('getThisPlayer', () => {
