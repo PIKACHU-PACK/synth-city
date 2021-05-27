@@ -37,7 +37,6 @@ export class Environment extends React.Component {
     this.getMessage = this.getMessage.bind(this);
     this.setPlayers = this.setPlayers.bind(this);
     this.setThisPlayer = this.setThisPlayer.bind(this);
-    //this.addPlayer = this.addPlayer.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
     this.finishTurn = this.finishTurn.bind(this);
     this.setTurn = this.setTurn.bind(this);
@@ -82,14 +81,18 @@ export class Environment extends React.Component {
   }
 
   setTurn() {
-    const nextTurn = this.state.turn + 1;
-    if (nextTurn === this.state.rounds) {
+    let nextTurn = this.state.turn + 1;
+    if (nextTurn === this.state.rounds || nextTurn > this.state.rounds) {
       this.setState({ page: 'song' });
     } else {
-      this.setState({ turn: nextTurn });
-      const turnIdx = this.state.turn % this.state.players.length;
-      const nextMusician = this.state.players[turnIdx];
-      this.setState({ musician: nextMusician, isFirst: false });
+      let turnIdx = nextTurn % this.state.players.length;
+      let nextMusician = this.state.players[turnIdx];
+      while (nextMusician === null) {
+        nextTurn++;
+        turnIdx = nextTurn % this.state.players.length;
+        nextMusician = this.state.players[turnIdx];
+      }
+      this.setState({ musician: nextMusician, isFirst: false, turn: nextTurn });
     }
   }
 
@@ -105,7 +108,7 @@ export class Environment extends React.Component {
   }
 
   render() {
-    console.log('Environment: ', this.state);
+    console.log('Players: ', this.state.players);
     const page = this.state.page;
     const musician = this.state.musician;
     return (

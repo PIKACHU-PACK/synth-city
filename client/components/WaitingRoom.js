@@ -1,15 +1,6 @@
 import React from 'react';
 import Chat from './Chat';
-import {
-  getPlayersListener,
-  newPlayerListener,
-  getInfo,
-  startListener,
-  updatePlayersListener,
-  startGame,
-  exitWaiting,
-  waitingRoomUnmounted,
-} from '../socket';
+import { startGame, exitWaiting, waitingRoomUnmounted } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
 import { turnLength } from './Sequencer';
@@ -32,10 +23,6 @@ class WaitingRoom extends React.Component {
   componentWillUnmount() {
     waitingRoomUnmounted();
   }
-
-  // updatePlayers(players) {
-  //   this.setState({ players: players });
-  // }
 
   goHome() {
     exitWaiting(this.props.room);

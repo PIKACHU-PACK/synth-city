@@ -112,7 +112,6 @@ export class GamePage extends React.Component {
     const musicianNickname = this.props.musician
       ? this.props.musician.nickname
       : '';
-    console.log('gameProps', this.props);
     return (
       <>
         {thisPlayerID === musicianID ? (

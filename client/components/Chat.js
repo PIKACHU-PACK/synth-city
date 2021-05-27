@@ -42,7 +42,6 @@ export class Chat extends React.Component {
   }
 
   render() {
-    console.log('chat props', this.props);
     const { chat } = this.props;
     return (
       <div className="chat-window">

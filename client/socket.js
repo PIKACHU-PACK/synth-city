@@ -71,13 +71,11 @@ export function exitWaiting(room) {
 }
 
 export function chatMessage(room, nickname, message) {
-  console.log('chatMessage', room, nickname, message);
   socket.emit('messageSent', room, nickname, message);
 }
 
 export function chatListener(getMessage) {
   socket.on('messageReceived', (received) => {
-    console.log('in messageRecieved', received);
     getMessage(received);
   });
 }

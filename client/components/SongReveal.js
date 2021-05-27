@@ -18,6 +18,7 @@ class SongReveal extends React.Component {
       synths: [],
       noteClickStarted: false,
       playButtonStarted: false,
+      finalSong: [],
     };
     this.configPlayButton = this.configPlayButton.bind(this);
     this.configLoop = this.configLoop.bind(this);

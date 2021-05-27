@@ -205,7 +205,6 @@ class Sequencer extends React.Component {
   }
 
   addPreviousNotes(grid) {
-    console.log(this.props.previousNotes);
     if (this.props.previousNotes[0][0] !== null) {
       let newGrid = grid.map((eachRow, rowIndex) => {
         if (rowIndex === 0) {

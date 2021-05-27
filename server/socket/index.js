@@ -11,19 +11,33 @@ module.exports = (io) => {
     console.log(`User Connected: ${socket.id}`);
 
     socket.on('disconnecting', async () => {
+      const page = socket.page || 'none yet';
       const room = socket.room;
       socket.room = null;
+      socket.page = null;
       if (room) {
-        //io.in(room).emit('playerLeft', socket.id);
         const sockets = await io.in(room).fetchSockets();
-        const players = sockets.filter((player) => {
-          return player.id !== socket.id;
-        });
-        const updatedPlayers = players.map((player) => {
-          return { id: player.id, nickname: player.nickname };
-        });
-        //let updatedPlayers = players.filter((player) => player !== socket.id);
-        io.in(room).emit('setPlayers', updatedPlayers);
+        let players;
+        if (page === 'game') {
+          players = sockets.map((player) => {
+            if (player.id === socket.id) {
+              player = null;
+            } else {
+              player = { id: player.id, nickname: player.nickname };
+            }
+            return player;
+          });
+        } else {
+          players = sockets
+            .filter((player) => {
+              return player.id !== socket.id;
+            })
+            .map((player) => {
+              return { id: player.id, nickname: player.nickname };
+            });
+        }
+        console.log('updatedPlayers', players);
+        io.in(room).emit('setPlayers', players);
       }
     });
 
@@ -47,7 +61,6 @@ module.exports = (io) => {
 
     socket.on('messageSent', (room, nickname, message) => {
       const received = { nickname: nickname, msg: message };
-      console.log('received', received);
       io.in(room).emit('messageReceived', received);
     });
 
@@ -82,10 +95,12 @@ module.exports = (io) => {
       socket.emit('playerInfo', { id: socket.id, nickname: socket.nickname });
     });
 
-    socket.on('startGame', (room) => {
-      const socketRoom = io.sockets.adapter.rooms.get(socket.room);
-      let players = [...socketRoom];
-      const rounds = players.length === 3 ? 6 : 4;
+    socket.on('startGame', async (room) => {
+      const sockets = await io.in(room).fetchSockets();
+      sockets.forEach((socket) => {
+        socket.page = 'game';
+      });
+      const rounds = sockets.length === 3 ? 6 : 4;
       io.in(room).emit('gameStarted', rounds);
     });
 
