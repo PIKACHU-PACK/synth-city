@@ -1,49 +1,13 @@
 import { AMOUNT_OF_NOTES } from "./Sequencer";
 import * as Tone from "tone";
 
-// export const amSynth = new Tone.AMSynth({
-//   oscillator: {
-//     type: "square",
-//   },
-// }).toDestination();
-// export const pluckySynth = new Tone.PluckSynth().toDestination();
-// export const basicSynth = new Tone.Synth({
-//   oscillator: {
-//     type: "sawtooth",
-//   },
-// }).toDestination();
-
-export const amSynth0 = new Tone.AMSynth({
+export const amSynth = new Tone.AMSynth({
   oscillator: {
     type: "square",
   },
 }).toDestination();
-export const pluckySynth0 = new Tone.PluckSynth().toDestination();
-export const basicSynth0 = new Tone.Synth({
-  oscillator: {
-    type: "sawtooth",
-  },
-}).toDestination();
-
-export const amSynth1 = new Tone.AMSynth({
-  oscillator: {
-    type: "square",
-  },
-}).toDestination();
-export const pluckySynth1 = new Tone.PluckSynth().toDestination();
-export const basicSynth1 = new Tone.Synth({
-  oscillator: {
-    type: "sawtooth",
-  },
-}).toDestination();
-
-export const amSynth2 = new Tone.AMSynth({
-  oscillator: {
-    type: "square",
-  },
-}).toDestination();
-export const pluckySynth2 = new Tone.PluckSynth().toDestination();
-export const basicSynth2 = new Tone.Synth({
+export const pluckySynth = new Tone.PluckSynth().toDestination();
+export const basicSynth = new Tone.Synth({
   oscillator: {
     type: "sawtooth",
   },
@@ -52,17 +16,7 @@ export const basicSynth2 = new Tone.Synth({
 export function makeSynths() {
   // MAKE DIFFERENT SYNTHS LATER ON INSTEAD
   const synths = [];
-  synths.push(
-    amSynth0,
-    pluckySynth0,
-    basicSynth0,
-    amSynth1,
-    pluckySynth1,
-    basicSynth1,
-    amSynth2,
-    pluckySynth2,
-    basicSynth2
-  );
+  synths.push(amSynth, pluckySynth, basicSynth);
   return synths;
 }
 
