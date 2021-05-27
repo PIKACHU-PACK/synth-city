@@ -38,7 +38,7 @@ class SongReveal extends React.Component {
     //chatListener(this.getMessages);
     const synthsArr = makeSynths();
     this.setState({ synths: synthsArr });
-    const finalCleanSong = this.cleanUpFinalSong(this.props.location.finalSong);
+    const finalCleanSong = this.cleanUpFinalSong(this.props.finalSong);
     this.setState({ finalSong: finalCleanSong });
   }
 
@@ -110,9 +110,7 @@ class SongReveal extends React.Component {
         }
       });
       this.setState({
-        beat:
-          (this.state.beat + 1) %
-          (this.props.location.finalSong.length * 16 + 6),
+        beat: (this.state.beat + 1) % (this.props.finalSong.length * 16 + 6),
       });
     };
     Tone.Transport.bpm.value = BPM;

@@ -1,10 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { parse } from 'flatted';
 import {
   joinGame,
   chatListener,
   getThisPlayer,
   startListener,
+  turnListener,
+  segmentListener,
+  passSegment,
+  endTurn,
 } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
@@ -22,11 +27,11 @@ export class Environment extends React.Component {
       chat: [],
       players: [],
       thisPlayer: {},
-      // musician: {},
+      musician: {},
       isFirst: true,
       rounds: null,
       turn: 0,
-      //previousNotes: [],
+      previousNotes: [],
       finalSong: [],
     };
     this.getMessage = this.getMessage.bind(this);
@@ -34,6 +39,9 @@ export class Environment extends React.Component {
     this.setThisPlayer = this.setThisPlayer.bind(this);
     //this.addPlayer = this.addPlayer.bind(this);
     this.gameStarted = this.gameStarted.bind(this);
+    this.finishTurn = this.finishTurn.bind(this);
+    this.setTurn = this.setTurn.bind(this);
+    this.getSegment = this.getSegment.bind(this);
   }
 
   componentDidMount() {
@@ -42,6 +50,8 @@ export class Environment extends React.Component {
     chatListener(this.getMessage);
     getThisPlayer(this.setThisPlayer);
     startListener(this.gameStarted);
+    turnListener(this.setTurn);
+    segmentListener(this.getSegment);
   }
 
   getMessage(msg) {
@@ -57,15 +67,47 @@ export class Environment extends React.Component {
   }
 
   gameStarted(rounds) {
-    this.setState({ page: 'game', rounds: rounds });
+    const musician = this.state.players[0];
+    this.setState({ page: 'game', rounds: rounds, musician: musician });
+  }
+
+  finishTurn(notesString, gridString) {
+    passSegment(this.props.room, notesString, gridString);
+    endTurn(
+      this.props.room,
+      this.state.rounds,
+      this.state.turn,
+      this.state.players
+    );
+  }
+
+  setTurn() {
+    const nextTurn = this.state.turn + 1;
+    if (nextTurn === this.state.rounds) {
+      this.setState({ page: 'song' });
+    } else {
+      this.setState({ turn: nextTurn });
+      const turnIdx = this.state.turn % this.state.players.length;
+      const nextMusician = this.state.players[turnIdx];
+      this.setState({ musician: nextMusician, isFirst: false });
+    }
+  }
+
+  getSegment(notesStr, gridStr) {
+    const notes = parse(notesStr);
+    const segment = parse(gridStr);
+    const songSoFar = this.state.finalSong.slice();
+    songSoFar.push(segment);
+    this.setState({
+      finalSong: songSoFar,
+      previousNotes: notes,
+    });
   }
 
   render() {
     console.log('Environment: ', this.state);
     const page = this.state.page;
-    const turnIdx = this.state.turn % this.state.players.length;
-    console.log('turnIdx', turnIdx);
-    const musician = this.state.players[turnIdx];
+    const musician = this.state.musician;
     return (
       <>
         {page === 'waiting' ? (
@@ -84,12 +126,15 @@ export class Environment extends React.Component {
             thisPlayer={this.state.thisPlayer}
             musician={musician}
             isFirst={this.state.isFirst}
+            finishTurn={this.finishTurn}
+            previousNotes={this.state.previousNotes}
           />
         ) : (
           <SongReveal
             room={this.props.room}
             chat={this.state.chat}
             thisPlayer={this.state.thisPlayer}
+            finalSong={this.state.finalSong}
           />
         )}
       </>

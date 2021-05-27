@@ -47,8 +47,6 @@ module.exports = (io) => {
 
     socket.on('createRoom', () => {
       const room = uuidv4().slice(0, 5).toUpperCase();
-      // socket.join(room);
-      // socket.room = room;
       socket.nickname = getPlayerNames(nicknames);
       socket.emit('roomCreated', room);
     });
@@ -117,27 +115,28 @@ module.exports = (io) => {
     //   });
     // });
 
-    socket.on('passSegment', (notesString, gridString) => {
-      io.in(socket.room).emit('sendSegment', notesString, gridString);
+    socket.on('passSegment', (room, notesString, gridString) => {
+      io.in(room).emit('sendSegment', notesString, gridString);
     });
 
-    socket.on('setTurn', async (rounds, turn, players) => {
-      const room = socket.room;
-      turn++;
-      if (turn === rounds) {
-        io.in(room).emit('gameOver');
-      } else {
-        let idx = turn % players.length;
-        let nextPlayer = players[idx];
-        while (nextPlayer === null) {
-          turn++;
-          idx = turn % players.length;
-          nextPlayer = players[idx];
-        }
-        const sockets = await io.in(nextPlayer).fetchSockets();
-        const nickname = sockets[0].nickname;
-        io.in(room).emit('switchTurn', nextPlayer, nickname, turn);
-      }
+    socket.on('endTurn', async (room, rounds, turn, players) => {
+      io.in(room).emit('switchTurn');
+      // const room = socket.room;
+      // turn++;
+      // if (turn === rounds) {
+      //   io.in(room).emit('gameOver');
+      // } else {
+      //   let idx = turn % players.length;
+      //   let nextPlayer = players[idx];
+      //   while (nextPlayer === null) {
+      //     turn++;
+      //     idx = turn % players.length;
+      //     nextPlayer = players[idx];
+      //   }
+      //   const sockets = await io.in(nextPlayer).fetchSockets();
+      //   const nickname = sockets[0].nickname;
+      //   io.in(room).emit('switchTurn', nextPlayer, nickname, turn);
+      // }
     });
   });
 };

@@ -111,12 +111,12 @@ export function startGame(room) {
   socket.emit('startGame', room);
 }
 
-export function passSegment(notesStr, gridStr) {
-  socket.emit('passSegment', notesStr, gridStr);
+export function passSegment(room, notesStr, gridStr) {
+  socket.emit('passSegment', room, notesStr, gridStr);
 }
 
-export function endTurn(rounds, turn, players) {
-  socket.emit('setTurn', rounds, turn, players);
+export function endTurn(room, rounds, turn, players) {
+  socket.emit('endTurn', room, rounds, turn, players);
 }
 
 export function segmentListener(getSegment) {
@@ -125,17 +125,17 @@ export function segmentListener(getSegment) {
   });
 }
 
-export function turnListener(sendTurn) {
-  socket.on('switchTurn', (nextPlayer, nickname, turn) => {
-    sendTurn(nextPlayer, nickname, turn);
+export function turnListener(setTurn) {
+  socket.on('switchTurn', () => {
+    setTurn();
   });
 }
 
-export function gameEndListener(revealSong) {
-  socket.on('gameOver', () => {
-    revealSong();
-  });
-}
+// export function gameEndListener(revealSong) {
+//   socket.on('gameOver', () => {
+//     revealSong();
+//   });
+// }
 
 export function waitingRoomUnmounted() {
   // socket.off('newPlayer');
