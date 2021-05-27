@@ -1,6 +1,6 @@
 import React from 'react';
 import Chat from './Chat';
-import { startGame, exitWaiting, waitingRoomUnmounted } from '../socket';
+import { startGame, exitWaiting } from '../socket';
 import history from '../history';
 import Swal from 'sweetalert2';
 import { turnLength } from './Sequencer';
