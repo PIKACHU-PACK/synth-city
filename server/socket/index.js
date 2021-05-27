@@ -38,6 +38,9 @@ module.exports = (io) => {
 
     socket.on('exitRoom', (room) => {
       socket.leave(room);
+      socket.room = null;
+      socket.nickname = null;
+      socket.page = null;
     });
 
     socket.on('exitWaiting', async (room) => {

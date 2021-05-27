@@ -42,25 +42,12 @@ export function joinGame(room, setPlayers) {
   });
 }
 
-// export function getPlayersListener(setPlayers, room) {
-//   socket.emit('getPlayers', room);
-//   socket.on('setPlayers', (players) => {
-//     setPlayers(players);
-//   });
-// }
-
 export function getThisPlayer(setThisPlayer) {
   socket.emit('getThisPlayer');
   socket.on('playerInfo', (thisPlayer) => {
     setThisPlayer(thisPlayer);
   });
 }
-
-// export function newPlayerListener(addPlayer) {
-//   socket.on('newPlayer', (newPlayer) => {
-//     addPlayer(newPlayer);
-//   });
-// }
 
 export function exitRoom(room) {
   socket.emit('exitRoom', room);
@@ -79,12 +66,6 @@ export function chatListener(getMessage) {
     getMessage(received);
   });
 }
-
-// export function updatePlayersListener(updatePlayers) {
-//   socket.on('updatePlayers', (players) => {
-//     updatePlayers(players);
-//   });
-// }
 
 export function playerLeftListener(playerLeft) {
   socket.on('playerLeft', (departedPlayer) => {
