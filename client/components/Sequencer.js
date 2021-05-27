@@ -17,6 +17,7 @@ export const BPM = 120;
 const dev = process.env.NODE_ENV !== 'production';
 export const turnLength = dev ? 8 : 40;
 
+
 class Sequencer extends React.Component {
   constructor(props) {
     super(props);
@@ -70,7 +71,7 @@ class Sequencer extends React.Component {
           if (note.synth === 'pluckySynth') {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              '+2',
+              "+1",
               time + synthsCount
             );
             synthsCount += 0.0001;

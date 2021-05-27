@@ -45,6 +45,7 @@ class PracticeRoom extends React.Component {
   configLoop() {
     let synthsCount = 0;
     const repeat = (time) => {
+      console.log("time is", time);
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
         if (note.isActive) {
@@ -53,7 +54,7 @@ class PracticeRoom extends React.Component {
           if (note.synth === "pluckySynth") {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              "+2",
+              "+1",
               time + synthsCount
             );
             synthsCount += 0.0001;
