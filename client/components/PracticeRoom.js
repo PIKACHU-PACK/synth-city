@@ -2,14 +2,7 @@ import classNames from "classnames";
 import * as Tone from "tone";
 import React from "react";
 import { NoteButton } from "./NoteButton";
-import {
-  makeGrid,
-  makeSynths,
-  basicSynth,
-  amSynth,
-  pluckySynth,
-  checkSynth,
-} from "./HelperFunctions";
+import { makeGrid, makeSynths, checkSynth } from "./HelperFunctions";
 import { BPM, notes } from "./Sequencer";
 import history from "../history";
 
@@ -38,7 +31,7 @@ class PracticeRoom extends React.Component {
 
   componentDidMount() {
     const rowGrid = makeGrid(notes, true);
-    const synthsArr = makeSynths(basicSynth);
+    const synthsArr = makeSynths();
     this.setState({ grid: rowGrid, synths: synthsArr });
   }
 
@@ -48,9 +41,18 @@ class PracticeRoom extends React.Component {
       console.log("time is", time);
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
+        let synth;
+
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
-          let synth = this.state.synths[synthIndex];
+          if (this.state.beat < 20) {
+            synth = this.state.synths[synthIndex];
+          } else if (this.state.beat >= 20 && this.state.beat < 40) {
+            synth = this.state.synths[synthIndex + 3];
+          } else if (this.state.beat >= 40) {
+            synth = this.state.synths[synthIndex + 6];
+          }
+          // let synth = this.state.synths[synthIndex];
           if (note.synth === "pluckySynth") {
             synth.triggerAttackRelease(
               note.note + note.octave,
@@ -104,12 +106,12 @@ class PracticeRoom extends React.Component {
             "note",
             { "note-not-active": !note.isActive },
             {
-              "fuchsia-synth": note.synth === basicSynth && note.isActive,
+              "fuchsia-synth": note.synth === "basicSynth" && note.isActive,
             },
             {
-              "blue-synth": note.synth === pluckySynth && note.isActive,
+              "blue-synth": note.synth === "pluckySynth" && note.isActive,
             },
-            { "orange-synth": note.synth === amSynth && note.isActive }
+            { "orange-synth": note.synth === "amSynth" && note.isActive }
           );
         }
         return note;
