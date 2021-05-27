@@ -15,7 +15,7 @@ export const AMOUNT_OF_NOTES = 18;
 export const notes = ["COUNT", "C", "D", "E", "F", "G", "A", "B"];
 export const BPM = 120;
 const dev = process.env.NODE_ENV !== "production";
-export const turnLength = dev ? 13 : 40;
+export const turnLength = dev ? 8 : 40;
 
 class Sequencer extends React.Component {
   constructor(props) {

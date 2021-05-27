@@ -19,20 +19,17 @@ class SongReveal extends React.Component {
       noteClickStarted: false,
       playButtonStarted: false,
       finalSong: [],
-      nickname: "",
-      chat: [],
     };
     this.configPlayButton = this.configPlayButton.bind(this);
     this.configLoop = this.configLoop.bind(this);
     this.goHome = this.goHome.bind(this);
-    this.goToWaitingRoom = this.goToWaitingRoom.bind(this);
     this.cleanUpFinalSong = this.cleanUpFinalSong.bind(this);
   }
 
   componentDidMount() {
     const synthsArr = makeSynths();
     this.setState({ synths: synthsArr });
-    const finalCleanSong = this.cleanUpFinalSong(this.props.location.finalSong);
+    const finalCleanSong = this.cleanUpFinalSong(this.props.finalSong);
     this.setState({ finalSong: finalCleanSong });
   }
 
@@ -86,6 +83,7 @@ class SongReveal extends React.Component {
             synth.triggerAttackRelease(
               note.note + note.octave,
               "+1",
+
               time + synthsCount
             );
             synthsCount += 0.0001;
@@ -100,9 +98,7 @@ class SongReveal extends React.Component {
         }
       });
       this.setState({
-        beat:
-          (this.state.beat + 1) %
-          (this.props.location.finalSong.length * 16 + 6),
+        beat: (this.state.beat + 1) % (this.props.finalSong.length * 16 + 6),
       });
     };
     Tone.Transport.bpm.value = BPM;
@@ -136,14 +132,11 @@ class SongReveal extends React.Component {
     });
   }
 
-  goToWaitingRoom() {
-    history.push({
-      pathname: `/waiting/${this.props.room}`,
-    });
-  }
-
   render() {
     const room = this.props.room;
+    const nickname = this.props.thisPlayer.nickname
+      ? this.props.thisPlayer.nickname
+      : "";
     return (
       <div className="reveal-view">
         <div className="song-reveal-banner">
@@ -192,11 +185,7 @@ class SongReveal extends React.Component {
             </div>
           </div>
           <div className="song-reveal-column">
-            <Chat
-              roomId={room}
-              nickname={this.state.nickname}
-              chat={this.state.chat}
-            />
+            <Chat room={room} nickname={nickname} chat={this.props.chat} />
           </div>
         </div>
       </div>

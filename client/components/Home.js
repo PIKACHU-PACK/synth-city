@@ -33,7 +33,7 @@ export class Home extends React.Component {
 
   enterNewRoom(room) {
     history.push({
-      pathname: `/waiting/${room}`,
+      pathname: `/play/${room}`,
     });
   }
 
@@ -54,7 +54,7 @@ export class Home extends React.Component {
 
   enterExistingRoom() {
     history.push({
-      pathname: `/waiting/${this.state.roomKey}`,
+      pathname: `/play/${this.state.roomKey}`,
     });
   }
 
