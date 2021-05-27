@@ -71,9 +71,17 @@ class SongReveal extends React.Component {
     const repeat = (time) => {
       fullSong.forEach((row, index) => {
         let note = row[this.state.beat];
+        let synth;
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
-          let synth = this.state.synths[synthIndex];
+          if (this.state.beat < 20) {
+            synth = this.state.synths[synthIndex];
+          } else if (this.state.beat >= 20 && this.state.beat < 40) {
+            synth = this.state.synths[synthIndex + 3];
+          } else if (this.state.beat >= 40) {
+            synth = this.state.synths[synthIndex + 6];
+          }
+          // let synth = this.state.synths[synthIndex];
           if (note.synth === "pluckySynth") {
             synth.triggerAttackRelease(
               note.note + note.octave,

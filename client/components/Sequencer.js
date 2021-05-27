@@ -60,13 +60,23 @@ class Sequencer extends React.Component {
 
   configLoop() {
     //0: am, 1: plucky, 2: basic (order of synths in state)
+    //3: am, 4: plucky, 5: basic
+    //6: am, 7: pucky, 8: basic
     let synthsCount = 0;
     const repeat = (time) => {
       this.state.grid.forEach((row, index) => {
         let note = row[this.state.beat];
+        let synth;
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
-          let synth = this.state.synths[synthIndex];
+          if (this.state.beat < 20) {
+            synth = this.state.synths[synthIndex];
+          } else if (this.state.beat >= 20 && this.state.beat < 40) {
+            synth = this.state.synths[synthIndex + 3];
+          } else if (this.state.beat >= 40) {
+            synth = this.state.synths[synthIndex + 6];
+          }
+          // let synth = this.state.synths[synthIndex];
           if (note.synth === "pluckySynth") {
             synth.triggerAttackRelease(
               note.note + note.octave,
