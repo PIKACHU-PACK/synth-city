@@ -68,7 +68,7 @@ module.exports = (io) => {
       if (!socketRoom) {
         socket.emit('roomDoesNotExist');
       } else if (socketRoom.size < 4) {
-        socket.emit('roomJoined');
+        socket.emit('roomJoined', roomKey);
       } else {
         socket.emit('roomFull');
       }
