@@ -127,7 +127,7 @@ export class Home extends React.Component {
             <div className="column">
               <Link to={'/practice'}>
                 <div className="option-card">
-                  <h3>Try it out</h3>
+                  <h3>Practice Room</h3>
                 </div>
               </Link>
             </div>

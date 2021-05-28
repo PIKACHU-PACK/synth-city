@@ -3,25 +3,7 @@ function getPlayerNames(nicknames) {
   return assignedName;
 }
 
-const funNicknames = [
-  'MAChael Jackson',
-  'Kat Stevens',
-  'Christina AguiLaura',
-  'A Tribe Called Kirstie',
-  'AmanDaBaby',
-  'LBeyonce',
-  'Saylor Twift',
-  'Bavid Dowie',
-  'Lay-Z',
-  'Bardi C',
-  'Micki Ninaj',
-  'Maaba Baal',
-  'Werard Gay',
-  'PlackBink',
-  'Ved Relvet',
-];
-
-const professionalNicknames = [
+const nicknames = [
   'Prince',
   'Taylor Swift',
   'Wolfgang Amadeus Mozart',
@@ -89,4 +71,4 @@ const professionalNicknames = [
   'Tina Turner',
 ];
 
-module.exports = { getPlayerNames, professionalNicknames, funNicknames };
+module.exports = { getPlayerNames, nicknames };

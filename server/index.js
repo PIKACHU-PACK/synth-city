@@ -7,7 +7,7 @@ const init = async () => {
   try {
     const io = socketio(server, {
       pingInterval: 10000,
-      pingTimeout: 600000, //10 minutes
+      pingTimeout: 600000,
     });
     require('./socket')(io);
     return server;
