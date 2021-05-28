@@ -1,6 +1,6 @@
 import React from 'react';
 import * as Tone from 'tone';
-import { checkSynth, makeSynths, lastNotesSeed } from './HelperFunctions';
+import { checkSynth, makeSynths } from './HelperFunctions';
 import history from '../history';
 import { BPM } from './Sequencer';
 import { exitRoom } from '../socket';
@@ -74,7 +74,7 @@ class SongReveal extends React.Component {
           if (note.synth === 'pluckySynth') {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              "+1",
+              '+1',
 
               time + synthsCount
             );

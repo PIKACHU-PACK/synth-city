@@ -109,6 +109,10 @@ export function turnListener(setTurn) {
   });
 }
 
+export function socketPageSong() {
+  socket.emit('socketPageSong');
+}
+
 export function environmnetUnmount() {
   socket.off('setPlayers');
   socket.off('playerInfo');

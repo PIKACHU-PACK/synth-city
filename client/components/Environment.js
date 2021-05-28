@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { parse } from 'flatted';
 import Swal from 'sweetalert2';
 import {
@@ -14,6 +13,8 @@ import {
   playerLeftListener,
   kickOutListener,
   environmnetUnmount,
+  socketPageSong,
+  exitRoom,
 } from '../socket';
 import history from '../history';
 import WaitingRoom from './WaitingRoom';
@@ -43,6 +44,7 @@ export class Environment extends React.Component {
     this.setTurn = this.setTurn.bind(this);
     this.getSegment = this.getSegment.bind(this);
     this.playerLeft = this.playerLeft.bind(this);
+    this.everyoneElseLeft = this.everyoneElseLeft.bind(this);
     this.sendHome = this.sendHome.bind(this);
   }
 
@@ -88,6 +90,7 @@ export class Environment extends React.Component {
     let nextTurn = this.state.turn + 1;
     if (nextTurn === this.state.rounds || nextTurn > this.state.rounds) {
       this.setState({ page: 'song' });
+      socketPageSong();
     } else {
       let turnIdx = nextTurn % this.state.players.length;
       let nextMusician = this.state.players[turnIdx];
@@ -113,15 +116,34 @@ export class Environment extends React.Component {
 
   playerLeft(departedPlayer) {
     const players = this.state.players;
+    let activePlayers = 0;
     const updatedPlayers = players.map((player) => {
       if (player === null) {
         return null;
       } else if (player.id === departedPlayer) {
         return null;
+      } else {
+        activePlayers++;
+        return player;
       }
-      return player;
     });
-    this.setState({ players: updatedPlayers });
+    if (activePlayers > 1) {
+      this.setState({ players: updatedPlayers });
+    } else {
+      this.everyoneElseLeft();
+    }
+  }
+
+  everyoneElseLeft() {
+    Swal.fire({
+      title: 'Error:',
+      html: 'Sorry, it looks like everyone else left.',
+      showCloseButton: true,
+    });
+    exitRoom(this.props.room);
+    history.push({
+      pathname: '/',
+    });
   }
 
   sendHome() {
