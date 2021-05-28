@@ -52,9 +52,9 @@ export class Home extends React.Component {
     );
   }
 
-  enterExistingRoom() {
+  enterExistingRoom(room) {
     history.push({
-      pathname: `/play/${this.state.roomKey}`,
+      pathname: `/play/${room}`,
     });
   }
 

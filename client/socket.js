@@ -27,8 +27,8 @@ export function joinRoom(
 ) {
   socket.emit('joinRoom', roomKey);
   socket.on('roomDoesNotExist', () => roomDoesNotExist());
-  socket.on('roomJoined', () => {
-    enterExistingRoom(roomKey);
+  socket.on('roomJoined', (room) => {
+    enterExistingRoom(room);
   });
   socket.on('roomFull', () => {
     roomFull();
@@ -107,6 +107,10 @@ export function turnListener(setTurn) {
   socket.on('switchTurn', () => {
     setTurn();
   });
+}
+
+export function socketPageSong() {
+  socket.emit('socketPageSong');
 }
 
 export function environmnetUnmount() {

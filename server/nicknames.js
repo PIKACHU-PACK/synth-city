@@ -76,6 +76,17 @@ const professionalNicknames = [
   'Linkin Park',
   'Fall Out Boy',
   'Dolly Parton',
+  'Childish Gambino',
+  'Swamp Dogg',
+  'Paul Simon',
+  'Boots Riley',
+  'Wesley Willis',
+  'Evan Greer',
+  'Jonathan Richman',
+  'Jeff Mangum',
+  'Suzanne Vega',
+  'Lizzo',
+  'Tina Turner',
 ];
 
 module.exports = { getPlayerNames, professionalNicknames, funNicknames };

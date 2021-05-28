@@ -11,7 +11,7 @@ module.exports = (io) => {
     console.log(`User Connected: ${socket.id}`);
 
     socket.on('disconnecting', async () => {
-      const page = socket.page || 'none yet';
+      const page = socket.page || null;
       const room = socket.room;
       socket.room = null;
       socket.page = null;
@@ -68,7 +68,7 @@ module.exports = (io) => {
       if (!socketRoom) {
         socket.emit('roomDoesNotExist');
       } else if (socketRoom.size < 4) {
-        socket.emit('roomJoined');
+        socket.emit('roomJoined', roomKey);
       } else {
         socket.emit('roomFull');
       }
@@ -80,7 +80,7 @@ module.exports = (io) => {
       const inGame = sockets.some((player) => {
         if (player === null) {
           return true;
-        } else if (player.page === 'game') {
+        } else if (player.page === 'game' || player.page === 'song') {
           return true;
         }
       });
@@ -116,6 +116,10 @@ module.exports = (io) => {
 
     socket.on('endTurn', async (room, rounds, turn, players) => {
       io.in(room).emit('switchTurn');
+    });
+
+    socket.on('socketPageSong', () => {
+      socket.page = 'song';
     });
   });
 };

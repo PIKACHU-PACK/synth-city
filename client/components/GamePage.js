@@ -1,26 +1,10 @@
 import React from 'react';
-import { exitRoom } from '../socket';
 import Sequencer from './Sequencer';
-import history from '../history';
 import Chat from './Chat';
-import Swal from 'sweetalert2';
 
 export class GamePage extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-
-  everyoneElseLeft() {
-    Swal.fire({
-      title: 'Error:',
-      html: 'Sorry, it looks like everyone else left.',
-      showCloseButton: true,
-    });
-    exitRoom(this.props.room);
-    history.push({
-      pathname: '/',
-    });
+  constructor(props) {
+    super(props);
   }
 
   render() {
