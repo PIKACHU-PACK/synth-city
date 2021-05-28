@@ -8,9 +8,9 @@ socket.on('connect', () => {
   }, 15 * 1000);
 });
 
-socket.on('disconnect', () => {
-  console.log(`${socket.id} Connection has Ended`);
-});
+// socket.on('disconnect', () => {
+//   console.log(`${socket.id} Connection has Ended`);
+// });
 
 export function createRoom(enterNewRoom) {
   socket.emit('createRoom');

@@ -1,34 +1,33 @@
 const { v4: uuidv4 } = require('uuid');
-const {
-  getPlayerNames,
-  professionalNicknames,
-  funNicknames,
-} = require('../nicknames');
-const nicknames = professionalNicknames;
+const { getPlayerNames, nicknames } = require('../nicknames');
 
 module.exports = (io) => {
   io.on('connection', (socket) => {
     console.log(`User Connected: ${socket.id}`);
 
     socket.on('disconnecting', async () => {
-      const page = socket.page || null;
-      const room = socket.room;
-      socket.room = null;
-      socket.page = null;
-      if (room) {
-        if (page === 'game') {
-          io.in(room).emit('playerLeft', socket.id);
-        } else {
-          const sockets = await io.in(room).fetchSockets();
-          const players = sockets
-            .filter((player) => {
-              return player.id !== socket.id;
-            })
-            .map((player) => {
-              return { id: player.id, nickname: player.nickname };
-            });
-          io.in(room).emit('setPlayers', players);
+      try {
+        const page = socket.page || null;
+        const room = socket.room;
+        socket.room = null;
+        socket.page = null;
+        if (room) {
+          if (page === 'game') {
+            io.in(room).emit('playerLeft', socket.id);
+          } else {
+            const sockets = await io.in(room).fetchSockets();
+            const players = sockets
+              .filter((player) => {
+                return player.id !== socket.id;
+              })
+              .map((player) => {
+                return { id: player.id, nickname: player.nickname };
+              });
+            io.in(room).emit('setPlayers', players);
+          }
         }
+      } catch (error) {
+        console.log(error);
       }
     });
 
@@ -44,13 +43,17 @@ module.exports = (io) => {
     });
 
     socket.on('exitWaiting', async (room) => {
-      socket.leave(room);
-      socket.room = null;
-      const sockets = await io.in(room).fetchSockets();
-      const players = sockets.map((socket) => {
-        return { id: socket.id, nickname: socket.nickname };
-      });
-      io.in(room).emit('setPlayers', players);
+      try {
+        socket.leave(room);
+        socket.room = null;
+        const sockets = await io.in(room).fetchSockets();
+        const players = sockets.map((socket) => {
+          return { id: socket.id, nickname: socket.nickname };
+        });
+        io.in(room).emit('setPlayers', players);
+      } catch (error) {
+        console.log(error);
+      }
     });
 
     socket.on('messageSent', (room, nickname, message) => {
@@ -75,25 +78,29 @@ module.exports = (io) => {
     });
 
     socket.on('joinGame', async (room) => {
-      socket.nickname = getPlayerNames(nicknames);
-      let sockets = await io.in(room).fetchSockets();
-      const inGame = sockets.some((player) => {
-        if (player === null) {
-          return true;
-        } else if (player.page === 'game' || player.page === 'song') {
-          return true;
-        }
-      });
-      if (!inGame) {
-        socket.join(room);
-        socket.room = room;
-        sockets = await io.in(room).fetchSockets();
-        const players = sockets.map((socket) => {
-          return { id: socket.id, nickname: socket.nickname };
+      try {
+        socket.nickname = getPlayerNames(nicknames);
+        let sockets = await io.in(room).fetchSockets();
+        const inGame = sockets.some((player) => {
+          if (player === null) {
+            return true;
+          } else if (player.page === 'game' || player.page === 'song') {
+            return true;
+          }
         });
-        io.in(room).emit('setPlayers', players);
-      } else {
-        socket.emit('kickOut');
+        if (!inGame) {
+          socket.join(room);
+          socket.room = room;
+          sockets = await io.in(room).fetchSockets();
+          const players = sockets.map((socket) => {
+            return { id: socket.id, nickname: socket.nickname };
+          });
+          io.in(room).emit('setPlayers', players);
+        } else {
+          socket.emit('kickOut');
+        }
+      } catch (error) {
+        console.log(error);
       }
     });
 
@@ -102,19 +109,23 @@ module.exports = (io) => {
     });
 
     socket.on('startGame', async (room) => {
-      const sockets = await io.in(room).fetchSockets();
-      sockets.forEach((socket) => {
-        socket.page = 'game';
-      });
-      const rounds = sockets.length === 3 ? 6 : 4;
-      io.in(room).emit('gameStarted', rounds);
+      try {
+        const sockets = await io.in(room).fetchSockets();
+        sockets.forEach((socket) => {
+          socket.page = 'game';
+        });
+        const rounds = sockets.length === 3 ? 6 : 4;
+        io.in(room).emit('gameStarted', rounds);
+      } catch (error) {
+        console.log(error);
+      }
     });
 
     socket.on('passSegment', (room, notesString, gridString) => {
       io.in(room).emit('sendSegment', notesString, gridString);
     });
 
-    socket.on('endTurn', async (room, rounds, turn, players) => {
+    socket.on('endTurn', (room) => {
       io.in(room).emit('switchTurn');
     });
 

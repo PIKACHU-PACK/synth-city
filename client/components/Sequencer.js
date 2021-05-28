@@ -59,10 +59,9 @@ class Sequencer extends React.Component {
   }
 
   configLoop() {
-    //0: am, 1: plucky, 2: basic (order of synths in state)
     let synthsCount = 0;
     const repeat = (time) => {
-      this.state.grid.forEach((row, index) => {
+      this.state.grid.forEach((row) => {
         let note = row[this.state.beat];
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);

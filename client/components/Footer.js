@@ -10,7 +10,9 @@ const Footer = () => {
           </a>
         </div>
         <div className="footer-column">
-          <a href="https://www.linkedin.com/in/mafermafer/">María Fernanda</a>
+          <a href="https://www.linkedin.com/in/mafermafer/">
+            María F. Hernández
+          </a>
         </div>
         <div className="footer-column">
           <a href="https://www.linkedin.com/in/lauraevandyke/">

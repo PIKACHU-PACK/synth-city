@@ -64,9 +64,8 @@ class SongReveal extends React.Component {
   configLoop() {
     let synthsCount = 0;
     const fullSong = this.state.finalSong;
-    //0: am, 1: plucky, 2: basic (order in state)
     const repeat = (time) => {
-      fullSong.forEach((row, index) => {
+      fullSong.forEach((row) => {
         let note = row[this.state.beat];
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);

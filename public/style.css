@@ -127,10 +127,6 @@ form div {
   background-color: #320879;
 }
 
-/* .option-card h3:hover {
-  color: #f3b4cf;
-} */
-
 .option-card:hover {
   box-shadow: 7px 7px #f3b4cf;
 }
@@ -165,10 +161,6 @@ form div {
   border-radius: 5px;
 }
 
-/* .join-cta button:hover {
-  background-color: #f3b4cf;
-} */
-
 .column {
   float: left;
   width: 1 0 33.33%;
@@ -186,7 +178,6 @@ form div {
   background-color: transparent;
   border: none;
   position: fixed;
-  /* right: 1%; */
   bottom: 1%;
 }
 
@@ -205,7 +196,6 @@ form div {
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  /* margin-bottom: 32px; */
 }
 
 .waiting-room {
@@ -226,10 +216,6 @@ form div {
   color: #320879;
   text-shadow: 1px 1px white;
 }
-/* 
-.banner p {
-  font-size: 22px;
-} */
 
 .waiting-title {
   font-family: 'Orbitron', sans-serif;
@@ -611,14 +597,8 @@ form div {
   text-shadow: 2px 2px #320879;
 }
 
-/* .practice-home-button-container {
-  display: flex;
-  justify-content: flex-start;
-} */
-
 .practice-home-button {
   background-color: transparent;
-  /* padding: 10px; */
   font-size: 0;
   border: none;
   position: fixed;
@@ -644,7 +624,6 @@ form div {
   font-size: 22px;
   padding: 0px;
   margin: 0px;
-  /* background-color: #db0035; */
 }
 
 #turn-ends {
@@ -672,23 +651,11 @@ form div {
   align-items: center;
   margin-bottom: 32px;
 }
-/* 
-.song-reveal-banner-column {
-  float: left;
-  width: 50%;
-} */
 
 .song-reveal-buttons {
   align-self: center;
 }
 
-/* SONG REVEAL */
-/* .song-reveal-container {
-  display: flex;
-  align-items: center;
-  display: inline-block;
-  white-space: nowrap;
-} */
 .reveal-toggle-play {
   height: 50px;
   position: relative;
@@ -706,7 +673,6 @@ form div {
   width: 1 0 50%;
   padding: 25px;
   margin: 10px;
-  /* display: inline-block; */
 }
 
 .hidden-note {
@@ -726,8 +692,6 @@ form div {
 
 .reveal-current-beat {
   background-color: rgb(197, 197, 197);
-  /* border-width: 3px;
-  border-color: rgb(53, 238, 192); */
 }
 
 #beat-title {
