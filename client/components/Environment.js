@@ -47,7 +47,7 @@ export class Environment extends React.Component {
   }
 
   componentDidMount() {
-    joinGame(this.props.room, this.setPlayers); // JOINS THE SOCKET AND LISTENS FOR PLAYERS
+    joinGame(this.props.room, this.setPlayers);
     chatListener(this.getMessage);
     getThisPlayer(this.setThisPlayer);
     startListener(this.gameStarted);
