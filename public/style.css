@@ -1,5 +1,5 @@
 * {
-  font-family: 'Ropa Sans', sans-serif;
+  font-family: "Ropa Sans", sans-serif;
 }
 
 body {
@@ -66,7 +66,7 @@ form div {
 /* HOME */
 
 .home-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 90px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -75,7 +75,7 @@ form div {
 }
 
 .home-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   color: #320879;
   font-size: 25px;
   text-shadow: 1px 1px white;
@@ -211,14 +211,14 @@ form div {
 }
 
 .waiting-subheading {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 25px;
   color: #320879;
   text-shadow: 1px 1px white;
 }
 
 .waiting-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 65px;
   color: #e12967;
   text-shadow: 6px 6px #320879;
@@ -484,12 +484,12 @@ form div {
   background: rgba(219, 0, 53, 0.2);
   overflow-y: scroll;
 }
-.chat-messages #messages {
-  display: flex;
-  flex-direction: column;
+
+#messages {
+  /* display: flex;
+  flex-direction: column; */
+  position: relative;
   width: 100%;
-}
-.chat-messages #messages .bubble {
   border-radius: 12px;
   padding: 1rem;
   margin-bottom: 20px;
@@ -500,20 +500,31 @@ form div {
   animation: appear 0.3s cubic-bezier(0.36, -0.04, 0.15, 1.64) forwards;
   max-width: 60%;
 }
-.chat-messages #messages .bubble:nth-child(even) {
-  align-self: flex-end;
-  border-bottom-right-radius: 0;
+
+.chat-me {
+  display: inline-block;
+  padding: 0.65rem;
+  border-radius: 12px;
+  border-bottom-left-radius: 0;
   background-color: #453a94;
   color: white;
-  transform-origin: bottom right;
+  /* transform-origin: bottom right; */
+  /* animation: appear 0.3s cubic-bezier(0.36, -0.04, 0.15, 1.64) forwards; */
+  max-width: 70%;
+  justify-content: flex-start;
 }
-.chat-messages #messages .bubble:nth-child(odd) {
-  align-self: flex-start;
-  display: inline-block;
-  border-bottom-left-radius: 0;
+
+.chat-them {
+  display: flex;
+  padding: 0.65rem;
+  border-radius: 12px;
+  border-bottom-right-radius: 0;
   background-color: white;
   color: #453a94;
-  transform-origin: bottom left;
+  /* transform-origin: bottom right; */
+  /* animation: appear 0.3s cubic-bezier(0.36, -0.04, 0.15, 1.64) backwards; */
+  max-width: 70%;
+  justify-content: flex-end;
 }
 
 .input-container {
@@ -549,7 +560,7 @@ form div {
   position: relative;
 }
 .message-submit:after {
-  content: '';
+  content: "";
   width: 0.5rem;
   height: 0.5rem;
   border: 5px solid white;
@@ -561,10 +572,27 @@ form div {
   left: calc(50% - 0.5rem);
 }
 
+/* .chat-me {
+  align-self: flex-start;
+  border-bottom-right-radius: 0;
+  background-color: #453a94;
+  color: white;
+  transform-origin: bottom right;
+}
+
+.chat-them {
+  align-self: flex-end;
+  display: inline-block;
+  border-bottom-left-radius: 0;
+  background-color: white;
+  color: #453a94;
+  transform-origin: bottom left;
+} */
+
 /* GAME PLAY */
 
 .game-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 45px;
   color: #e12967;
   text-shadow: 3px 3px #320879;
@@ -589,7 +617,7 @@ form div {
 }
 
 .practice-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 50px;
   margin: 0;
   padding: 0;
@@ -633,7 +661,7 @@ form div {
 /* SONG REVEAL */
 
 .song-reveal-title {
-  font-family: 'Orbitron', sans-serif;
+  font-family: "Orbitron", sans-serif;
   font-size: 70px;
   color: #e12967;
   text-shadow: 6px 6px #320879;

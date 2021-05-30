@@ -1,11 +1,11 @@
-import React from 'react';
-import { chatMessage } from '../socket';
+import React from "react";
+import { chatMessage } from "../socket";
 
 export class Chat extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      msg: '',
+      msg: "",
       chat: [],
     };
     this.onMessageSubmit = this.onMessageSubmit.bind(this);
@@ -38,7 +38,7 @@ export class Chat extends React.Component {
     const nickname = this.props.nickname;
     const { msg } = this.state;
     chatMessage(this.props.room, nickname, msg);
-    this.setState({ chat: [...this.state.chat, msg], msg: '' });
+    this.setState({ chat: [...this.state.chat, msg], msg: "" });
   }
 
   render() {
@@ -58,9 +58,21 @@ export class Chat extends React.Component {
         >
           <div id="messages">
             {chat.map((rec, i) => (
-              <p key={i}>
-                {rec.nickname}: {rec.msg}
-              </p>
+              <div key={i}>
+                {rec.nickname === this.props.nickname ? (
+                  <div className="chat-me">
+                    <p>
+                      {rec.nickname}: {rec.msg}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="chat-them">
+                    <p>
+                      {rec.msg} : {rec.nickname}
+                    </p>
+                  </div>
+                )}
+              </div>
             ))}
           </div>
           <i id="typing"></i>
