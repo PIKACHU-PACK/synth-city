@@ -1,11 +1,8 @@
 import React, { Component } from "react";
-import { withRouter, Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Home from "./components/Home";
-import WaitingRoom from "./components/WaitingRoom";
-import Sequencer from "./components/Sequencer";
 import PracticeRoom from "./components/PracticeRoom";
-import GamePage from "./components/GamePage";
-import SongReveal from "./components/SongReveal";
+import Environment from "./components/Environment";
 import { Intro } from "./components/Intro";
 
 class Routes extends Component {
@@ -14,30 +11,15 @@ class Routes extends Component {
       <div>
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/sequencer" component={Sequencer} />
           <Route exact path="/practice" component={PracticeRoom} />
           <Route
             exact
-            path="/game/:room"
+            path="/play/:room"
             render={(routeProps) => (
-              <GamePage {...routeProps} room={routeProps.match.params.room} />
-            )}
-          />
-          <Route
-            exact
-            path="/waiting/:room"
-            render={(routeProps) => (
-              <WaitingRoom
+              <Environment
                 {...routeProps}
                 room={routeProps.match.params.room}
               />
-            )}
-          />
-          <Route
-            exact
-            path="/song/:room"
-            render={(routeProps) => (
-              <SongReveal {...routeProps} room={routeProps.match.params.room} />
             )}
           />
           <Route exact path="/intro" component={Intro} history={history} />

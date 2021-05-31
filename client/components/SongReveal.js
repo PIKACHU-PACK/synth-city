@@ -1,11 +1,11 @@
-import React from "react";
-import * as Tone from "tone";
-import { checkSynth, makeSynths, lastNotesSeed } from "./HelperFunctions";
-import history from "../history";
-import { BPM } from "./Sequencer";
-import { exitRoom } from "../socket";
-import { NoteButton } from "./NoteButtonSongReveal";
-import Chat from "./Chat";
+import React from 'react';
+import * as Tone from 'tone';
+import { checkSynth, makeSynths } from './HelperFunctions';
+import history from '../history';
+import { BPM } from './Sequencer';
+import { exitRoom } from '../socket';
+import { NoteButton } from './NoteButtonSongReveal';
+import Chat from './Chat';
 
 class SongReveal extends React.Component {
   constructor(props) {
@@ -19,30 +19,27 @@ class SongReveal extends React.Component {
       noteClickStarted: false,
       playButtonStarted: false,
       finalSong: [],
-      nickname: "",
-      chat: [],
     };
     this.configPlayButton = this.configPlayButton.bind(this);
     this.configLoop = this.configLoop.bind(this);
     this.goHome = this.goHome.bind(this);
-    this.goToWaitingRoom = this.goToWaitingRoom.bind(this);
     this.cleanUpFinalSong = this.cleanUpFinalSong.bind(this);
   }
 
   componentDidMount() {
     const synthsArr = makeSynths();
     this.setState({ synths: synthsArr });
-    const finalCleanSong = this.cleanUpFinalSong(this.props.location.finalSong);
+    const finalCleanSong = this.cleanUpFinalSong(this.props.finalSong);
     this.setState({ finalSong: finalCleanSong });
   }
 
   cleanUpFinalSong(finalSongSegmented) {
     let newGrid = [[], [], [], [], [], [], []];
     let initialNote = {
-      note: "♫",
+      note: '♫',
       isActive: false,
-      synth: "",
-      octave: "",
+      synth: '',
+      octave: '',
     };
     for (let i = 0; i < finalSongSegmented.length; i++) {
       const currentSegment = finalSongSegmented[i];
@@ -50,8 +47,8 @@ class SongReveal extends React.Component {
         const currRow = currentSegment[j];
         currRow.forEach((note) => {
           if (!note.isActive) {
-            note.note = "♫";
-            note.octave = "";
+            note.note = '♫';
+            note.octave = '';
           }
           newGrid[j].push(note);
         });
@@ -67,24 +64,24 @@ class SongReveal extends React.Component {
   configLoop() {
     let synthsCount = 0;
     const fullSong = this.state.finalSong;
-    //0: am, 1: plucky, 2: basic (order in state)
     const repeat = (time) => {
-      fullSong.forEach((row, index) => {
+      fullSong.forEach((row) => {
         let note = row[this.state.beat];
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          if (note.synth === "pluckySynth") {
+          if (note.synth === 'pluckySynth') {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              "+2",
+              '+1',
+
               time + synthsCount
             );
             synthsCount += 0.0001;
           } else {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              "8n",
+              '8n',
               time + synthsCount
             );
             synthsCount += 0.0001;
@@ -92,13 +89,11 @@ class SongReveal extends React.Component {
         }
       });
       this.setState({
-        beat:
-          (this.state.beat + 1) %
-          (this.props.location.finalSong.length * 16 + 6),
+        beat: (this.state.beat + 1) % (this.props.finalSong.length * 16 + 6),
       });
     };
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, "8n");
+    Tone.Transport.scheduleRepeat(repeat, '8n');
   }
 
   configPlayButton(e) {
@@ -109,13 +104,13 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = "Play Song";
+      e.target.innerText = 'Play Song';
       Tone.Transport.stop();
       this.setState({
         playing: false,
       });
     } else {
-      e.target.innerText = "Stop";
+      e.target.innerText = 'Stop';
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -124,18 +119,15 @@ class SongReveal extends React.Component {
   goHome() {
     exitRoom(this.props.room);
     history.push({
-      pathname: "/",
-    });
-  }
-
-  goToWaitingRoom() {
-    history.push({
-      pathname: `/waiting/${this.props.room}`,
+      pathname: '/',
     });
   }
 
   render() {
     const room = this.props.room;
+    const nickname = this.props.thisPlayer.nickname
+      ? this.props.thisPlayer.nickname
+      : '';
     return (
       <div className="reveal-view">
         <div className="song-reveal-banner">
@@ -162,13 +154,13 @@ class SongReveal extends React.Component {
                   <div
                     id="rowIndex"
                     className="sequencer-row"
-                    key={rowIndex + "row"}
+                    key={rowIndex + 'row'}
                   >
                     {row.map(({ note, isActive, synth, octave }, noteIndex) => {
                       return (
                         <NoteButton
                           note={note}
-                          key={noteIndex + "note"}
+                          key={noteIndex + 'note'}
                           isActive={isActive}
                           beat={this.state.beat}
                           synth={synth}
@@ -184,11 +176,7 @@ class SongReveal extends React.Component {
             </div>
           </div>
           <div className="song-reveal-column">
-            <Chat
-              roomId={room}
-              nickname={this.state.nickname}
-              chat={this.state.chat}
-            />
+            <Chat room={room} nickname={nickname} chat={this.props.chat} />
           </div>
         </div>
       </div>

@@ -2,8 +2,8 @@ import React from 'react';
 import { chatMessage } from '../socket';
 
 export class Chat extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       msg: '',
       chat: [],
@@ -37,7 +37,7 @@ export class Chat extends React.Component {
     e.preventDefault();
     const nickname = this.props.nickname;
     const { msg } = this.state;
-    chatMessage(nickname, msg); //emits message to server
+    chatMessage(this.props.room, nickname, msg);
     this.setState({ chat: [...this.state.chat, msg], msg: '' });
   }
 
