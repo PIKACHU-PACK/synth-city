@@ -722,3 +722,13 @@ form div {
   margin: 0px;
   margin-top: 30px;
 }
+
+.intro-title {
+  font-family: "Orbitron", sans-serif;
+  font-size: 90px;
+  color: #e12967;
+  text-shadow: 6px 6px #320879;
+  justify-content: center;
+  text-align: center;
+  margin-top: 20px;
+}

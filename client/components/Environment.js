@@ -1,6 +1,6 @@
-import React from 'react';
-import { parse } from 'flatted';
-import Swal from 'sweetalert2';
+import React from "react";
+import { parse } from "flatted";
+import Swal from "sweetalert2";
 import {
   joinGame,
   chatListener,
@@ -15,17 +15,17 @@ import {
   environmnetUnmount,
   socketPageSong,
   exitRoom,
-} from '../socket';
-import history from '../history';
-import WaitingRoom from './WaitingRoom';
-import GamePage from './GamePage';
-import SongReveal from './SongReveal';
+} from "../socket";
+import history from "../history";
+import WaitingRoom from "./WaitingRoom";
+import GamePage from "./GamePage";
+import SongReveal from "./SongReveal";
 
 export class Environment extends React.Component {
   constructor() {
     super();
     this.state = {
-      page: 'waiting',
+      page: "waiting",
       chat: [],
       players: [],
       thisPlayer: {},
@@ -73,7 +73,7 @@ export class Environment extends React.Component {
 
   gameStarted(rounds) {
     const musician = this.state.players[0];
-    this.setState({ page: 'game', rounds: rounds, musician: musician });
+    this.setState({ page: "game", rounds: rounds, musician: musician });
   }
 
   finishTurn(notesString, gridString) {
@@ -89,7 +89,7 @@ export class Environment extends React.Component {
   setTurn() {
     let nextTurn = this.state.turn + 1;
     if (nextTurn === this.state.rounds || nextTurn > this.state.rounds) {
-      this.setState({ page: 'song' });
+      this.setState({ page: "song" });
       socketPageSong();
     } else {
       let turnIdx = nextTurn % this.state.players.length;
@@ -136,24 +136,24 @@ export class Environment extends React.Component {
 
   everyoneElseLeft() {
     Swal.fire({
-      title: 'Error:',
-      html: 'Sorry, it looks like everyone else left.',
+      title: "Error:",
+      html: "Sorry, it looks like everyone else left.",
       showCloseButton: true,
     });
     exitRoom(this.props.room);
     history.push({
-      pathname: '/',
+      pathname: "/home",
     });
   }
 
   sendHome() {
     Swal.fire({
-      title: 'Error:',
-      html: 'This game is in progress. Please start or join another game.',
+      title: "Error:",
+      html: "This game is in progress. Please start or join another game.",
       showCloseButton: true,
     });
     history.push({
-      pathname: '/',
+      pathname: "/home",
     });
   }
 
@@ -166,7 +166,7 @@ export class Environment extends React.Component {
     const musician = this.state.musician;
     return (
       <>
-        {page === 'waiting' ? (
+        {page === "waiting" ? (
           <WaitingRoom
             room={this.props.room}
             chat={this.state.chat}
@@ -174,7 +174,7 @@ export class Environment extends React.Component {
             thisPlayer={this.state.thisPlayer}
             setPlayers={this.setPlayers}
           />
-        ) : page === 'game' ? (
+        ) : page === "game" ? (
           <GamePage
             room={this.props.room}
             chat={this.state.chat}

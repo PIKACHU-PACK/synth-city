@@ -1,9 +1,9 @@
-import React from 'react';
-import Chat from './Chat';
-import { startGame, exitWaiting } from '../socket';
-import history from '../history';
-import Swal from 'sweetalert2';
-import { turnLength } from './Sequencer';
+import React from "react";
+import Chat from "./Chat";
+import { startGame, exitWaiting } from "../socket";
+import history from "../history";
+import Swal from "sweetalert2";
+import { turnLength } from "./Sequencer";
 
 class WaitingRoom extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class WaitingRoom extends React.Component {
   goHome() {
     exitWaiting(this.props.room);
     history.push({
-      pathname: '/',
+      pathname: "/home",
     });
   }
 
@@ -33,19 +33,19 @@ class WaitingRoom extends React.Component {
 
   wrongNumberPlayers() {
     Swal.fire({
-      title: 'Error:',
-      html: 'Sorry, you need 2-4 players to start the game.',
+      title: "Error:",
+      html: "Sorry, you need 2-4 players to start the game.",
       showCloseButton: true,
     });
   }
 
   displayInstructions() {
     Swal.fire({
-      title: 'HOW TO PLAY:',
+      title: "HOW TO PLAY:",
       html:
         `Each player will have two ${turnLength}-second turns to compose an 8-second section of an original song. The last two notes from each turn will be passed along to the next player to continue the song. <br></br>` +
         "When it is your turn, the first two notes on your display will display the final two notes from the previous player. To compose your section, click on the Sequencer's buttons. Use the menu at the top to change Octaves and Synths.<br></br>" +
-        'At the end of the game, you and your teammates will be able to listen to your grammy-nominated masterpiece!',
+        "At the end of the game, you and your teammates will be able to listen to your grammy-nominated masterpiece!",
       showCloseButton: true,
     });
   }
@@ -55,18 +55,18 @@ class WaitingRoom extends React.Component {
     const players = this.props.players;
     const nickname = this.props.thisPlayer.nickname
       ? this.props.thisPlayer.nickname
-      : '';
+      : "";
     const hostID = players[0] ? players[0].id : players[0];
     const thisPlayerID = this.props.thisPlayer.id
       ? this.props.thisPlayer.id
-      : '';
+      : "";
 
     return (
       <div className="waiting-room">
         <div className="waiting-view">
           <div className="home-button-container">
             <button type="button" className="home-button" onClick={this.goHome}>
-              <img src={'/homebutton.png'} className="home-arrow-img" />
+              <img src={"/homebutton.png"} className="home-arrow-img" />
             </button>
           </div>
           <div className="waiting-info">
@@ -93,7 +93,7 @@ class WaitingRoom extends React.Component {
                   : `${players.length} Players Are Ready To Jam!`}
               </h2>
               <h2>
-                Invite Your Friends With This Code:{' '}
+                Invite Your Friends With This Code:{" "}
                 <p className="bold">{room}</p>
               </h2>
               {thisPlayerID === hostID ? (
@@ -121,7 +121,7 @@ class WaitingRoom extends React.Component {
               onClick={this.displayInstructions}
             >
               <img
-                src={'/InstructionsIcon.png'}
+                src={"/InstructionsIcon.png"}
                 className="waiting-instructions-img"
               />
             </button>

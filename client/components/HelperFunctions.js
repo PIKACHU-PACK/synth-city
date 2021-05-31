@@ -1,15 +1,15 @@
-import { AMOUNT_OF_NOTES } from './Sequencer';
-import * as Tone from 'tone';
+import { AMOUNT_OF_NOTES } from "./Sequencer";
+import * as Tone from "tone";
 
 export const amSynth = new Tone.AMSynth({
   oscillator: {
-    type: 'square',
+    type: "square",
   },
 }).toDestination();
 export const pluckySynth = new Tone.PluckSynth().toDestination();
 export const basicSynth = new Tone.Synth({
   oscillator: {
-    type: 'sawtooth',
+    type: "sawtooth",
   },
 }).toDestination();
 
@@ -31,7 +31,7 @@ export function makeGrid(notes, isFirst) {
   for (const note of notes) {
     const col = [];
     for (let i = 0; i < CORRECT_TOTAL; i++) {
-      if (note === 'COUNT') {
+      if (note === "COUNT") {
         col.push({
           note: countArray[currHeaderCount],
           isActive: false,
@@ -42,8 +42,8 @@ export function makeGrid(notes, isFirst) {
         col.push({
           note: note,
           isActive: false,
-          synth: 'basicSynth',
-          octave: '4',
+          synth: "basicSynth",
+          octave: "4",
           isPrevious: false,
         });
       }
@@ -55,11 +55,11 @@ export function makeGrid(notes, isFirst) {
 
 export function checkSynth(stringName) {
   let synthIndex;
-  if (stringName === 'amSynth') {
+  if (stringName === "amSynth") {
     synthIndex = 0;
-  } else if (stringName === 'pluckySynth') {
+  } else if (stringName === "pluckySynth") {
     synthIndex = 1;
-  } else if (stringName === 'basicSynth') {
+  } else if (stringName === "basicSynth") {
     synthIndex = 2;
   }
   return synthIndex;
