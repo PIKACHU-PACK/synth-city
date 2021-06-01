@@ -68,7 +68,7 @@ export class Chat extends React.Component {
                 ) : (
                   <div className="chat-them">
                     <p>
-                      {rec.msg} : {rec.nickname}
+                      {rec.nickname} : {rec.msg}
                     </p>
                   </div>
                 )}
