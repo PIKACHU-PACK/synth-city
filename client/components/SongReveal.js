@@ -1,11 +1,11 @@
-import React from 'react';
-import * as Tone from 'tone';
-import { checkSynth, makeSynths } from './HelperFunctions';
-import history from '../history';
-import { BPM } from './Sequencer';
-import { exitRoom } from '../socket';
-import { NoteButton } from './NoteButtonSongReveal';
-import Chat from './Chat';
+import React from "react";
+import * as Tone from "tone";
+import { checkSynth, makeSynths } from "./HelperFunctions";
+import history from "../history";
+import { BPM } from "./Sequencer";
+import { exitRoom } from "../socket";
+import { NoteButton } from "./NoteButtonSongReveal";
+import Chat from "./Chat";
 
 class SongReveal extends React.Component {
   constructor(props) {
@@ -36,10 +36,10 @@ class SongReveal extends React.Component {
   cleanUpFinalSong(finalSongSegmented) {
     let newGrid = [[], [], [], [], [], [], []];
     let initialNote = {
-      note: '♫',
+      note: "♫",
       isActive: false,
-      synth: '',
-      octave: '',
+      synth: "",
+      octave: "",
     };
     for (let i = 0; i < finalSongSegmented.length; i++) {
       const currentSegment = finalSongSegmented[i];
@@ -47,8 +47,8 @@ class SongReveal extends React.Component {
         const currRow = currentSegment[j];
         currRow.forEach((note) => {
           if (!note.isActive) {
-            note.note = '♫';
-            note.octave = '';
+            note.note = "♫";
+            note.octave = "";
           }
           newGrid[j].push(note);
         });
@@ -70,10 +70,10 @@ class SongReveal extends React.Component {
         if (note.isActive) {
           const synthIndex = checkSynth(note.synth);
           let synth = this.state.synths[synthIndex];
-          if (note.synth === 'pluckySynth') {
+          if (note.synth === "pluckySynth") {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              '+1',
+              "+1",
 
               time + synthsCount
             );
@@ -81,7 +81,7 @@ class SongReveal extends React.Component {
           } else {
             synth.triggerAttackRelease(
               note.note + note.octave,
-              '8n',
+              "8n",
               time + synthsCount
             );
             synthsCount += 0.0001;
@@ -93,7 +93,7 @@ class SongReveal extends React.Component {
       });
     };
     Tone.Transport.bpm.value = BPM;
-    Tone.Transport.scheduleRepeat(repeat, '8n');
+    Tone.Transport.scheduleRepeat(repeat, "8n");
   }
 
   configPlayButton(e) {
@@ -104,13 +104,13 @@ class SongReveal extends React.Component {
       this.configLoop();
     }
     if (this.state.playing) {
-      e.target.innerText = 'Play Song';
+      e.target.innerText = "Play Song";
       Tone.Transport.stop();
       this.setState({
         playing: false,
       });
     } else {
-      e.target.innerText = 'Stop';
+      e.target.innerText = "Stop";
       Tone.Transport.start();
       this.setState({ playing: true });
     }
@@ -119,7 +119,7 @@ class SongReveal extends React.Component {
   goHome() {
     exitRoom(this.props.room);
     history.push({
-      pathname: '/',
+      pathname: "/",
     });
   }
 
@@ -127,7 +127,7 @@ class SongReveal extends React.Component {
     const room = this.props.room;
     const nickname = this.props.thisPlayer.nickname
       ? this.props.thisPlayer.nickname
-      : '';
+      : "";
     return (
       <div className="reveal-view">
         <div className="song-reveal-banner">
@@ -136,12 +136,12 @@ class SongReveal extends React.Component {
         <div className="reveal-toggle-play">
           <div className="play-container">
             <button
-              className="play-button"
+              className="glow-on-hover"
               onClick={(event) => this.configPlayButton(event)}
             >
               Play Song
             </button>
-            <button className="play-button" onClick={this.goHome}>
+            <button className="glow-on-hover" onClick={this.goHome}>
               New Game
             </button>
           </div>
@@ -154,13 +154,13 @@ class SongReveal extends React.Component {
                   <div
                     id="rowIndex"
                     className="sequencer-row"
-                    key={rowIndex + 'row'}
+                    key={rowIndex + "row"}
                   >
                     {row.map(({ note, isActive, synth, octave }, noteIndex) => {
                       return (
                         <NoteButton
                           note={note}
-                          key={noteIndex + 'note'}
+                          key={noteIndex + "note"}
                           isActive={isActive}
                           beat={this.state.beat}
                           synth={synth}

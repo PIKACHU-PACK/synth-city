@@ -1,6 +1,6 @@
-import React from 'react';
-import Sequencer from './Sequencer';
-import Chat from './Chat';
+import React from "react";
+import Sequencer from "./Sequencer";
+import Chat from "./Chat";
 
 export class GamePage extends React.Component {
   constructor(props) {
@@ -11,14 +11,14 @@ export class GamePage extends React.Component {
     const room = this.props.room;
     const nickname = this.props.thisPlayer.nickname
       ? this.props.thisPlayer.nickname
-      : '';
+      : "";
     const thisPlayerID = this.props.thisPlayer.id
       ? this.props.thisPlayer.id
-      : '';
+      : "";
     const musicianID = this.props.musician ? this.props.musician.id : null;
     const musicianNickname = this.props.musician
       ? this.props.musician.nickname
-      : '';
+      : "";
     return (
       <>
         {thisPlayerID === musicianID ? (

@@ -62,13 +62,13 @@ export class Chat extends React.Component {
                 {rec.nickname === this.props.nickname ? (
                   <div className="chat-me">
                     <p>
-                      {rec.nickname}: {rec.msg}
+                      <b>{rec.nickname}</b>: {rec.msg}
                     </p>
                   </div>
                 ) : (
                   <div className="chat-them">
                     <p>
-                      {rec.nickname} : {rec.msg}
+                      <b>{rec.nickname}</b> : {rec.msg}
                     </p>
                   </div>
                 )}
