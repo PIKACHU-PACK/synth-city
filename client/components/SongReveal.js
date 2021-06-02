@@ -175,7 +175,7 @@ class SongReveal extends React.Component {
               })}
             </div>
           </div>
-          <div className="song-reveal-column">
+          <div className="song-reveal-column-chat">
             <Chat room={room} nickname={nickname} chat={this.props.chat} />
           </div>
         </div>

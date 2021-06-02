@@ -413,15 +413,13 @@ form div {
   position: relative;
 }
 
-.play-container {
-  display: flex;
-  justify-content: center;
-  /* margin: 0;
+.play-container-seq {
+  margin: 0;
   position: absolute;
   top: 50%;
   left: 50%;
   -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); */
+  transform: translate(-50%, -50%);
 }
 
 .play-button {
@@ -707,12 +705,22 @@ form div {
   position: relative;
 }
 
-.song-reveal-content {
+play-container {
+  display: flex;
+  justify-content: center;
+  /* margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); */
+}
+
+/* .song-reveal-content {
   width: 100%;
   display: flex;
   flex-wrap: column;
   justify-content: space-between;
-  margin: auto;
 }
 
 .song-reveal-column {
@@ -720,6 +728,31 @@ form div {
   width: 1 0 50%;
   padding: 25px;
   margin: 10px;
+} */
+
+.song-reveal-content {
+  /* width: 100%; */
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  align-items: center;
+  text-align: center;
+  /* flex-wrap: column; */
+  justify-content: center;
+  margin: 0 auto;
+  /* padding: 10px 20px; */
+}
+
+.song-reveal-column {
+  /* float: left;
+  width: 1 0 50%;
+  margin: 10px; */
+  padding: 30px 30px 0px 20px;
+}
+
+.song-reveal-column-chat {
+  padding-right: 15%;
+  padding-top: 3%;
 }
 
 .hidden-note {
