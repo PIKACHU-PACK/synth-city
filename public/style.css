@@ -5,7 +5,10 @@
 body {
   background-image: linear-gradient(#32eaf4, #df21c3);
   overflow: hidden;
-  height: 100vh;
+  /* height: 100vh; */
+  height: 100%;
+  margin: 0;
+  background-attachment: fixed;
 }
 
 a {
@@ -38,21 +41,28 @@ form div {
 /* FOOTER */
 
 #footer {
-  position: relative;
-  height: 7vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* position: relative;
+  height: 7vh; */
 }
 
 .footer-container {
   display: flex;
   margin-top: 20px;
-  margin-left: 40px;
+  /* margin-left: 40px; */
   justify-content: center;
+  text-align: center;
 }
 
 .footer-column {
   flex: 1;
-  margin: 5px;
+  padding-top: 10px;
   justify-content: center;
+  text-align: center;
+  /* margin: 5px;
+  justify-content: center; */
 }
 
 .footer-column a {
@@ -584,6 +594,7 @@ form div {
   color: #e12967;
   text-shadow: 3px 3px #320879;
   padding: 0px;
+  margin: 0;
 }
 
 .game-chat {
